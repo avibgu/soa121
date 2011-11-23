@@ -9,15 +9,13 @@ public class Main {
 
 	public static void main(String[] args) {
 		
-		// Open a server
 		Server server = new Server(SERVER_PORT);
-		
-		// Servlets
+
 		ServletContextHandler ctx = 
 			new ServletContextHandler(ServletContextHandler.SESSIONS);
 		
 		ctx.setContextPath("/ex1");
-		ctx.addServlet(new ServletHolder(new MainServlet()), "/");
+		ctx.addServlet(new ServletHolder(new MainServlet(new FeedsManager())), "/");
 		
 //		// Files
 //		ResourceHandler res = new ResourceHandler();
