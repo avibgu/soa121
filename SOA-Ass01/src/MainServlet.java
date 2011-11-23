@@ -4,7 +4,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.ServletException;
 import java.io.IOException;
-//	import java.io.PrintWriter;
+import java.io.PrintWriter;
 
 public class MainServlet extends HttpServlet {
 
@@ -33,11 +33,11 @@ public class MainServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		
-		request.getAuthType();
+		StringBuilder answer = new StringBuilder();
 		
 		try{
 			
-			_fm.getFeeds(request.getQueryString(), request.getParameterMap());
+			answer = _fm.getFeeds(request.getQueryString(), request.getParameterMap());
 		}
 		catch (NotImplaementedException e) {
 			response.sendError(HttpServletResponse.SC_NOT_IMPLEMENTED);
@@ -46,13 +46,13 @@ public class MainServlet extends HttpServlet {
 			response.sendError(HttpServletResponse.SC_BAD_REQUEST);
 		}
 
-//		response.setCharacterEncoding("UTF-8");
-//		
-//		PrintWriter out = response.getWriter();
-//		
-//		out.println("Hello, " + name + "!");
-//		
-//		out.close();
+		response.setCharacterEncoding("UTF-8");
+		
+		PrintWriter out = response.getWriter();
+		
+		out.println(answer.toString());
+		
+		out.close();
 	}
 	
 	@Override
