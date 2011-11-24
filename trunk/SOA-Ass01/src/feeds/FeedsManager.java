@@ -59,7 +59,7 @@ public class FeedsManager {
 	 * @throws BadRequestException		in case the request is damaged
 	 * @throws NotImplaementedException	in case the given element is actually a collection
 	 */
-	public void putNamedFeed(String elementName, String content)
+	public void putNamedFeed(String elementName, String address)
 		throws BadRequestException, NotImplaementedException {
 		
 		// TODO Auto-generated method stub
@@ -76,5 +76,12 @@ public class FeedsManager {
 		// TODO Auto-generated method stub
 		
 		return;
+	}
+
+	public int getNumOfFeeds() {
+		
+		// TODO Auto-generated method stub
+		
+		return 0;
 	}
 }
