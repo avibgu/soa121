@@ -1,7 +1,11 @@
+package server;
+
 
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.*;
 import org.eclipse.jetty.servlet.*;
+
+import feeds.FeedsManager;
 
 public class Main {
 	

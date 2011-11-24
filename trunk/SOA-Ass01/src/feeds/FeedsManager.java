@@ -1,4 +1,8 @@
+package feeds;
 import java.util.Map;
+
+import exceptions.BadRequestException;
+import exceptions.NotImplaementedException;
 
 public class FeedsManager {
 

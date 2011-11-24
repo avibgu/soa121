@@ -1,8 +1,15 @@
+package server;
+
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.ServletException;
+
+import exceptions.BadRequestException;
+import exceptions.NotImplaementedException;
+import feeds.FeedsManager;
+
 import java.io.IOException;
 import java.io.PrintWriter;
 
