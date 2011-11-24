@@ -10,6 +10,7 @@ import exceptions.BadRequestException;
 import exceptions.NotImplaementedException;
 import feeds.FeedsManager;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 
@@ -25,10 +26,10 @@ public class MainServlet extends HttpServlet {
 //	GET		Return items from all feeds in the collection	Return items from this feed
 	
 //	200	OK
-//	501	Not implemented	response.sendError(HttpServletResponse.SC_NOT_IMPLEMENTED);
+//	501	Not	implemented	response.sendError(HttpServletResponse.SC_NOT_IMPLEMENTED);
 //	400	Bad request		response.sendError(HttpServletResponse.SC_BAD_REQUEST);
 	
-	private FeedsManager _fm;
+	protected FeedsManager _fm;
 	
 	public MainServlet(FeedsManager fm) {
 
@@ -46,41 +47,88 @@ public class MainServlet extends HttpServlet {
 			
 			answer = _fm.getFeeds(request.getQueryString(), request.getParameterMap());
 		}
-		catch (NotImplaementedException e) {
-			response.sendError(HttpServletResponse.SC_NOT_IMPLEMENTED);
-		}
 		catch (BadRequestException e) {
 			response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+			return;
 		}
 
 		response.setCharacterEncoding("UTF-8");
-		
 		PrintWriter out = response.getWriter();
-		
 		out.println(answer.toString());
-		
 		out.close();
 	}
 	
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		super.doPost(request, response);
+
+		String content = getRequestContent(request);
+		
+		try{
+			
+			_fm.postUnnamedFeed(request.getQueryString(), content);
+		}
+		catch (NotImplaementedException e) {
+			response.sendError(HttpServletResponse.SC_NOT_IMPLEMENTED);
+			return;
+		}
+		catch (BadRequestException e) {
+			response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+			return;
+		}
 	}
-	
+
 	@Override
 	protected void doPut(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		super.doPut(request, response);
+		
+		String content = getRequestContent(request);
+		
+		try{
+			
+			_fm.putNamedFeed(request.getQueryString(), content);
+		}
+		catch (NotImplaementedException e) {
+			response.sendError(HttpServletResponse.SC_NOT_IMPLEMENTED);
+			return;
+		}
+		catch (BadRequestException e) {
+			response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+			return;
+		}
 	}
 	
 	@Override
 	protected void doDelete(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		super.doDelete(request, response);
+
+		try{
+			
+			_fm.deleteFeeds(request.getQueryString());
+		}
+		catch (BadRequestException e) {
+			response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+			return;
+		}
+	}
+	
+	protected String getRequestContent(HttpServletRequest request) {
+
+		StringBuffer sb = new StringBuffer();
+		String line = null;
+
+		try {
+
+			BufferedReader reader = request.getReader();
+
+			while ((line = reader.readLine()) != null)
+				sb.append(line);
+		}
+		catch (Exception e){
+			//TODO Auto-generated
+		}
+
+		return sb.toString();
 	}
 
 	public void setFm(FeedsManager fm) {
