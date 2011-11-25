@@ -65,7 +65,7 @@ public class XMLStreamReader {
 			e.printStackTrace();
 		}  
 		
-		return r.toString();
+		return ((RSSContentHandler) getContentHandler()).getResult();
 	}
 
 	public void setTransformer(Transformer transformer) {

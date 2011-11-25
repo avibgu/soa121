@@ -13,29 +13,11 @@ import feeds.FeedsManager;
 
 public class Main {
 	
-	private static final int SERVER_PORT = 17171;
+	public static final int SERVER_PORT = 17171;
 
 	public static void main(String[] args) {
-		
-		test();
-		
-		//	startServer();
-	}
-	
-	public static void test(){
-	
-		try {
-			new XMLStreamReader().readFromStream(
-					new URL("http://www.cs.bgu.ac.il/~dwss121/Announcements?action=rss"));
-		}
-		catch (MalformedURLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+			
+		startServer();
 	}
 		
 	public static void startServer(){
@@ -66,6 +48,23 @@ public class Main {
 		}
 		catch (Throwable e) {
 			
+			e.printStackTrace();
+		}
+	}
+	
+	public static void test(){
+		
+		try {
+			System.out.println(
+				new XMLStreamReader().readFromStream(
+					new URL("http://www.cs.bgu.ac.il/~dwss121/Announcements?action=rss")));
+		}
+		catch (MalformedURLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		catch (Exception e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

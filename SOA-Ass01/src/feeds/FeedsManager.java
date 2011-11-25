@@ -22,7 +22,7 @@ public class FeedsManager {
 		setUnnamedFeedsUrls(new Vector<String>());
 		setNumOfFeeds(0);
 	}
-	
+
 	/**
 	 * @param feed					the feed\s (collection or element) that we want its content 
 	 * @param filters				the requested feed filters
