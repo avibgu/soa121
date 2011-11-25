@@ -1,17 +1,26 @@
 package feeds;
+
+import java.util.HashMap;
 import java.util.Map;
+import java.util.Vector;
 
 import exceptions.BadRequestException;
 import exceptions.NotImplaementedException;
 
 
-//TODO: should use write-read-locks..
+//TODO: should use write-read-locks?..
 
 public class FeedsManager {
 
+	protected	Map<String,Feed>	_namedFeeds;
+	protected	Vector<String>		_unnamedFeedsUrls;
+	protected	int					_numOfFeeds;
+	
 	public FeedsManager() {
 	
-		// TODO Auto-generated constructor stub
+		setNamedFeeds(new HashMap<String,Feed>());
+		setUnnamedFeedsUrls(new Vector<String>());
+		setNumOfFeeds(0);
 	}
 	
 	/**
@@ -78,10 +87,35 @@ public class FeedsManager {
 		return;
 	}
 
+	public void setNamedFeeds(Map<String,Feed> feeds) {
+		this._namedFeeds = feeds;
+	}
+
+	public Map<String,Feed> getNamedFeeds() {
+		return _namedFeeds;
+	}
+
+	public void setNumOfFeeds(int numOfFeeds) {
+		this._numOfFeeds = numOfFeeds;
+	}
+	
+	public void setUnnamedFeedsUrls(Vector<String> unnamedFeedsUrls) {
+		this._unnamedFeedsUrls = unnamedFeedsUrls;
+	}
+
+	public Vector<String> getUnnamedFeedsUrls() {
+		return _unnamedFeedsUrls;
+	}
+	
 	public int getNumOfFeeds() {
-		
-		// TODO Auto-generated method stub
-		
-		return 0;
+		return _numOfFeeds;
+	}
+	
+	public void increaseNumOfFeeds() {
+		_numOfFeeds++;
+	}
+	
+	public void decreaseNumOfFeeds() {
+		_numOfFeeds--;
 	}
 }
