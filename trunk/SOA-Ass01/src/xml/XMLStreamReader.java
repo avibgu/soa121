@@ -18,12 +18,13 @@ import org.xml.sax.ContentHandler;
 
 public class XMLStreamReader {
 
-	Transformer _transformer;
+	protected	Transformer		_transformer;
+	protected	ContentHandler	_contentHandler;
 	
 	public XMLStreamReader() {
 
 		try {
-			_transformer = TransformerFactory.newInstance().newTransformer();
+			setTransformer(TransformerFactory.newInstance().newTransformer());
 		}
 		catch (TransformerConfigurationException e) {
 			// TODO Auto-generated catch block
@@ -33,9 +34,11 @@ public class XMLStreamReader {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
+		setContentHandler(new RSSContentHandler());
 	}
 	
-	public void readFromStream(URL url) throws Exception{
+	public String readFromStream(URL url) throws Exception{
 
 		//	Parsing from a stream to SAX callbacks
 
@@ -52,15 +55,32 @@ public class XMLStreamReader {
 		}
 		
 		Source s = new StreamSource(stream);
-		ContentHandler h = new RSSContentHandler();
-		Result r = new SAXResult(h);
+		Result r = new SAXResult(getContentHandler());
 		
 		try {
-			_transformer.transform(s, r);	// calls SAX callbacks
+			getTransformer().transform(s, r);	// calls SAX callbacks
 		}
 		catch (TransformerException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}  
+		
+		return r.toString();
+	}
+
+	public void setTransformer(Transformer transformer) {
+		this._transformer = transformer;
+	}
+
+	public Transformer getTransformer() {
+		return _transformer;
+	}
+
+	public void setContentHandler(ContentHandler contentHandler) {
+		this._contentHandler = contentHandler;
+	}
+
+	public ContentHandler getContentHandler() {
+		return _contentHandler;
 	}
 }
