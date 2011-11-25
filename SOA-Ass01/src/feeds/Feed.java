@@ -1,5 +1,7 @@
 package feeds;
 
+import java.net.URL;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Vector;
@@ -7,11 +9,11 @@ import java.util.Vector;
 public class Feed {
 
 	protected	String				_name;
-	protected	String				_url;
+	protected	URL					_url;
 	protected	Map<String,Feed>	_feeds;
 	protected	Vector<String>		_unnamedFeedsUrls;
 	
-	public Feed(String name, String url) {
+	public Feed(String name, URL url) {
 	
 		setName(name);
 		setUrl(url);
@@ -23,11 +25,11 @@ public class Feed {
 		this._name = name;
 	}
 
-	public void setUrl(String url) {
+	public void setUrl(URL url) {
 		this._url = url;
 	}
 
-	public String getUrl() {
+	public URL getUrl() {
 		return _url;
 	}
 	
