@@ -68,10 +68,14 @@ public class MainServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
-		String content = getRequestContent(request);
+		String content;
 		
 		try{
+			if(request.getRequestURI().endsWith("/"))
+				//throw exception => PUT method is unsupported for Feed collections
+				throw new BadRequestException();
 			
+			content = getRequestContent(request);
 			_mainFeed.postUnnamedFeed(request.getQueryString(), content);
 		}
 		catch (NotImplaementedException e) {

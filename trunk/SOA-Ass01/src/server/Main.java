@@ -34,7 +34,7 @@ public class Main {
 			new ServletContextHandler(ServletContextHandler.SESSIONS);
 		
 		ctx.setContextPath("/ex1");
-		ctx.addServlet(new ServletHolder(new MainServlet(FeedFactory.createFeedCollection())), "/");
+		ctx.addServlet(new ServletHolder(new MainServlet(FeedFactory.create(null))), "/");
 		
 //		// Files
 //		ResourceHandler res = new ResourceHandler();
