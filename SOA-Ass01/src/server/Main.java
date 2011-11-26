@@ -2,11 +2,14 @@ package server;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.*;
 import org.eclipse.jetty.servlet.*;
 
+import xml.DOMStreamReader;
 import xml.SAXStreamReader;
 
 import feeds.FeedCollection;
@@ -18,6 +21,9 @@ public class Main {
 	public static void main(String[] args) {
 			
 		startServer();
+		
+		//	testSAX();
+		//	testDOM();
 	}
 		
 	public static void startServer(){
@@ -52,7 +58,7 @@ public class Main {
 		}
 	}
 	
-	public static void test(){
+	public static void testSAX(){
 		
 		try {
 			System.out.println(
@@ -67,5 +73,29 @@ public class Main {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+	
+	public static void testDOM(){
+		
+		URL url = null;
+		
+		try {
+			url = new URL("http://www.cs.bgu.ac.il/~dwss121/Announcements?action=rss");
+		}
+		catch (MalformedURLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	
+		// Create an executor:
+        ExecutorService e = Executors.newFixedThreadPool(7);
+
+        for (int i=0;  i < 10;   i++)
+        	e.execute(new DOMStreamReader(url, System.out));
+
+        // this causes the executor not to accept any more
+        //tasks, and to kill all of its threads when all the
+        //submitted tasks are done.
+        e.shutdown();
 	}
 }   
