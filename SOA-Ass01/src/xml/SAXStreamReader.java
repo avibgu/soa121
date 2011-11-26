@@ -16,12 +16,12 @@ import javax.xml.transform.stream.StreamSource;
 
 import org.xml.sax.ContentHandler;
 
-public class XMLStreamReader {
+public class SAXStreamReader {
 
 	protected	Transformer		_transformer;
 	protected	ContentHandler	_contentHandler;
 	
-	public XMLStreamReader() {
+	public SAXStreamReader() {
 
 		try {
 			setTransformer(TransformerFactory.newInstance().newTransformer());

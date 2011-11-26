@@ -7,7 +7,7 @@ import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.*;
 import org.eclipse.jetty.servlet.*;
 
-import xml.XMLStreamReader;
+import xml.SAXStreamReader;
 
 import feeds.FeedCollection;
 
@@ -56,7 +56,7 @@ public class Main {
 		
 		try {
 			System.out.println(
-				new XMLStreamReader().readFromStream(
+				new SAXStreamReader().readFromStream(
 					new URL("http://www.cs.bgu.ac.il/~dwss121/Announcements?action=rss")));
 		}
 		catch (MalformedURLException e) {
