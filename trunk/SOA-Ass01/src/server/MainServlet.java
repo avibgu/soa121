@@ -8,11 +8,13 @@ import javax.servlet.ServletException;
 
 import exceptions.BadRequestException;
 import exceptions.NotImplaementedException;
-import feeds.FeedsManager;
+import feeds.FeedCollection;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Arrays;
+import java.util.Vector;
 
 public class MainServlet extends HttpServlet {
 
@@ -29,11 +31,11 @@ public class MainServlet extends HttpServlet {
 //	501	Not	implemented	response.sendError(HttpServletResponse.SC_NOT_IMPLEMENTED);
 //	400	Bad request		response.sendError(HttpServletResponse.SC_BAD_REQUEST);
 	
-	protected FeedsManager _fm;
+	protected FeedCollection _fc;
 	
-	public MainServlet(FeedsManager fm) {
+	public MainServlet(FeedCollection fc) {
 
-		setFm(fm);
+		setFc(fc);
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -45,7 +47,7 @@ public class MainServlet extends HttpServlet {
 		
 		try{
 			
-			answer = _fm.getFeeds(request.getQueryString(), request.getParameterMap());
+			answer = _fc.getFeeds(request.getQueryString(), request.getParameterMap());
 		}
 		catch (BadRequestException e) {
 			response.sendError(HttpServletResponse.SC_BAD_REQUEST);
@@ -66,7 +68,7 @@ public class MainServlet extends HttpServlet {
 		
 		try{
 			
-			_fm.postUnnamedFeed(request.getQueryString(), content);
+			_fc.postUnnamedFeed(request.getQueryString(), content);
 		}
 		catch (NotImplaementedException e) {
 			response.sendError(HttpServletResponse.SC_NOT_IMPLEMENTED);
@@ -85,14 +87,16 @@ public class MainServlet extends HttpServlet {
 		String content = getRequestContent(request);
 		
 		try{
-			
-			_fm.putNamedFeed(request.getQueryString(), content);
+			String [] pathArray = request.getRequestURI().split("/");
+			if(pathArray[0].isEmpty() && pathArray[1].equalsIgnoreCase("ex1"))
+				_fc.putNamedFeed(new Vector<String>(Arrays.asList(pathArray).subList(2, pathArray.length)), content);
+			else throw new BadRequestException();
 		}
 		catch (NotImplaementedException e) {
 			response.sendError(HttpServletResponse.SC_NOT_IMPLEMENTED);
 			return;
 		}
-		catch (BadRequestException e) {
+		catch (Exception e) {
 			response.sendError(HttpServletResponse.SC_BAD_REQUEST);
 			return;
 		}
@@ -104,7 +108,7 @@ public class MainServlet extends HttpServlet {
 
 		try{
 			
-			_fm.deleteFeeds(request.getQueryString());
+			_fc.deleteFeeds(request.getQueryString());
 		}
 		catch (BadRequestException e) {
 			response.sendError(HttpServletResponse.SC_BAD_REQUEST);
@@ -131,11 +135,11 @@ public class MainServlet extends HttpServlet {
 		return sb.toString();
 	}
 
-	public void setFm(FeedsManager fm) {
-		this._fm = fm;
+	public void setFc(FeedCollection fc) {
+		this._fc = fc;
 	}
 
-	public FeedsManager getFm() {
-		return this._fm;
+	public FeedCollection getFc() {
+		return this._fc;
 	}
 }
