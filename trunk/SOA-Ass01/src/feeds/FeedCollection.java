@@ -1,6 +1,5 @@
 package feeds;
 
-import java.net.URL;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -19,50 +18,46 @@ public class FeedCollection extends Feed{
 	protected	Vector<String>		_unnamedFeedsUrls;
 	protected	int					_numOfFeeds;
 	
-	private FeedCollection(String feedName, URL url, Feed childFeed) {
-		super(feedName,url);
+	private FeedCollection(Feed childFeed, String childFeedName) {
 		setNamedFeeds(new HashMap<String,Feed>());
 		if(childFeed != null)
-			_namedFeeds.put(childFeed.getName(), childFeed);
+			_namedFeeds.put(childFeedName, childFeed);
 		setUnnamedFeedsUrls(new Vector<String>());
-		//setNumOfFeeds(0);
 	}
 	
-	public FeedCollection(String feedName, Feed childFeed) {
-		super(feedName);
-		setNamedFeeds(new HashMap<String,Feed>());
-		if(childFeed != null)
-			_namedFeeds.put(childFeed.getName(), childFeed);
-		setUnnamedFeedsUrls(new Vector<String>());
+	public static Feed createFeedCollection(Feed childFeed, String childFeedName){
+		return new FeedCollection(childFeed,childFeedName);
 	}
 
-	/**
-	 * @param feed					the feed\s (collection or element) that we want its content 
-	 * @param filters				the requested feed filters
-	 * 
-	 * @return						the answer that should be delivered to the client
-	 * 								(only when the operation succeeded)
-	 * 
-	 * @throws BadRequestException	in case the request is damaged
-	 */
-	public StringBuilder getFeeds(String feed, Map<String,String> filters)
+	@Override
+	public StringBuilder getFeeds(Vector<String> requestPath, Map<String,String> filters)
 		throws BadRequestException{
-
-		// TODO Auto-generated method stub
-	
-		return new StringBuilder();
+		StringBuilder sb = super.getFeeds(requestPath,filters);
+		Feed nextFeed;
+		
+		if(requestPath.isEmpty())
+		{
+			for (Feed feed : _namedFeeds.values()) {
+				//TODO threads
+				sb.append(feed.getFeeds(requestPath, filters));
+			}
+			//TODO connection
+			sb.append(getUrl()!=null? getUrl().toString():"null");
+			//TODO unnamed feeds and what about FeedElement (inheritance??)
+		}
+		
+		else
+		{
+			nextFeed = _namedFeeds.get(requestPath.remove(0));
+			if(nextFeed != null)
+				sb = nextFeed.getFeeds(requestPath, filters);
+			else
+				throw new BadRequestException();
+		}
+		return sb;
 	}
 
-	/**
-	 * @param collection				the collection that we want to add the feed to
-	 * @param address					the feed's address
-	 * 
-	 * @return 							the answer that should be delivered to the client
-	 * 									(only when the operation succeeded)
-	 * 
-	 * @throws BadRequestException		in case the request is damaged
-	 * @throws NotImplaementedException	in case the given collection is actually an element
-	 */
+	@Override
 	public void postUnnamedFeed(String collection, String address)
 		throws BadRequestException, NotImplaementedException {
 		
@@ -71,16 +66,7 @@ public class FeedCollection extends Feed{
 		return;
 	}
 
-	/**
-	 * @param element					the name of the new feed
-	 * @param address					the feed's address
-	 * 
-	 * @return 							the answer that should be delivered to the client
-	 * 									(only when the operation succeeded)
-	 * 
-	 * @throws BadRequestException		in case the request is damaged
-	 * @throws NotImplaementedException	in case the given element is actually a collection
-	 */
+	@Override
 	public void putNamedFeed(Vector<String> requestPath, String address)
 		throws BadRequestException, NotImplaementedException {
 		Feed f = null;
@@ -99,15 +85,13 @@ public class FeedCollection extends Feed{
 		f = this._namedFeeds.get(nextElementName);
 		if(f == null)
 		{
-			f = FeedFactory.create(nextElementName, requestPath);
+			f = FeedFactory.create(requestPath);
 			this._namedFeeds.put(nextElementName, f);
 		}
 		f.putNamedFeed(new Vector<String>(Arrays.asList(nextRequestPath)), address);
 	}
 
-	/**
-	 * @param feed						the element or collection that we want to delete
-	 */
+	@Override
 	public void deleteFeeds(String feed)
 		throws BadRequestException {
 		

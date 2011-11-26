@@ -1,16 +1,19 @@
 package feeds;
 
-import java.net.URL;
 import java.util.Vector;
 
 public class FeedFactory {
 
-	public static Feed create(String feedName, Vector<String> requestPath) {
+	public static Feed create(Vector<String> requestPath) {
 		String NextElementName;
 		
-		if(requestPath.isEmpty())
-			return new Feed(feedName);
+		if(requestPath == null || requestPath.isEmpty())
+			return FeedElement.createFeedElement();
 		NextElementName = requestPath.remove(0);
-		return new FeedCollection(feedName,create(NextElementName,requestPath));
+		return FeedCollection.createFeedCollection(create(requestPath),NextElementName);
+	}
+	
+	public static Feed createFeedCollection() {
+		return FeedCollection.createFeedCollection(null,null);
 	}
 }
