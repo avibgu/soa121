@@ -9,7 +9,7 @@ import org.eclipse.jetty.servlet.*;
 
 import xml.XMLStreamReader;
 
-import feeds.FeedsManager;
+import feeds.FeedCollection;
 
 public class Main {
 	
@@ -28,7 +28,7 @@ public class Main {
 			new ServletContextHandler(ServletContextHandler.SESSIONS);
 		
 		ctx.setContextPath("/ex1");
-		ctx.addServlet(new ServletHolder(new MainServlet(new FeedsManager())), "/");
+		ctx.addServlet(new ServletHolder(new MainServlet(new FeedCollection("ex1",null))), "/");
 		
 //		// Files
 //		ResourceHandler res = new ResourceHandler();

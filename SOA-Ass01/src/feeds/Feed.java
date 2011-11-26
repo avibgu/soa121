@@ -1,24 +1,32 @@
 package feeds;
 
+import java.net.MalformedURLException;
 import java.net.URL;
-
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Vector;
 
-public class Feed {
+import exceptions.BadRequestException;
+import exceptions.NotImplaementedException;
 
+public class Feed {
 	protected	String				_name;
 	protected	URL					_url;
-	protected	Map<String,Feed>	_feeds;
-	protected	Vector<String>		_unnamedFeedsUrls;
 	
 	public Feed(String name, URL url) {
 	
 		setName(name);
 		setUrl(url);
-		setNamedFeeds(new HashMap<String,Feed>());
-		setUnnamedFeedsUrls(new Vector<String>());
+	}
+
+	public Feed(String name) {
+		setName(name);
+	}
+
+	public void putNamedFeed(Vector<String> requestPath, String address) throws BadRequestException, NotImplaementedException{
+		try {
+			setUrl(new URL(address));
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public void setName(String name) {
@@ -35,25 +43,5 @@ public class Feed {
 	
 	public String getName() {
 		return _name;
-	}
-
-	public void setNamedFeeds(Map<String,Feed> feeds) {
-		this._feeds = feeds;
-	}
-
-	public Map<String,Feed> getNamedFeeds() {
-		return _feeds;
-	}
-	
-	public void setUnnamedFeedsUrls(Vector<String> unnamedFeedsUrls) {
-		this._unnamedFeedsUrls = unnamedFeedsUrls;
-	}
-
-	public Vector<String> getUnnamedFeedsUrls() {
-		return _unnamedFeedsUrls;
-	}
-	
-	public void addSubFeed(String name, Feed feed){
-		_feeds.put(name, feed);
 	}
 }
