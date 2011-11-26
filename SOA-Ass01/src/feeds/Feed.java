@@ -98,8 +98,9 @@ public class Feed {
 				sb.append(feed.getFeeds(requestPath, filters));
 			}
 			//TODO connection
-			sb.append(getUrl()!=null? getUrl().toString():"null");
-			//TODO unnamed feeds and what about FeedElement (inheritance??)
+			if(getUrl()!=null)
+				sb.append("\n"+getUrl().toString());
+		//TODO unnamed feeds and what about FeedElement (inheritance??)
 		}
 		
 		else
@@ -128,10 +129,37 @@ public class Feed {
 	throws BadRequestException, NotImplaementedException{}
 	
 	/**
-	 * @param feed						the element or collection that we want to delete
+	 * @param requestPath						the element or collection that we want to delete
 	 */
-	public void deleteFeeds(String feed)
-		throws BadRequestException{}
+	public void deleteFeeds(Vector<String> requestPath)
+		throws BadRequestException
+	{
+		String nextFeedKey;
+		Feed nextFeed;
+	
+		//When delete all feeds
+		if(requestPath.isEmpty())
+		{
+			setNamedFeeds(new HashMap<String, Feed>());
+			setUrl(null);
+			return;
+		}
+		
+		nextFeedKey = requestPath.remove(0);
+		if(requestPath.isEmpty())
+		{
+			if(_namedFeeds.remove(nextFeedKey) == null)
+				throw new BadRequestException();
+		}
+		else 
+			{
+			nextFeed = _namedFeeds.get(nextFeedKey); 
+			if(nextFeed != null)
+				nextFeed.deleteFeeds(requestPath);
+			else
+				throw new BadRequestException();
+			}
+	}
 
 	public void setNamedFeeds(Map<String,Feed> feeds) {
 		this._namedFeeds = feeds;
