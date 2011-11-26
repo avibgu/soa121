@@ -8,12 +8,8 @@ public class FeedFactory {
 		String NextElementName;
 		
 		if(requestPath == null || requestPath.isEmpty())
-			return FeedElement.createFeedElement();
+			return new Feed();
 		NextElementName = requestPath.remove(0);
-		return FeedCollection.createFeedCollection(create(requestPath),NextElementName);
-	}
-	
-	public static Feed createFeedCollection() {
-		return FeedCollection.createFeedCollection(null,null);
+		return new Feed(create(requestPath),NextElementName);
 	}
 }
