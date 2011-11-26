@@ -102,7 +102,7 @@ public class MainServlet extends HttpServlet {
 			response.sendError(HttpServletResponse.SC_NOT_IMPLEMENTED);
 			return;
 		}
-		catch (Exception e) {
+		catch (BadRequestException e) {
 			response.sendError(HttpServletResponse.SC_BAD_REQUEST);
 			return;
 		}
@@ -125,7 +125,11 @@ public class MainServlet extends HttpServlet {
 
 		try{
 			
-			_mainFeed.deleteFeeds(request.getQueryString());
+			_mainFeed.deleteFeeds(getRequestPath(request));
+		}
+		catch (NotImplaementedException e) {
+			response.sendError(HttpServletResponse.SC_NOT_IMPLEMENTED);
+			return;
 		}
 		catch (BadRequestException e) {
 			response.sendError(HttpServletResponse.SC_BAD_REQUEST);
