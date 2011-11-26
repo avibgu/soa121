@@ -8,7 +8,7 @@ import javax.servlet.ServletException;
 
 import exceptions.BadRequestException;
 import exceptions.NotImplaementedException;
-import feeds.FeedCollection;
+import feeds.Feed;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -31,11 +31,11 @@ public class MainServlet extends HttpServlet {
 //	501	Not	implemented	response.sendError(HttpServletResponse.SC_NOT_IMPLEMENTED);
 //	400	Bad request		response.sendError(HttpServletResponse.SC_BAD_REQUEST);
 	
-	protected FeedCollection _fc;
+	protected Feed _mainFeed;
 	
-	public MainServlet(FeedCollection fc) {
+	public MainServlet(Feed feed) {
 
-		setFc(fc);
+		setMainFeed(feed);
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -47,7 +47,11 @@ public class MainServlet extends HttpServlet {
 		
 		try{
 			
-			answer = _fc.getFeeds(request.getQueryString(), request.getParameterMap());
+			answer = _mainFeed.getFeeds(getRequestPath(request), request.getParameterMap());
+		}
+		catch (NotImplaementedException e) {
+			response.sendError(HttpServletResponse.SC_NOT_IMPLEMENTED);
+			return;
 		}
 		catch (BadRequestException e) {
 			response.sendError(HttpServletResponse.SC_BAD_REQUEST);
@@ -68,7 +72,7 @@ public class MainServlet extends HttpServlet {
 		
 		try{
 			
-			_fc.postUnnamedFeed(request.getQueryString(), content);
+			_mainFeed.postUnnamedFeed(request.getQueryString(), content);
 		}
 		catch (NotImplaementedException e) {
 			response.sendError(HttpServletResponse.SC_NOT_IMPLEMENTED);
@@ -86,11 +90,9 @@ public class MainServlet extends HttpServlet {
 		
 		String content = getRequestContent(request);
 		
-		try{
-			String [] pathArray = request.getRequestURI().split("/");
-			if(pathArray[0].isEmpty() && pathArray[1].equalsIgnoreCase("ex1"))
-				_fc.putNamedFeed(new Vector<String>(Arrays.asList(pathArray).subList(2, pathArray.length)), content);
-			else throw new BadRequestException();
+		try
+		{
+			_mainFeed.putNamedFeed(getRequestPath(request), content);
 		}
 		catch (NotImplaementedException e) {
 			response.sendError(HttpServletResponse.SC_NOT_IMPLEMENTED);
@@ -102,13 +104,24 @@ public class MainServlet extends HttpServlet {
 		}
 	}
 	
+	private Vector<String> getRequestPath(HttpServletRequest request) throws NotImplaementedException, BadRequestException {
+		try {
+			String [] pathArray = request.getRequestURI().split("/");
+			if(pathArray[0].isEmpty() && pathArray[1].equalsIgnoreCase("ex1"))
+				return new Vector<String>(Arrays.asList(pathArray).subList(2, pathArray.length));
+		} catch (Exception e) {
+			throw new BadRequestException();
+		}
+		throw new BadRequestException();
+	}
+
 	@Override
 	protected void doDelete(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
 		try{
 			
-			_fc.deleteFeeds(request.getQueryString());
+			_mainFeed.deleteFeeds(request.getQueryString());
 		}
 		catch (BadRequestException e) {
 			response.sendError(HttpServletResponse.SC_BAD_REQUEST);
@@ -135,11 +148,11 @@ public class MainServlet extends HttpServlet {
 		return sb.toString();
 	}
 
-	public void setFc(FeedCollection fc) {
-		this._fc = fc;
+	public void setMainFeed(Feed f) {
+		this._mainFeed = f;
 	}
 
-	public FeedCollection getFc() {
-		return this._fc;
+	public Feed getMainFeed() {
+		return this._mainFeed;
 	}
 }

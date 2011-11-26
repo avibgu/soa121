@@ -12,7 +12,7 @@ import org.eclipse.jetty.servlet.*;
 import xml.DOMStreamReader;
 import xml.SAXStreamReader;
 
-import feeds.FeedCollection;
+import feeds.FeedFactory;
 
 public class Main {
 	
@@ -34,7 +34,7 @@ public class Main {
 			new ServletContextHandler(ServletContextHandler.SESSIONS);
 		
 		ctx.setContextPath("/ex1");
-		ctx.addServlet(new ServletHolder(new MainServlet(new FeedCollection("ex1",null))), "/");
+		ctx.addServlet(new ServletHolder(new MainServlet(FeedFactory.createFeedCollection())), "/");
 		
 //		// Files
 //		ResourceHandler res = new ResourceHandler();
