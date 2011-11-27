@@ -80,37 +80,18 @@ public class DOMStreamReader implements Runnable {
 		
 		return ((DOMResult)r).getNode();
 	}
-
+	
 	protected Node filter(Node node) {
-		
-		//TODO: currently supports only channel filters..
-		
-		boolean found = false;
-		
-		for(	Node child = node.getFirstChild();
-				child != null && !found;
-				child = child.getNextSibling()	){
 
-			for (String filterKey: getFilters().keySet()){
-				
-				ArrayList<String> values = getFilters().get(filterKey);
-				
-				for (String filterValue: values){
-					
-					if (	0 == child.getNodeName().compareTo(filterKey) &&
-							0 == child.getFirstChild().getNodeValue().compareTo(filterValue)	)
-						found = true;
-					
-					Node tmp = filter(child);
-					
-					if (null != tmp)
-						found = true;
-				}
-			}
-		}
+		if (getFilters().containsKey("title"))
+			node = Filter.filterByTitle(node, getFilters().get("title"));
 		
-		if (!found) return null;
+		if (getFilters().containsKey("category"))
+			node = Filter.filterByCategory(node, getFilters().get("category"));
 		
+		if (getFilters().containsKey("author"))
+			node = Filter.filterByAuthor(node, getFilters().get("author"));
+			
 		return node;
 	}
 	
