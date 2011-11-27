@@ -2,12 +2,25 @@ package server;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+
+import javax.xml.transform.Result;
+import javax.xml.transform.Source;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.*;
 import org.eclipse.jetty.servlet.*;
+import org.w3c.dom.Node;
 
 import xml.DOMStreamReader;
 import xml.SAXStreamReader;
@@ -20,10 +33,10 @@ public class Main {
 
 	public static void main(String[] args) {
 			
-		startServer();
+		//	startServer();
 		
 		//	testSAX();
-		//	testDOM();
+		testDOM();
 	}
 		
 	public static void startServer(){
@@ -34,7 +47,7 @@ public class Main {
 			new ServletContextHandler(ServletContextHandler.SESSIONS);
 		
 		ctx.setContextPath("/ex1");
-		ctx.addServlet(new ServletHolder(new MainServlet(FeedFactory.create(null))), "/");
+		ctx.addServlet(new ServletHolder(new MainServlet(FeedFactory.create(null))), "/*");
 		
 //		// Files
 //		ResourceHandler res = new ResourceHandler();
@@ -86,16 +99,49 @@ public class Main {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-	
+		
+		ArrayList<Node> nodes = new ArrayList<Node>();
+		
+		Map<String,ArrayList<String>> filters = new HashMap<String, ArrayList<String>>();
+		
+		ArrayList<String> filterValue = new ArrayList<String>();
+		filterValue.add("News");
+		
+		filters.put("category", filterValue);
+		
 		// Create an executor:
         ExecutorService e = Executors.newFixedThreadPool(7);
 
         for (int i=0;  i < 10;   i++)
-        	e.execute(new DOMStreamReader(url, System.out));
+        	e.execute(new DOMStreamReader(url, nodes, filters));
 
         // this causes the executor not to accept any more
         //tasks, and to kill all of its threads when all the
         //submitted tasks are done.
         e.shutdown();
+        
+        Transformer transformer = null;
+        
+		try {
+			transformer = TransformerFactory.newInstance().newTransformer();
+		}
+		catch (TransformerConfigurationException e2) {
+			// TODO Auto-generated catch block
+			e2.printStackTrace();
+		}
+        
+        for (Node node: nodes){
+        	
+        	Source s = new DOMSource(node);
+    		Result r = new StreamResult(System.out);
+
+    		try {
+    			transformer.transform(s, r);
+    		}
+    		catch (TransformerException e3) {
+    			// TODO Auto-generated catch block
+    			e3.printStackTrace();
+    		}
+        }
 	}
 }   
