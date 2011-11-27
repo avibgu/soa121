@@ -9,6 +9,8 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.Result;
 import javax.xml.transform.Source;
 import javax.xml.transform.Transformer;
@@ -21,7 +23,12 @@ import javax.xml.transform.stream.StreamResult;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.*;
 import org.eclipse.jetty.servlet.*;
+import org.w3c.dom.Document;
+import org.w3c.dom.DocumentType;
 import org.w3c.dom.Node;
+
+import com.sun.org.apache.xerces.internal.dom.DocumentImpl;
+import com.sun.org.apache.xerces.internal.dom.ElementNSImpl;
 
 import xml.DOMStreamReader;
 import xml.SAXStreamReader;
@@ -34,10 +41,11 @@ public class Main {
 
 	public static void main(String[] args) {
 			
-		//	startServer();
+		startServer();
 		
 		//	testSAX();
-		testDOM();
+		//	testDOM1();
+		//	testDOM2();
 	}
 		
 	public static void startServer(){
@@ -89,7 +97,7 @@ public class Main {
 		}
 	}
 	
-	public static void testDOM(){
+	public static void testDOM1(){
 		
 		URL url = null;
 		
@@ -113,7 +121,7 @@ public class Main {
 		// Create an executor:
         ExecutorService e = Executors.newFixedThreadPool(7);
 
-        for (int i = 0; i < 1; i++)
+        for (int i = 0; i < 7; i++)
         	e.execute(new DOMStreamReader(url, nodes, filters));
 
         // this causes the executor not to accept any more
@@ -138,7 +146,17 @@ public class Main {
 			// TODO Auto-generated catch block
 			e2.printStackTrace();
 		}
-        
+
+		XmlMerge xmlMerge = new DefaultXmlMerge();
+		
+		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+		DocumentBuilder db = dbf.newDocumentBuilder();
+		
+		Document doc = db.parse(
+		                             xmlMerge.merge(
+		                                new FileInputStream("file1.xml"),
+		                                servletRequest.getInputStream()));
+
         for (Node node: nodes){
         	
         	Source s = new DOMSource(node);
@@ -152,5 +170,31 @@ public class Main {
     			e3.printStackTrace();
     		}
         }
+	}
+	
+	public static void testDOM2(){
+		
+		Node node = new DocumentImpl();
+		
+        Transformer transformer = null;
+        
+		try {
+			transformer = TransformerFactory.newInstance().newTransformer();
+		}
+		catch (TransformerConfigurationException e2) {
+			// TODO Auto-generated catch block
+			e2.printStackTrace();
+		}
+        	
+    	Source s = new DOMSource(node);
+		Result r = new StreamResult(System.out);
+
+		try {
+			transformer.transform(s, r);
+		}
+		catch (TransformerException e3) {
+			// TODO Auto-generated catch block
+			e3.printStackTrace();
+		}
 	}
 }   
