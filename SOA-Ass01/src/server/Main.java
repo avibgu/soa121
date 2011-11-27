@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 import javax.xml.transform.Result;
 import javax.xml.transform.Source;
@@ -112,13 +113,21 @@ public class Main {
 		// Create an executor:
         ExecutorService e = Executors.newFixedThreadPool(7);
 
-        for (int i=0;  i < 10;   i++)
+        for (int i = 0; i < 1; i++)
         	e.execute(new DOMStreamReader(url, nodes, filters));
 
         // this causes the executor not to accept any more
         //tasks, and to kill all of its threads when all the
         //submitted tasks are done.
         e.shutdown();
+        
+        try {
+			while (!e.awaitTermination(3, TimeUnit.SECONDS)) continue;
+		}
+        catch (InterruptedException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
         
         Transformer transformer = null;
         
