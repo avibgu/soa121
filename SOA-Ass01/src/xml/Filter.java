@@ -29,9 +29,8 @@ public class Filter {
 				
 				if (found) break;
 				
-				Node tmp = filterByCategory(child, filterValues);
-				
-				if (null != tmp) found = true;
+				if (null != filterByCategory(child, filterValues))
+					found = true;
 			}
 		}
 		
