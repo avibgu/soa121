@@ -49,7 +49,7 @@ public class DOMStreamReader implements Runnable {
 
 		Node node = readFeedContent();
 		
-		if (getFilters() != null && getFilters().size() > 0)
+		if (getFilters() != null && !getFilters().isEmpty())
 			node = filter(node);
 		
 		addFeedToNodesList(node);
@@ -82,7 +82,7 @@ public class DOMStreamReader implements Runnable {
 	}
 
 	protected Node filter(Node node) {
-
+		
 		//TODO: currently supports only channel filters..
 		
 		boolean found = false;
@@ -95,9 +95,17 @@ public class DOMStreamReader implements Runnable {
 				
 				ArrayList<String> values = getFilters().get(filterKey);
 				
-				for (String filterValue: values)
-					if (0 == child.getNodeName().compareTo(filterValue))
+				for (String filterValue: values){
+					
+					if (	0 == child.getNodeName().compareTo(filterKey) &&
+							0 == child.getFirstChild().getNodeValue().compareTo(filterValue)	)
 						found = true;
+					
+					Node tmp = filter(child);
+					
+					if (null != tmp)
+						found = true;
+				}
 			}
 		}
 		
