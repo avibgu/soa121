@@ -27,6 +27,8 @@ public class Filter {
 						0 == child.getFirstChild().getNodeValue().compareTo(filterValue)	)
 					found = true;
 				
+				if (found) break;
+				
 				Node tmp = filterByCategory(child, filterValues);
 				
 				if (null != tmp) found = true;
