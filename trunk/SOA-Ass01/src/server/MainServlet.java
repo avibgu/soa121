@@ -71,9 +71,6 @@ public class MainServlet extends HttpServlet {
 		String content;
 		
 		try{
-			if(request.getRequestURI().endsWith("/"))
-				//throw exception => PUT method is unsupported for Feed collections
-				throw new BadRequestException();
 			
 			content = getRequestContent(request);
 			_mainFeed.postUnnamedFeed(request.getQueryString(), content);
@@ -96,6 +93,9 @@ public class MainServlet extends HttpServlet {
 		
 		try
 		{
+			if(request.getRequestURI().endsWith("/"))
+				//throw exception => PUT method is unsupported for Feed collections
+				throw new BadRequestException();
 			_mainFeed.putNamedFeed(getRequestPath(request), content);
 		}
 		catch (NotImplaementedException e) {
@@ -108,17 +108,6 @@ public class MainServlet extends HttpServlet {
 		}
 	}
 	
-	private Vector<String> getRequestPath(HttpServletRequest request) throws NotImplaementedException, BadRequestException {
-		try {
-			String [] pathArray = request.getRequestURI().split("/");
-			if(pathArray[0].isEmpty() && pathArray[1].equalsIgnoreCase("ex1"))
-				return new Vector<String>(Arrays.asList(pathArray).subList(2, pathArray.length));
-		} catch (Exception e) {
-			throw new BadRequestException();
-		}
-		throw new BadRequestException();
-	}
-
 	@Override
 	protected void doDelete(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
@@ -154,6 +143,17 @@ public class MainServlet extends HttpServlet {
 		}
 
 		return sb.toString();
+	}
+
+	private Vector<String> getRequestPath(HttpServletRequest request) throws NotImplaementedException, BadRequestException {
+		try {
+			String [] pathArray = request.getRequestURI().split("/");
+			if(pathArray[0].isEmpty() && pathArray[1].equalsIgnoreCase("ex1"))
+				return new Vector<String>(Arrays.asList(pathArray).subList(2, pathArray.length));
+		} catch (Exception e) {
+			throw new BadRequestException();
+		}
+		throw new BadRequestException();
 	}
 
 	public void setMainFeed(Feed f) {
