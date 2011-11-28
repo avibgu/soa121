@@ -2,15 +2,8 @@ package server;
 
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
+import java.util.Vector;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.Result;
 import javax.xml.transform.Source;
 import javax.xml.transform.Transformer;
@@ -23,17 +16,13 @@ import javax.xml.transform.stream.StreamResult;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.*;
 import org.eclipse.jetty.servlet.*;
-import org.w3c.dom.Document;
-import org.w3c.dom.DocumentType;
 import org.w3c.dom.Node;
 
 import com.sun.org.apache.xerces.internal.dom.DocumentImpl;
-import com.sun.org.apache.xerces.internal.dom.ElementNSImpl;
 
-import xml.DOMStreamReader;
 import xml.SAXStreamReader;
 
-import feeds.FeedFactory;
+import feeds.Feed;
 
 public class Main {
 	
@@ -56,7 +45,7 @@ public class Main {
 			new ServletContextHandler(ServletContextHandler.SESSIONS);
 		
 		ctx.setContextPath("/ex1");
-		ctx.addServlet(new ServletHolder(new MainServlet(FeedFactory.create(null))), "/*");
+		ctx.addServlet(new ServletHolder(new MainServlet(Feed.create(new Vector<String>()))), "/*");
 		
 //		// Files
 //		ResourceHandler res = new ResourceHandler();
@@ -97,6 +86,7 @@ public class Main {
 		}
 	}
 	
+	/*
 	public static void testDOM1(){
 		
 		URL url = null;
@@ -171,7 +161,7 @@ public class Main {
     		}
         }
 	}
-	
+	*/
 	public static void testDOM2(){
 		
 		Node node = new DocumentImpl();

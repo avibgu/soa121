@@ -14,14 +14,12 @@ public class Feed {
 	protected	Map<String,Feed>	_namedFeeds;
 	protected	Vector<String>		_unnamedFeedsUrls;
 
-	public Feed(Feed childFeed, String childFeedName) {
+	private Feed(Feed childFeed, String childFeedName) {
 		setNamedFeeds(new HashMap<String,Feed>());
-		if(childFeed != null)
-			_namedFeeds.put(childFeedName, childFeed);
 		setUnnamedFeedsUrls(new Vector<String>());
 	}
 
-	public Feed() {
+	private Feed() {
 		setNamedFeeds(new HashMap<String,Feed>());
 		setUnnamedFeedsUrls(new Vector<String>());
 	}
@@ -70,7 +68,7 @@ public class Feed {
 		f = this._namedFeeds.get(nextElementName);
 		if(f == null)
 		{
-			f = FeedFactory.create(requestPath);
+			f = create(requestPath);
 			this._namedFeeds.put(nextElementName, f);
 		}
 		f.putNamedFeed(new Vector<String>(Arrays.asList(nextRequestPath)), address);
@@ -176,7 +174,13 @@ public class Feed {
 	public Vector<String> getUnnamedFeedsUrls() {
 		return _unnamedFeedsUrls;
 	}
-	
 
-
+	public static Feed create(Vector<String> requestPath) {
+		String NextElementName;
+		
+		if(requestPath.isEmpty())
+			return new Feed();
+		NextElementName = requestPath.remove(0);
+		return new Feed(create(requestPath),NextElementName);
+	}
 }
