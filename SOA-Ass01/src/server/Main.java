@@ -121,7 +121,7 @@ public class Main {
 		filters.put("category", filterValue);
 		
 		// Create an executor:
-        ExecutorService e = Executors.newFixedThreadPool(7);
+        ExecutorService e = Executors.newFixedThreadPool(4);
 
         for (int i = 0; i < 7; i++)
         	e.execute(new DOMStreamReader(url, nodes, filters));

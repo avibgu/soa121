@@ -1,10 +1,18 @@
 package feeds;
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Vector;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
+
+import org.w3c.dom.Node;
+
+import xml.DOMStreamReader;
 
 import exceptions.BadRequestException;
 import exceptions.NotImplaementedException;
@@ -45,6 +53,7 @@ public class Feed {
 	public void putNamedFeed(Vector<String> requestPath, String address)
 	throws BadRequestException, NotImplaementedException
 	{
+		//TODO  Implaement NotImplaementedException
 		Feed f = null;
 		String nextElementName;
 		String[] nextRequestPath; 
@@ -76,14 +85,14 @@ public class Feed {
 
 	/**
 	 * @param feed					the feed\s (collection or element) that we want its content 
-	 * @param filters				the requested feed filters
+	 * @param urls 
 	 * 
 	 * @return						the answer that should be delivered to the client
 	 * 								(only when the operation succeeded)
 	 * 
 	 * @throws BadRequestException	in case the request is damaged
 	 */
-	public StringBuilder getFeeds(Vector<String> requestPath, Map<String,String> filters)
+	public StringBuilder getFeeds(Vector<String> requestPath, Vector<URL> urls)
 	throws BadRequestException
 	{
 		StringBuilder sb = new StringBuilder();
@@ -93,7 +102,7 @@ public class Feed {
 		{
 			for (Feed feed : _namedFeeds.values()) {
 				//TODO threads
-				sb.append(feed.getFeeds(requestPath, filters));
+				sb.append(feed.getFeeds(requestPath, urls));
 			}
 			//TODO connection
 			if(getUrl()!=null)
@@ -105,7 +114,7 @@ public class Feed {
 		{
 			nextFeed = _namedFeeds.get(requestPath.remove(0));
 			if(nextFeed != null)
-				sb = nextFeed.getFeeds(requestPath, filters);
+				sb = nextFeed.getFeeds(requestPath, urls);
 			else
 				throw new BadRequestException();
 		}

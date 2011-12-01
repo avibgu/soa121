@@ -32,6 +32,8 @@ public class Filter {
 				if (null != filterByCategory(child, filterValues))
 					found = true;
 			}
+			
+			//	TODO: getElementsByTagName
 		}
 		
 		if (!found) return null;
