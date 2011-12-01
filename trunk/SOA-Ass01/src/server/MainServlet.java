@@ -5,6 +5,19 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.ServletException;
+import javax.xml.transform.Result;
+import javax.xml.transform.Source;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+
+import xml.DOMStreamReader;
 
 import exceptions.BadRequestException;
 import exceptions.NotImplaementedException;
@@ -13,8 +26,14 @@ import feeds.Feed;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.URL;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Map;
 import java.util.Vector;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 public class MainServlet extends HttpServlet {
 
@@ -47,7 +66,13 @@ public class MainServlet extends HttpServlet {
 		
 		try{
 			
-			answer = _mainFeed.getFeeds(getRequestPath(request), request.getParameterMap());
+			Vector<URL> urls = new Vector<URL>();
+			
+			_mainFeed.getFeeds(getRequestPath(request), urls);
+			
+			ArrayList<Node> fetchedFeeds = fetchFeeds(urls, request.getParameterMap());
+			
+			sendResultDocumentToCaller(createDocumentFromFeeds(fetchedFeeds), response.getWriter());
 		}
 		catch (NotImplaementedException e) {
 			response.sendError(HttpServletResponse.SC_NOT_IMPLEMENTED);
@@ -64,6 +89,63 @@ public class MainServlet extends HttpServlet {
 		out.close();
 	}
 	
+	
+	public ArrayList<Node> fetchFeeds(Vector<URL> urls, Map<String,ArrayList<String>> filters){
+		
+		ArrayList<Node> fetchedFeeds = new ArrayList<Node>();
+		
+		// Create an executor:
+        ExecutorService e = Executors.newFixedThreadPool(4);
+
+        for (URL url: urls)
+        	e.execute(new DOMStreamReader(url, fetchedFeeds, filters));
+
+        // this causes the executor not to accept any more
+        //tasks, and to kill all of its threads when all the
+        //submitted tasks are done.
+        e.shutdown();
+        
+        try {
+			while (!e.awaitTermination(3, TimeUnit.SECONDS)) continue;
+		}
+        catch (InterruptedException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+        
+        return null;
+	}
+	
+	private Document createDocumentFromFeeds(ArrayList<Node> fetchedFeeds) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	private void sendResultDocumentToCaller(Document doc, PrintWriter out) {
+
+		Transformer transformer = null;
+        
+		try {
+			transformer = TransformerFactory.newInstance().newTransformer();
+		}
+		catch (TransformerConfigurationException e2) {
+			// TODO Auto-generated catch block
+			e2.printStackTrace();
+		}
+		
+    	Source s = new DOMSource(doc);
+		Result r = new StreamResult(out);
+
+		try {
+			transformer.transform(s, r);
+		}
+		catch (TransformerException e3) {
+			// TODO Auto-generated catch block
+			e3.printStackTrace();
+		}
+
+	}
+
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
