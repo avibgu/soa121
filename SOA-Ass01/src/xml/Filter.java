@@ -2,7 +2,9 @@ package xml;
 
 import java.util.ArrayList;
 
+import org.w3c.dom.Document;
 import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 public class Filter {
 	
@@ -13,32 +15,19 @@ public class Filter {
 	
 	public static Node filterByCategory(Node node, ArrayList<String> filterValues){
 		
-		//TODO: currently supports only channel filters.. and not items..
-		
-		boolean found = false;
-		
-		for(	Node child = node.getFirstChild();
-				child != null && !found;
-				child = child.getNextSibling()	){
+		for (String filterValue: filterValues){
+
+			if (node instanceof Document){
 				
-			for (String filterValue: filterValues){
+				NodeList categoryNodes = ((Document) node).getElementsByTagName("category");
 				
-				if (	0 == child.getNodeName().compareTo("category") &&
-						0 == child.getFirstChild().getNodeValue().compareTo(filterValue)	)
-					found = true;
-				
-				if (found) break;
-				
-				if (null != filterByCategory(child, filterValues))
-					found = true;
+				for (int i = 0; i < categoryNodes.getLength(); i++)
+					if (0 == categoryNodes.item(i).getFirstChild().getNodeValue().compareTo(filterValue))
+						return node;			
 			}
-			
-			//	TODO: getElementsByTagName
 		}
 		
-		if (!found) return null;
-		
-		return node;
+		return null;
 	}
 	
 	public static Node filterByAuthor(Node node, ArrayList<String> filterValues){
@@ -48,34 +37,34 @@ public class Filter {
 	
 //	public static Node filter(Node node) {
 //	
-//	//TODO: currently supports only channel filters.. and not items..
+//		//TODO: currently supports only channel filters.. and not items..
+//		
+//		boolean found = false;
+//		
+//		for(	Node child = node.getFirstChild();
+//				child != null && !found;
+//				child = child.getNextSibling()	){
 //	
-//	boolean found = false;
-//	
-//	for(	Node child = node.getFirstChild();
-//			child != null && !found;
-//			child = child.getNextSibling()	){
-//
-//		for (String filterKey: getFilters().keySet()){
-//			
-//			ArrayList<String> values = getFilters().get(filterKey);
-//			
-//			for (String filterValue: values){
+//			for (String filterKey: getFilters().keySet()){
 //				
-//				if (	0 == child.getNodeName().compareTo(filterKey) &&
-//						0 == child.getFirstChild().getNodeValue().compareTo(filterValue)	)
-//					found = true;
+//				ArrayList<String> values = getFilters().get(filterKey);
 //				
-//				Node tmp = filter(child);
-//				
-//				if (null != tmp)
-//					found = true;
+//				for (String filterValue: values){
+//					
+//					if (	0 == child.getNodeName().compareTo(filterKey) &&
+//							0 == child.getFirstChild().getNodeValue().compareTo(filterValue)	)
+//						found = true;
+//					
+//					Node tmp = filter(child);
+//					
+//					if (null != tmp)
+//						found = true;
+//				}
 //			}
 //		}
+//		
+//		if (!found) return null;
+//		
+//		return node;
 //	}
-//	
-//	if (!found) return null;
-//	
-//	return node;
-//}
 }

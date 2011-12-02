@@ -41,11 +41,10 @@ public class Main {
 
 	public static void main(String[] args) {
 			
-			startServer();
-		
-		//	testSAX();
-		//testDOM1();
-		//	testDOM2();
+//		startServer();
+
+		testDOM1();
+//		testDOM2();
 	}
 		
 	public static void startServer(){
@@ -78,25 +77,7 @@ public class Main {
 			
 			e.printStackTrace();
 		}
-	}
-	
-	public static void testSAX(){
-		
-		try {
-			System.out.println(
-				new SAXStreamReader().readFromStream(
-					new URL("http://www.cs.bgu.ac.il/~dwss121/Announcements?action=rss")));
-		}
-		catch (MalformedURLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-	
+	}	
 
 	public static void testDOM1(){
 		
@@ -122,7 +103,7 @@ public class Main {
 		// Create an executor:
         ExecutorService e = Executors.newFixedThreadPool(4);
 
-        for (int i = 0; i < 7; i++)
+        for (int i = 0; i < 1; i++)
         	e.execute(new DOMStreamReader(url, nodes, filters));
 
         // this causes the executor not to accept any more
