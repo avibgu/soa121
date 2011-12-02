@@ -5,7 +5,6 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Vector;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -34,7 +33,7 @@ import com.sun.org.apache.xerces.internal.dom.DocumentImpl;
 import xml.DOMStreamReader;
 import xml.SAXStreamReader;
 
-import feeds.Feed;
+import feeds.FeedHandler;
 
 public class Main {
 	
@@ -42,10 +41,10 @@ public class Main {
 
 	public static void main(String[] args) {
 			
-		//	startServer();
+			startServer();
 		
 		//	testSAX();
-		testDOM1();
+		//testDOM1();
 		//	testDOM2();
 	}
 		
@@ -57,7 +56,7 @@ public class Main {
 			new ServletContextHandler(ServletContextHandler.SESSIONS);
 		
 		ctx.setContextPath("/ex1");
-		ctx.addServlet(new ServletHolder(new MainServlet(Feed.create(new Vector<String>()))), "/*");
+		ctx.addServlet(new ServletHolder(new MainServlet(new FeedHandler())), "/*");
 		
 //		// Files
 //		ResourceHandler res = new ResourceHandler();
