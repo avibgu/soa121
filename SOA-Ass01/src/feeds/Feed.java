@@ -1,35 +1,18 @@
 package feeds;
 
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Vector;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
-
-import org.w3c.dom.Node;
-
-import xml.DOMStreamReader;
-
-import exceptions.BadRequestException;
-import exceptions.NotImplaementedException;
 
 public class Feed {
 	protected	URL					_url;
 	protected	Map<String,Feed>	_namedFeeds;
-	protected	Vector<String>		_unnamedFeedsUrls;
+	protected	Vector<URL>		_unnamedFeedsUrls;
 
-	private Feed(Feed childFeed, String childFeedName) {
+	public Feed() {
 		setNamedFeeds(new HashMap<String,Feed>());
-		setUnnamedFeedsUrls(new Vector<String>());
-	}
-
-	private Feed() {
-		setNamedFeeds(new HashMap<String,Feed>());
-		setUnnamedFeedsUrls(new Vector<String>());
+		setUnnamedFeedsUrls(new Vector<URL>());
 	}
 
 	public void setUrl(URL url) {
@@ -40,134 +23,6 @@ public class Feed {
 		return _url;
 	}
 
-	/**
-	 * @param element					the name of the new feed
-	 * @param address					the feed's address
-	 * 
-	 * @return 							the answer that should be delivered to the client
-	 * 									(only when the operation succeeded)
-	 * 
-	 * @throws BadRequestException		in case the request is damaged
-	 * @throws NotImplaementedException	in case the given element is actually a collection
-	 */
-	public void putNamedFeed(Vector<String> requestPath, String address)
-	throws BadRequestException, NotImplaementedException
-	{
-		//TODO  Implaement NotImplaementedException
-		Feed f = null;
-		String nextElementName;
-		String[] nextRequestPath; 
-		
-		try {
-			if(requestPath.isEmpty())
-			{
-				setUrl(new URL(address));
-				return;
-			}
-		} catch (Exception e) {
-			throw new BadRequestException();
-		}
-		
-		//assume requestPath.isEmpty()=false
-		nextElementName = requestPath.remove(0);
-		
-		nextRequestPath = new String[requestPath.size()];
-		requestPath.copyInto(nextRequestPath);
-		
-		f = this._namedFeeds.get(nextElementName);
-		if(f == null)
-		{
-			f = create(requestPath);
-			this._namedFeeds.put(nextElementName, f);
-		}
-		f.putNamedFeed(new Vector<String>(Arrays.asList(nextRequestPath)), address);
-	}
-
-	/**
-	 * @param feed					the feed\s (collection or element) that we want its content 
-	 * @param urls 
-	 * 
-	 * @return						the answer that should be delivered to the client
-	 * 								(only when the operation succeeded)
-	 * 
-	 * @throws BadRequestException	in case the request is damaged
-	 */
-	public StringBuilder getFeeds(Vector<String> requestPath, Vector<URL> urls)
-	throws BadRequestException
-	{
-		StringBuilder sb = new StringBuilder();
-		Feed nextFeed;
-		
-		if(requestPath.isEmpty())
-		{
-			for (Feed feed : _namedFeeds.values()) {
-				//TODO threads
-				sb.append(feed.getFeeds(requestPath, urls));
-			}
-			//TODO connection
-			if(getUrl()!=null)
-				sb.append("\n"+getUrl().toString());
-		//TODO unnamed feeds and what about FeedElement (inheritance??)
-		}
-		
-		else
-		{
-			nextFeed = _namedFeeds.get(requestPath.remove(0));
-			if(nextFeed != null)
-				sb = nextFeed.getFeeds(requestPath, urls);
-			else
-				throw new BadRequestException();
-		}
-		
-		return sb;
-	}
-	
-	/**
-	 * @param collection				the collection that we want to add the feed to
-	 * @param address					the feed's address
-	 * 
-	 * @return 							the answer that should be delivered to the client
-	 * 									(only when the operation succeeded)
-	 * 
-	 * @throws BadRequestException		in case the request is damaged
-	 * @throws NotImplaementedException	in case the given collection is actually an element
-	 */
-	public void postUnnamedFeed(String collection, String address)
-	throws BadRequestException, NotImplaementedException{}
-	
-	/**
-	 * @param requestPath						the element or collection that we want to delete
-	 */
-	public void deleteFeeds(Vector<String> requestPath)
-		throws BadRequestException
-	{
-		String nextFeedKey;
-		Feed nextFeed;
-	
-		//When delete all feeds
-		if(requestPath.isEmpty())
-		{
-			setNamedFeeds(new HashMap<String, Feed>());
-			setUrl(null);
-			return;
-		}
-		
-		nextFeedKey = requestPath.remove(0);
-		if(requestPath.isEmpty())
-		{
-			if(_namedFeeds.remove(nextFeedKey) == null)
-				throw new BadRequestException();
-		}
-		else 
-			{
-			nextFeed = _namedFeeds.get(nextFeedKey); 
-			if(nextFeed != null)
-				nextFeed.deleteFeeds(requestPath);
-			else
-				throw new BadRequestException();
-			}
-	}
-
 	public void setNamedFeeds(Map<String,Feed> feeds) {
 		this._namedFeeds = feeds;
 	}
@@ -176,20 +31,50 @@ public class Feed {
 		return _namedFeeds;
 	}
 
-	public void setUnnamedFeedsUrls(Vector<String> unnamedFeedsUrls) {
+	public void setUnnamedFeedsUrls(Vector<URL> unnamedFeedsUrls) {
 		this._unnamedFeedsUrls = unnamedFeedsUrls;
 	}
 
-	public Vector<String> getUnnamedFeedsUrls() {
+	public Vector<URL> getUnnamedFeedsUrls() {
 		return _unnamedFeedsUrls;
 	}
 
-	public static Feed create(Vector<String> requestPath) {
-		String NextElementName;
-		
-		if(requestPath.isEmpty())
-			return new Feed();
-		NextElementName = requestPath.remove(0);
-		return new Feed(create(requestPath),NextElementName);
+	public void addNamedFeed(Feed newFeed, String feedName) {
+		this._namedFeeds.put(feedName, newFeed);
+	}
+
+	public Vector<URL> getAllUrls() {
+		Vector<URL> urls = new Vector<URL>();
+		if(_unnamedFeedsUrls != null)
+			urls.addAll(_unnamedFeedsUrls);
+		if(_url != null)
+			urls.add(_url);
+		for (Feed f : _namedFeeds.values())
+			urls.addAll(f.getAllUrls());
+		return urls;
+	}
+
+	public void addUnnamedFeedURL(URL url) {
+		_unnamedFeedsUrls.add(url);
+	}
+
+	public void deleteAll() {
+		setNamedFeeds(new HashMap<String, Feed>());
+		setUnnamedFeedsUrls(new Vector<URL>());
+		setUrl(null);
+	}
+
+	public Vector<URL> getElementsUrls() {
+		Vector<URL> urls = new Vector<URL>();
+		if(_url != null)
+			urls.add(_url);
+		for (Feed f : _namedFeeds.values())
+			urls.addAll(f.getAllUrls());
+		return urls;
+	}
+
+	public void deleteElements() {
+		setNamedFeeds(new HashMap<String, Feed>());
+		setUrl(null);
 	}
 }

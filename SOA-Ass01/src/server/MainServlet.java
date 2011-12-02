@@ -21,7 +21,7 @@ import xml.DOMStreamReader;
 
 import exceptions.BadRequestException;
 import exceptions.NotImplaementedException;
-import feeds.Feed;
+import feeds.FeedHandler;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -50,11 +50,11 @@ public class MainServlet extends HttpServlet {
 //	501	Not	implemented	response.sendError(HttpServletResponse.SC_NOT_IMPLEMENTED);
 //	400	Bad request		response.sendError(HttpServletResponse.SC_BAD_REQUEST);
 	
-	protected Feed _mainFeed;
+	protected FeedHandler _feedHandler;
 	
-	public MainServlet(Feed feed) {
+	public MainServlet(FeedHandler fh) {
 
-		setMainFeed(feed);
+		setFeedHandler(fh);
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -65,14 +65,12 @@ public class MainServlet extends HttpServlet {
 		StringBuilder answer = new StringBuilder();
 		
 		try{
+			Vector<URL> urls = request.getRequestURI().endsWith("/")? 
+						_feedHandler.getFeedsCollection(getRequestPath(request)) : _feedHandler.getFeedsElement(getRequestPath(request)); 
+			System.out.println(urls);//TODO remove
+			//ArrayList<Node> fetchedFeeds = fetchFeeds(urls, request.getParameterMap());
 			
-			Vector<URL> urls = new Vector<URL>();
-			
-			_mainFeed.getFeeds(getRequestPath(request), urls);
-			
-			ArrayList<Node> fetchedFeeds = fetchFeeds(urls, request.getParameterMap());
-			
-			sendResultDocumentToCaller(createDocumentFromFeeds(fetchedFeeds), response.getWriter());
+			//sendResultDocumentToCaller(createDocumentFromFeeds(fetchedFeeds), response.getWriter());
 		}
 		catch (NotImplaementedException e) {
 			response.sendError(HttpServletResponse.SC_NOT_IMPLEMENTED);
@@ -150,12 +148,14 @@ public class MainServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
-		String content;
+		String content = getRequestContent(request);
 		
-		try{
-			
-			content = getRequestContent(request);
-			_mainFeed.postUnnamedFeed(request.getQueryString(), content);
+		try
+		{
+			if(!request.getRequestURI().endsWith("/"))
+				//throw exception => POST method is unsupported for Feed elements
+				throw new NotImplaementedException();
+			_feedHandler.postFeed(getRequestPath(request), content);
 		}
 		catch (NotImplaementedException e) {
 			response.sendError(HttpServletResponse.SC_NOT_IMPLEMENTED);
@@ -177,8 +177,8 @@ public class MainServlet extends HttpServlet {
 		{
 			if(request.getRequestURI().endsWith("/"))
 				//throw exception => PUT method is unsupported for Feed collections
-				throw new BadRequestException();
-			_mainFeed.putNamedFeed(getRequestPath(request), content);
+				throw new NotImplaementedException();
+			_feedHandler.putFeed(getRequestPath(request), content);
 		}
 		catch (NotImplaementedException e) {
 			response.sendError(HttpServletResponse.SC_NOT_IMPLEMENTED);
@@ -195,8 +195,10 @@ public class MainServlet extends HttpServlet {
 			throws ServletException, IOException {
 
 		try{
-			
-			_mainFeed.deleteFeeds(getRequestPath(request));
+			if(request.getRequestURI().endsWith("/")) 
+				_feedHandler.deleteCollectionFeeds(getRequestPath(request));
+			else
+				_feedHandler.deleteElementFeeds(getRequestPath(request));
 		}
 		catch (NotImplaementedException e) {
 			response.sendError(HttpServletResponse.SC_NOT_IMPLEMENTED);
@@ -238,11 +240,11 @@ public class MainServlet extends HttpServlet {
 		throw new BadRequestException();
 	}
 
-	public void setMainFeed(Feed f) {
-		this._mainFeed = f;
+	public void setFeedHandler(FeedHandler fh) {
+		this._feedHandler = fh;
 	}
 
-	public Feed getMainFeed() {
-		return this._mainFeed;
+	public FeedHandler getFeedHandler() {
+		return this._feedHandler;
 	}
 }
