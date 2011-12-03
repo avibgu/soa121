@@ -9,9 +9,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.Result;
 import javax.xml.transform.Source;
 import javax.xml.transform.Transformer;
@@ -24,27 +21,24 @@ import javax.xml.transform.stream.StreamResult;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.*;
 import org.eclipse.jetty.servlet.*;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
+
 import org.w3c.dom.Node;
 
-import com.sun.org.apache.xerces.internal.dom.DocumentImpl;
-
 import xml.DOMStreamReader;
-import xml.SAXStreamReader;
 
 import feeds.FeedHandler;
 
 public class Main {
 	
-	public static final int SERVER_PORT = 17171;
+	public static final int		SERVER_PORT			= 8994;
+	public static final String	SERVER_NAME			= "soa1";
+	public static final String	FULL_SERVER_NAME	= "http://soa1.cs.bgu.ac.il:8994/ex1";
 
 	public static void main(String[] args) {
 			
-//		startServer();
+		startServer();
 
-		testDOM1();
-//		testDOM2();
+//		testDOM();
 	}
 		
 	public static void startServer(){
@@ -57,14 +51,9 @@ public class Main {
 		ctx.setContextPath("/ex1");
 		ctx.addServlet(new ServletHolder(new MainServlet(new FeedHandler())), "/*");
 		
-//		// Files
-//		ResourceHandler res = new ResourceHandler();
-//		res.setResourceBase("files");
-		
 		HandlerList list = new HandlerList();
 		
 		list.addHandler(ctx);
-//		list.addHandler(res);
 		
 		server.setHandler(list);
 		
@@ -79,12 +68,14 @@ public class Main {
 		}
 	}	
 
-	public static void testDOM1(){
+	public static void testDOM(){
 		
 		URL url = null;
 		
 		try {
-			url = new URL("http://www.cs.bgu.ac.il/~dwss121/Announcements?action=rss");
+//			url = new URL("http://www.cs.bgu.ac.il/~dwss121/Announcements?action=rss");
+			url = new URL("http://news.google.com/news?ned=us&topic=h&output=rss");
+			
 		}
 		catch (MalformedURLException e) {
 			// TODO Auto-generated catch block
@@ -95,10 +86,20 @@ public class Main {
 		
 		Map<String,ArrayList<String>> filters = new HashMap<String, ArrayList<String>>();
 		
-		ArrayList<String> filterValue = new ArrayList<String>();
-		filterValue.add("News");
+//		ArrayList<String> filterCategoryValue = new ArrayList<String>();
+//		filterCategoryValue.add("News");
+//		
+//		filters.put("category", filterCategoryValue);
 		
-		filters.put("category", filterValue);
+//		ArrayList<String> filterAuthorValue = new ArrayList<String>();
+//		filterAuthorValue.add("Guy Wiener");
+//		
+//		filters.put("author", filterAuthorValue);
+		
+		ArrayList<String> filterAuthorValue = new ArrayList<String>();
+		filterAuthorValue.add("George McGovern hospitalized after fall in South Dakota - Reuters");
+		
+		filters.put("title", filterAuthorValue);
 		
 		// Create an executor:
         ExecutorService e = Executors.newFixedThreadPool(4);
@@ -142,59 +143,5 @@ public class Main {
     			e3.printStackTrace();
     		}
         }
-	}
-
-	public static void createDOMDoc() {
-
-		try {
-
-			DocumentBuilderFactory f = DocumentBuilderFactory.newInstance();
-			DocumentBuilder b = f.newDocumentBuilder();
-			Document d = b.newDocument();
-			Element r = d.createElement("dictionary"); 
-			
-			d.appendChild(r);
-			Element w = d.createElement("word");
-			r.appendChild(w);
-			Element e = d.createElement("update");
-			w.appendChild(e);
-			e.setAttribute("date","2002-12-24");
-			e = d.createElement("name");
-			w.appendChild(e);
-			e.setAttribute("is_acronym","true");
-			e.appendChild(d.createTextNode("DTD"));
-			e = d.createElement("definition");
-			w.appendChild(e);
-			e.appendChild(d.createTextNode("Document Type Definition"));
-		}
-		catch (ParserConfigurationException e) {
-			System.out.println(e.toString()); 	
-		}
-	}
-
-	public static void testDOM2(){
-		
-		Node node = new DocumentImpl();
-		
-        Transformer transformer = null;
-        
-		try {
-			transformer = TransformerFactory.newInstance().newTransformer();
-		}
-		catch (TransformerConfigurationException e2) {
-			// TODO Auto-generated catch block
-			e2.printStackTrace();
-		}
-        	
-    	Source s = new DOMSource(node);
-		Result r = new StreamResult(System.out);
-
-		try {
-			transformer.transform(s, r);
-		}
-		catch (TransformerException e3) {
-			// TODO Auto-generated catch block
-			e3.printStackTrace();
-		}
 	}
 }   
