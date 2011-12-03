@@ -21,12 +21,12 @@ import filter.Filter;
 
 public class DOMStreamReader implements Runnable {
 
-	protected	URL								_url;
-	protected	ArrayList<Node>					_nodesArray;
-	protected	Map<String,ArrayList<String>>	_filters;
-	protected	Transformer						_transformer;
+	protected	URL						_url;
+	protected	ArrayList<Node>			_nodesArray;
+	protected	Map<String,String[]>	_filters;
+	protected	Transformer				_transformer;
 	
-	public DOMStreamReader(URL url, ArrayList<Node> nodes, Map<String,ArrayList<String>> filters) {
+	public DOMStreamReader(URL url, ArrayList<Node> nodes, Map<String,String[]> filters) {
 
 		setUrl(url);
 		setNodesArray(nodes);
@@ -118,11 +118,11 @@ public class DOMStreamReader implements Runnable {
 		return _transformer;
 	}
 
-	public void setFilters(Map<String,ArrayList<String>> filters) {
+	public void setFilters(Map<String,String[]> filters) {
 		this._filters = filters;
 	}
 
-	public Map<String,ArrayList<String>> getFilters() {
+	public Map<String,String[]> getFilters() {
 		return _filters;
 	}
 }
