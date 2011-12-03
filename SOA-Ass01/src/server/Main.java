@@ -84,7 +84,7 @@ public class Main {
 		
 		ArrayList<Node> nodes = new ArrayList<Node>();
 		
-		Map<String,ArrayList<String>> filters = new HashMap<String, ArrayList<String>>();
+		Map<String, String[]> filters = new HashMap<String, String[]>();
 		
 //		ArrayList<String> filterCategoryValue = new ArrayList<String>();
 //		filterCategoryValue.add("News");
@@ -96,8 +96,8 @@ public class Main {
 //		
 //		filters.put("author", filterAuthorValue);
 		
-		ArrayList<String> filterAuthorValue = new ArrayList<String>();
-		filterAuthorValue.add("George McGovern hospitalized after fall in South Dakota - Reuters");
+		String[] filterAuthorValue = new String[1];
+		filterAuthorValue[0] = "George McGovern hospitalized after fall in South Dakota - Reuters";
 		
 		filters.put("title", filterAuthorValue);
 		
