@@ -99,7 +99,7 @@ public class MainServlet extends HttpServlet {
 	}
 	
 	
-	public ArrayList<Node> fetchFeeds(Vector<URL> urls, Map<String,ArrayList<String>> filters){
+	public ArrayList<Node> fetchFeeds(Vector<URL> urls, Map<String,String[]> filters){
 		
 		ArrayList<Node> fetchedFeeds = new ArrayList<Node>();
 		
@@ -127,6 +127,8 @@ public class MainServlet extends HttpServlet {
 	
 	private Document createDocumentFromFeeds(ArrayList<Node> fetchedFeeds) {
 
+		if(null == fetchedFeeds) return null;
+		
 		Document document = null;
 		
 		try {
@@ -157,7 +159,7 @@ public class MainServlet extends HttpServlet {
 						feed, NodeFilter.SHOW_ELEMENT, itemFilter, false);
 
 				while ((item = iter.nextNode()) != null)
-					channel.appendChild(item);
+					channel.appendChild(document.importNode(item, true));
 			}
 			
 		}
