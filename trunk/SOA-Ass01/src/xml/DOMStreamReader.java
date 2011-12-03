@@ -21,6 +21,8 @@ import javax.xml.transform.stream.StreamSource;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import filter.Filter;
+
 public class DOMStreamReader implements Runnable {
 
 	protected	URL								_url;
@@ -84,13 +86,14 @@ public class DOMStreamReader implements Runnable {
 	protected Node filter(Node node) {
 
 		if (getFilters().containsKey("title"))
-			node = Filter.filterByTitle(node, getFilters().get("title"));
+			node = Filter.filterItems(node, "title", getFilters().get("title"));
 		
 		if (getFilters().containsKey("category"))
-			node = Filter.filterByCategory(node, getFilters().get("category"));
+//			node = Filter.filterByCategory(node, getFilters().get("category"));
+			node = Filter.filterItems(node, "category", getFilters().get("category"));
 		
 		if (getFilters().containsKey("author"))
-			node = Filter.filterByAuthor(node, getFilters().get("author"));
+			node = Filter.filterItems(node, "author", getFilters().get("author"));
 			
 		return node;
 	}
