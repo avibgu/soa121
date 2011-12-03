@@ -40,7 +40,7 @@ public class Filter {
 	}
 	
 	public static Node filterItems(Node node, String itemPropertyToFilter,
-			ArrayList<String> filterValues){
+			String[] filterValues){
 		
 		ItemFilter itemFilter = new ItemFilter();
 		
@@ -63,6 +63,8 @@ public class Filter {
 	public static boolean removeItemThatDoesntMatchTheFilter(Node item,
 			String filterKey, String filterValue) {
 
+		String filterValueWithoutNL = filterValue.trim();
+		
 		boolean found = false;
 		   
 		for (	Node child = item.getFirstChild(); 
@@ -70,7 +72,8 @@ public class Filter {
 				child = child.getNextSibling()){
 
 			if(	0 == child.getNodeName().compareTo(filterKey) &&
-				0 == child.getFirstChild().getNodeValue().compareTo(filterValue)){
+				(0 == child.getFirstChild().getNodeValue().compareTo(filterValue) ||
+				 0 == child.getFirstChild().getNodeValue().compareTo(filterValueWithoutNL))){
 
 				found = true;
 			}
