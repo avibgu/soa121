@@ -63,7 +63,7 @@ public class Main {
 			server.join();
 		}
 		catch (Throwable e) {
-			
+			//TODO Exception handling
 			e.printStackTrace();
 		}
 	}	
