@@ -5,6 +5,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.ServletException;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.Result;
 import javax.xml.transform.Source;
 import javax.xml.transform.Transformer;
@@ -15,13 +18,18 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
 import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 import org.w3c.dom.Node;
+import org.w3c.dom.traversal.DocumentTraversal;
+import org.w3c.dom.traversal.NodeFilter;
+import org.w3c.dom.traversal.NodeIterator;
 
 import xml.DOMStreamReader;
 
 import exceptions.BadRequestException;
 import exceptions.NotImplaementedException;
 import feeds.FeedHandler;
+import filter.ItemFilter;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -64,13 +72,16 @@ public class MainServlet extends HttpServlet {
 		
 		StringBuilder answer = new StringBuilder();
 		
-		try{
+		try {
+			
 			Vector<URL> urls = request.getRequestURI().endsWith("/")? 
 						_feedHandler.getFeedsCollection(getRequestPath(request)) : _feedHandler.getFeedsElement(getRequestPath(request)); 
-			System.out.println(urls);//TODO remove
-			//ArrayList<Node> fetchedFeeds = fetchFeeds(urls, request.getParameterMap());
 			
-			//sendResultDocumentToCaller(createDocumentFromFeeds(fetchedFeeds), response.getWriter());
+			System.out.println(urls);//TODO remove
+			
+			ArrayList<Node> fetchedFeeds = fetchFeeds(urls, request.getParameterMap());
+			
+			sendResultDocumentToCaller(createDocumentFromFeeds(fetchedFeeds), response.getWriter());
 		}
 		catch (NotImplaementedException e) {
 			response.sendError(HttpServletResponse.SC_NOT_IMPLEMENTED);
@@ -111,12 +122,50 @@ public class MainServlet extends HttpServlet {
 			e1.printStackTrace();
 		}
         
-        return null;
+        return fetchedFeeds;
 	}
 	
 	private Document createDocumentFromFeeds(ArrayList<Node> fetchedFeeds) {
-		// TODO Auto-generated method stub
-		return null;
+
+		Document document = null;
+		
+		try {
+
+			DocumentBuilderFactory f = DocumentBuilderFactory.newInstance();
+			DocumentBuilder b = f.newDocumentBuilder();
+			document = b.newDocument();
+			
+			Element rss = document.createElement("rss"); 
+			document.appendChild(rss);
+			
+			Element channel = document.createElement("channel");
+			rss.appendChild(channel);
+			
+			Element title = document.createElement("title");
+			title.appendChild(document.createTextNode("Feeds Result"));
+			channel.appendChild(title);
+			
+			ItemFilter itemFilter = new ItemFilter();
+			
+			NodeIterator iter;
+			
+			Node item;
+			
+			for (Node feed: fetchedFeeds){
+				
+				iter = ((DocumentTraversal)feed).createNodeIterator(
+						feed, NodeFilter.SHOW_ELEMENT, itemFilter, false);
+
+				while ((item = iter.nextNode()) != null)
+					channel.appendChild(item);
+			}
+			
+		}
+		catch (ParserConfigurationException e) {
+			System.out.println(e.toString()); 	
+		}
+		
+		return document;
 	}
 
 	private void sendResultDocumentToCaller(Document doc, PrintWriter out) {
