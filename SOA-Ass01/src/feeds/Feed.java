@@ -10,6 +10,9 @@ public class Feed {
 	protected	Map<String,Feed>	_namedFeeds;
 	protected	Vector<URL>		_unnamedFeedsUrls;
 
+	/**
+	 * Constructor
+	 */
 	public Feed() {
 		setNamedFeeds(new HashMap<String,Feed>());
 		setUnnamedFeedsUrls(new Vector<URL>());
@@ -43,6 +46,10 @@ public class Feed {
 		this._namedFeeds.put(feedName, newFeed);
 	}
 
+	/**
+	 * @return All URLs from this feed. Including _unnamedFeedsUrls (Collection)
+	 * and other sub-feeds
+	 */
 	public Vector<URL> getAllUrls() {
 		Vector<URL> urls = new Vector<URL>();
 		if(_unnamedFeedsUrls != null)
@@ -58,12 +65,19 @@ public class Feed {
 		_unnamedFeedsUrls.add(url);
 	}
 
+	/**
+	 * Delete all URLs
+	 */
 	public void deleteAll() {
 		setNamedFeeds(new HashMap<String, Feed>());
 		setUnnamedFeedsUrls(new Vector<URL>());
 		setUrl(null);
 	}
 
+	/**
+	 * 
+	 * @return Vector<URL> which contain the main URL adress of this feed and all URL's of the sub-Feeds (No unnamed URL's included)
+	 */
 	public Vector<URL> getElementsUrls() {
 		Vector<URL> urls = new Vector<URL>();
 		if(_url != null)
@@ -73,6 +87,9 @@ public class Feed {
 		return urls;
 	}
 
+	/**
+	 * Delete only the main URL adress of this feed and the URLof it's sub-feeds. No URL's fron collection included
+	 */
 	public void deleteElements() {
 		setNamedFeeds(new HashMap<String, Feed>());
 		setUrl(null);
