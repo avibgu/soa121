@@ -42,7 +42,7 @@ public class Filter {
 	public static Node filterItems(Node node, String itemPropertyToFilter,
 			String[] filterValues){
 		
-		ItemEntryFilter itemFilter = new ItemEntryFilter("item");
+		RSSAtomFilter itemFilter = new RSSAtomFilter("item");
 		
 		NodeIterator iter;
 		
@@ -71,11 +71,16 @@ public class Filter {
 				child != null && !found;
 				child = child.getNextSibling()){
 
-			if(	0 == child.getNodeName().compareTo(filterKey) &&
-				(0 == child.getFirstChild().getNodeValue().compareTo(filterValue) ||
-				 0 == child.getFirstChild().getNodeValue().compareTo(filterValueWithoutNL))){
+			if(0 == child.getNodeName().compareTo(filterKey)){
+				
+				String nodeValue = child.getFirstChild().getNodeValue();
+			
+				if (	null != nodeValue &&
+						(0 == nodeValue.compareTo(filterValue) ||
+						 0 == nodeValue.compareTo(filterValueWithoutNL))){
 
-				found = true;
+					found = true;
+				}
 			}
 		}
 		

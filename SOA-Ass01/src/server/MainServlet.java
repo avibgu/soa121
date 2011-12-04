@@ -29,7 +29,7 @@ import xml.DOMStreamReader;
 import exceptions.BadRequestException;
 import exceptions.NotImplaementedException;
 import feeds.FeedHandler;
-import filter.ItemEntryFilter;
+import filter.RSSAtomFilter;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -147,7 +147,7 @@ public class MainServlet extends HttpServlet {
 			title.appendChild(document.createTextNode("Feeds Result"));
 			channel.appendChild(title);
 			
-			ItemEntryFilter itemFilter = new ItemEntryFilter("item");
+			RSSAtomFilter itemFilter = new RSSAtomFilter("item");
 			
 			NodeIterator iter;
 			

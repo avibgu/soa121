@@ -74,7 +74,7 @@ public class Main {
 		
 		try {
 //			url = new URL("http://www.cs.bgu.ac.il/~dwss121/Announcements?action=rss");
-			url = new URL("http://news.google.com/news?ned=us&topic=h&output=rss");
+			url = new URL("http://plasmasturm.org/feeds/plasmasturm/");
 			
 		}
 		catch (MalformedURLException e) {
@@ -90,15 +90,15 @@ public class Main {
 //		filterCategoryValue.add("News");
 //		
 //		filters.put("category", filterCategoryValue);
-		
+//		
 //		ArrayList<String> filterAuthorValue = new ArrayList<String>();
 //		filterAuthorValue.add("Guy Wiener");
 //		
 //		filters.put("author", filterAuthorValue);
-		
+//		
 		String[] filterAuthorValue = new String[1];
-		filterAuthorValue[0] = "George McGovern hospitalized after fall in South Dakota - Reuters";
-		
+		filterAuthorValue[0] = "Elegy to my only love in the cloud";
+//		
 		filters.put("title", filterAuthorValue);
 		
 		// Create an executor:
