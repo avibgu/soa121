@@ -9,9 +9,11 @@ import exceptions.NotImplaementedException;
 public class FeedHandler {
 	
 	protected Feed _mainFeed;
-	
-	public FeedHandler() {
 
+	/*
+	 * Constructor
+	 */
+	public FeedHandler() {
 		setMainFeed(new Feed());
 	}
 
@@ -24,25 +26,29 @@ public class FeedHandler {
 	}
 
 	/**
-	 * @param element					the name of the new feed
-	 * @param address					the feed's address
-	 * 
-	 * @return 							the answer that should be delivered to the client
-	 * 									(only when the operation succeeded)
+	 * @param requestPath				the request Path that left to the target feed
+	 * @param address					the feed's address to put
 	 * 
 	 * @throws BadRequestException		in case the request is damaged
-	 * @throws NotImplaementedException	in case the given element is actually a collection
+	 * @throws NotImplaementedException	in case the given path is a collection
 	 */
 	public void putFeed(Vector<String> requestPath, String address)
 	throws BadRequestException, NotImplaementedException
 	{
 		try {
 			findFeed(requestPath, true).setUrl(new URL(address));
-		} catch (Exception e) {
+		} catch (Exception e) {//catch any IO exceptions and return Bad Request response
 			throw new BadRequestException();
 		}
 	}
 
+	/**
+	 * 
+	 * @param requestPath The path to the target feed
+	 * @param create Flag to indicate if the function should create the feed when it ain't found
+	 * @return the feed object which found (or the new one - when created)
+	 * @throws BadRequestException When feed not found and create flag is false
+	 */
 	private Feed findFeed(Vector<String> requestPath, boolean create)
 			throws BadRequestException {
 		Feed f = _mainFeed;
@@ -74,21 +80,25 @@ public class FeedHandler {
 	 * @param requestPath				the collection that we want to add the feed to
 	 * @param address					the feed's address
 	 * 
-	 * @return 							the answer that should be delivered to the client
-	 * 									(only when the operation succeeded)
-	 * 
 	 * @throws BadRequestException		in case the request is damaged
-	 * @throws NotImplaementedException	in case the given collection is actually an element
+	 * @throws NotImplaementedException	in case the given request is an element
 	 */
 	public void postFeed(Vector<String> requestPath, String address)
 	throws BadRequestException, NotImplaementedException{
 		try {
 			findFeed(requestPath, true).addUnnamedFeedURL(new URL(address));
-		} catch (Exception e) {
+		} catch (Exception e) {//catch any IO exceptions and return Bad Request response
 			throw new BadRequestException();
 		}
 	}
-	
+
+	/**
+	 * recursive function to create new Feed in specific location
+	 * @param requestPath The location where the feed should placed 
+	 * @param fOld The parent feed of the new feed
+	 * @param feedName The name of the new feed
+	 * @return New feed
+	 */
 	public Feed create(Vector<String> requestPath, Feed fOld, String feedName) {
 		String NextFeedName;
 		Feed newFeed = new Feed();
@@ -101,12 +111,9 @@ public class FeedHandler {
 	}
 
 	/**
-	 * @param feed					the feed\s (collection or element) that we want its content 
-	 * @param urls 
-	 * 
-	 * @return						the answer that should be delivered to the client
-	 * 								(only when the operation succeeded)
-	 * 
+	 * @param requestPath			the feed path (collection only) that we want its content 
+
+	 * @return						Vector of URLs of the given feed which later be fetched for RSS content
 	 * @throws BadRequestException	in case the request is damaged
 	 */
 	public Vector<URL> getFeedsCollection(Vector<String> requestPath)throws BadRequestException
@@ -114,30 +121,42 @@ public class FeedHandler {
 		return findFeed(requestPath, false).getAllUrls();
 	}
 
+	/**
+	 * @param requestPath			the feed path (element only) that we want its content 
+
+	 * @return						Vector of URLs of the given feed which later be fetched for RSS content
+	 * @throws BadRequestException	in case the request is damaged
+	 */
 	public Vector<URL> getFeedsElement(Vector<String> requestPath) throws BadRequestException
 	{
 		return findFeed(requestPath, false).getElementsUrls();
 	}
 
+	/**
+	 * 
+	 * @param requestPath The path of the requested feed (collection only) 
+	 * @throws BadRequestException In case the requested path damaged
+	 */
 	public void deleteCollectionFeeds(Vector<String> requestPath)
 		throws BadRequestException
 		{
 			try {
 				findFeed(requestPath, false).deleteAll();
-			} catch (Exception e) {
+			} catch (Exception e) {//catch any IO exceptions and return Bad Request response
 				throw new BadRequestException();
 			}
 	}
 
 	/**
-	 * @param requestPath						the element or collection that we want to delete
+	 * @param requestPath						the element that we want to delete
+	 * @throws BadRequestException In case the requested path damaged
 	 */
 	public void deleteElementFeeds(Vector<String> requestPath) 
 		throws BadRequestException
 		{
 			try {
 				findFeed(requestPath, false).deleteElements();
-			} catch (Exception e) {
+			} catch (Exception e) {//catch any IO exceptions and return Bad Request response
 				throw new BadRequestException();
 			}
 	}
