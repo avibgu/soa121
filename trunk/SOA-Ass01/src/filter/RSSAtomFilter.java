@@ -3,11 +3,11 @@ package filter;
 import org.w3c.dom.Node;
 import org.w3c.dom.traversal.NodeFilter;
 
-public class ItemEntryFilter implements NodeFilter {
+public class RSSAtomFilter implements NodeFilter {
 
 	private String _whatToFilter;
 	
-	public ItemEntryFilter(String whatToFilter) {
+	public RSSAtomFilter(String whatToFilter) {
 		_whatToFilter = whatToFilter;
 	}
 	

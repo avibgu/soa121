@@ -15,9 +15,14 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMResult;
 import javax.xml.transform.stream.StreamSource;
 
+import org.w3c.dom.Document;
 import org.w3c.dom.Node;
+import org.w3c.dom.traversal.DocumentTraversal;
+import org.w3c.dom.traversal.NodeFilter;
+import org.w3c.dom.traversal.NodeIterator;
 
 import filter.Filter;
+import filter.RSSAtomFilter;
 
 public class DOMStreamReader implements Runnable {
 
@@ -46,6 +51,8 @@ public class DOMStreamReader implements Runnable {
 	public void run() {
 
 		Node node = readFeedContent();
+		
+		convertAtomToRSS(node);
 		
 		if (getFilters() != null && !getFilters().isEmpty())
 			node = filter(node);
@@ -79,6 +86,36 @@ public class DOMStreamReader implements Runnable {
 		return ((DOMResult)r).getNode();
 	}
 	
+	protected void convertAtomToRSS(Node node) {
+		
+		if (0 == node.getFirstChild().getNodeName().compareTo("rss"))
+			return;
+		
+		if (0 != node.getFirstChild().getNodeName().compareTo("feed"))
+			return;
+
+		convertAllTagNames(node, "entry", "item");
+		convertAllTagNames(node, "subtitle", "description");
+		convertAllTagNames(node, "content", "description");
+		convertAllTagNames(node, "summary", "description");
+	}
+	
+	protected void convertAllTagNames(Node node, String from, String to) {
+
+		RSSAtomFilter itemFilter = new RSSAtomFilter(from);
+		
+		NodeIterator iter;
+		
+		Node item;
+		
+		iter = ((DocumentTraversal)node).createNodeIterator(
+				node, NodeFilter.SHOW_ELEMENT, itemFilter, false);
+
+		while ((item = iter.nextNode()) != null)
+			((Document)node).renameNode(item, item.getParentNode().getNamespaceURI(), to);
+			
+	}
+
 	protected Node filter(Node node) {
 
 		if (getFilters().containsKey("title"))
