@@ -81,6 +81,8 @@ public class MainServlet extends HttpServlet {
 			
 			ArrayList<Node> fetchedFeeds = fetchFeeds(urls, request.getParameterMap());
 			
+			response.setCharacterEncoding("UTF-8");
+			
 			sendResultDocumentToCaller(createDocumentFromFeeds(fetchedFeeds), response.getWriter());
 		}
 		catch (NotImplaementedException e) {
@@ -193,6 +195,7 @@ public class MainServlet extends HttpServlet {
 			e3.printStackTrace();
 		}
 
+		out.close();
 	}
 
 	@Override
