@@ -42,7 +42,7 @@ public class Filter {
 	public static Node filterItems(Node node, String itemPropertyToFilter,
 			String[] filterValues){
 		
-		ItemFilter itemFilter = new ItemFilter();
+		ItemEntryFilter itemFilter = new ItemEntryFilter("item");
 		
 		NodeIterator iter;
 		
