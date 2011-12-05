@@ -1,7 +1,5 @@
 package filter;
 
-import java.util.ArrayList;
-
 import org.w3c.dom.Node;
 
 import org.w3c.dom.traversal.DocumentTraversal;
@@ -11,34 +9,10 @@ import org.w3c.dom.traversal.NodeIterator;
 
 public class Filter {
 	
-	public static Node filterByCategory(Node node, ArrayList<String> filterValues){
-		
-		//TODO: currently supports only channel filters.. and not items..
-		
-		boolean found = false;
-		
-		for(	Node child = node.getFirstChild();
-				child != null && !found;
-				child = child.getNextSibling()	){
-				
-			for (String filterValue: filterValues){
-				
-				if (	0 == child.getNodeName().compareTo("category") &&
-						0 == child.getFirstChild().getNodeValue().compareTo(filterValue)	)
-					found = true;
-				
-				if (found) break;
-				
-				if (null != filterByCategory(child, filterValues))
-					found = true;
-			}
-		}
-		
-		if (!found) return null;
-		
-		return node;
-	}
 	
+	/**
+	 * Filters all the items of the given rss feed
+	 */
 	public static Node filterItems(Node node, String itemPropertyToFilter,
 			String[] filterValues){
 		
