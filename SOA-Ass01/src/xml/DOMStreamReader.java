@@ -38,15 +38,21 @@ public class DOMStreamReader implements Runnable {
 		setFilters(filters);
 		setTransformer(null);
 		
-		try {
-			setTransformer(TransformerFactory.newInstance().newTransformer());
-		}
-		catch (TransformerConfigurationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		while (true){
+			
+			try {
+				setTransformer(TransformerFactory.newInstance().newTransformer());
+				break;
+			}
+			catch (TransformerConfigurationException e) {}
 		}
 	}
 	
+	/**
+	 * Reads the feed content, if it's an Atom feed - convert it to RSS.
+	 * After that, filters-out the unwanted items and adds the relevant items
+	 * to the list.
+	 */
 	@Override
 	public void run() {
 
@@ -64,29 +70,43 @@ public class DOMStreamReader implements Runnable {
 
 		InputStream inputStream = null;
 		
-		try {
-			inputStream = getUrl().openStream();
-		}
-		catch (IOException e1) {
-			e1.printStackTrace();
+		while(true){
 			
+			try {
+	
+				inputStream = getUrl().openStream();
+				break;
+			}
+			catch (IOException e1) {}
 		}
 		
 		Source s = new StreamSource(inputStream);
 		Result r = new DOMResult();
 		
-		try {
-			getTransformer().transform(s, r);
-		}
-		catch (TransformerException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		int numOfTries = 2;
+		
+		while (numOfTries > 0){
+			
+			try {
+				
+				getTransformer().transform(s, r);
+				break;
+			}
+			catch (TransformerException e) {
+				e.printStackTrace();
+			}
+			finally{
+				numOfTries--;
+			}
 		}
 		
 		return ((DOMResult)r).getNode();
 	}
 	
 	protected void convertAtomToRSS(Node node) {
+		
+		if (null == node)
+			return;
 		
 		if (0 == node.getFirstChild().getNodeName().compareTo("rss"))
 			return;
@@ -122,7 +142,6 @@ public class DOMStreamReader implements Runnable {
 			node = Filter.filterItems(node, "title", getFilters().get("title"));
 		
 		if (getFilters().containsKey("category"))
-//			node = Filter.filterByCategory(node, getFilters().get("category"));
 			node = Filter.filterItems(node, "category", getFilters().get("category"));
 		
 		if (getFilters().containsKey("author"))

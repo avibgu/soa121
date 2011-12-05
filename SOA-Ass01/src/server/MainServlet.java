@@ -77,8 +77,6 @@ public class MainServlet extends HttpServlet {
 			Vector<URL> urls = request.getRequestURI().endsWith("/")? 
 						_feedHandler.getFeedsCollection(getRequestPath(request)) : _feedHandler.getFeedsElement(getRequestPath(request)); 
 			
-			System.out.println(urls);//TODO remove
-			
 			ArrayList<Node> fetchedFeeds = fetchFeeds(urls, request.getParameterMap());
 			
 			response.setCharacterEncoding("UTF-8");
@@ -120,7 +118,6 @@ public class MainServlet extends HttpServlet {
 			while (!e.awaitTermination(3, TimeUnit.SECONDS)) continue;
 		}
         catch (InterruptedException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
         
@@ -176,25 +173,35 @@ public class MainServlet extends HttpServlet {
 
 		Transformer transformer = null;
         
-		try {
-			transformer = TransformerFactory.newInstance().newTransformer();
-		}
-		catch (TransformerConfigurationException e2) {
-			// TODO Auto-generated catch block
-			e2.printStackTrace();
+		while (true){
+			
+			try {
+
+				transformer = TransformerFactory.newInstance().newTransformer();
+				break;
+			}
+			catch (TransformerConfigurationException e2) {}
 		}
 		
     	Source s = new DOMSource(doc);
 		Result r = new StreamResult(out);
 
-		try {
-			transformer.transform(s, r);
+		int numOfTries = 3;
+		
+		while (numOfTries > 0){
+			
+			try {
+				
+				transformer.transform(s, r);
+				break;
+			}
+			catch (TransformerException e3) {
+			}
+			finally{
+				numOfTries--;
+			}
 		}
-		catch (TransformerException e3) {
-			// TODO Auto-generated catch block
-			e3.printStackTrace();
-		}
-
+	
 		out.close();
 	}
 
@@ -276,9 +283,7 @@ public class MainServlet extends HttpServlet {
 			while ((line = reader.readLine()) != null)
 				sb.append(line);
 		}
-		catch (Exception e){
-			//TODO Auto-generated
-		}
+		catch (Exception e){}
 
 		return sb.toString();
 	}

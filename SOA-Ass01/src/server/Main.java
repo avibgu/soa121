@@ -10,7 +10,7 @@ public class Main {
 	
 	public static final int		SERVER_PORT			= 8994;
 	public static final String	SERVER_NAME			= "soa1";
-	public static final String	FULL_SERVER_NAME	= "http://soa1.cs.bgu.ac.il:8994/ex1";
+	public static final String	FULL_SERVER_NAME	= "http://soa2.cs.bgu.ac.il:8994/ex1";
 
 	public static void main(String[] args) {
 
@@ -28,14 +28,17 @@ public class Main {
 		
 		server.setHandler(list);
 		
-		try {
+		while (true){
 			
-			server.start();
-			server.join();
-		}
-		catch (Throwable e) {
-			//TODO Exception handling
-			e.printStackTrace();
+			try {
+				
+				server.start();
+				server.join();
+				break;
+			}
+			catch (Throwable e) {
+				e.printStackTrace();
+			}
 		}
 	}
 }   
