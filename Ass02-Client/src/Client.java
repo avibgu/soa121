@@ -1,4 +1,5 @@
 import org.aggregate.news.NewsAggrStub;
+import org.aggregate.news.NewsAggrStub.GetNewsReq;
 
 
 public class Client {
@@ -10,7 +11,9 @@ public class Client {
 
 		NewsAggrStub na = new NewsAggrStub("cs302six1-1");
 		
+		GetNewsReq nr = new GetNewsReq();
 		
+		nr.setAuthor(param);
 		
 		LibraryStub.LoanDoc d = new LibraryStub.LoanDoc();
 		LibraryStub.Book_type0 b = new LibraryStub.Book_type0();
