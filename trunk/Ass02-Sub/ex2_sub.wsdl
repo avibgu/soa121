@@ -44,7 +44,7 @@
   </wsdl:binding>
   <wsdl:service name="ex2_sub">
     <wsdl:port binding="sub:ex2_subSOAP" name="ex2_subSOAP">
-      <soap:address location="http://www.example.org/"/>
+      <soap:address location="http://soa3.cs.bgu.ac.il:17171/ex2"/>
     </wsdl:port>
   </wsdl:service>
 </wsdl:definitions>
