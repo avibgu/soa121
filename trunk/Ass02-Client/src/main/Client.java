@@ -1,3 +1,6 @@
+
+package main;
+
 import java.rmi.RemoteException;
 
 import org.aggregate.news.NewsAggrStub;
