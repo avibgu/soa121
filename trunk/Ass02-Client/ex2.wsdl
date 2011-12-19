@@ -57,7 +57,7 @@
     </wsdl:binding>
     <wsdl:service name="NewsAggr">
         <wsdl:port name="NewsAggrSoap" binding="agg:newsFeedAggrBinding">
-            <soap:address location="http://soa3.cs.bgu.ac.il:9876/ex2"/>
+            <soap:address location="http://soa2.cs.bgu.ac.il:17171/ex2"/>
         </wsdl:port>
     </wsdl:service>
  </wsdl:definitions>
