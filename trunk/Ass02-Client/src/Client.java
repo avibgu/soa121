@@ -11,7 +11,7 @@ public class Client {
 	 */
 	public static void main(String[] args) throws RemoteException {
 
-		NewsAggrStub na = new NewsAggrStub("cs302six1-1");
+		NewsAggrStub na = new NewsAggrStub("http://soa2.cs.bgu.ac.il:17171/ex2");
 		
 		GetNewsReq nr = new GetNewsReq();
 
