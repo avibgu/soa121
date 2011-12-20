@@ -1,5 +1,5 @@
 
-package main;
+package org.aggregate.news;
 
 import java.rmi.RemoteException;
 
@@ -14,7 +14,7 @@ public class Client {
 	 */
 	public static void main(String[] args) throws RemoteException {
 
-		NewsAggrStub na = new NewsAggrStub("http://soa2.cs.bgu.ac.il:17171/ex2");
+		NewsAggrStub na = new NewsAggrStub("http://soa2:17171/ex2");
 		
 		GetNewsReq nr = new GetNewsReq();
 
