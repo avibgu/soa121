@@ -48,9 +48,9 @@
         </wsdl:operation>
     </wsdl:portType>
     <wsdl:binding name="newsFeedAggrBinding" type="agg:newsFeedAggrPT">
+    	<soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
         <wsdl:operation name="getNews">
             <soap:operation soapAction="urn:events" style="document"/>
-            <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
             <wsdl:input><soap:body use="literal"/></wsdl:input>
             <wsdl:output><soap:body use="literal"/></wsdl:output>
         </wsdl:operation>
