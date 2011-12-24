@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<wsdl:definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:sub="http://www.example.org/ex2_sub/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="ex2_sub" targetNamespace="http://www.example.org/ex2_sub/">
+<wsdl:definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+                  xmlns:sub="http://news.subscription.org/"
+		  xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+		  xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+		  name="ex2_sub"
+		  targetNamespace="http://news.subscription.org/">
   <wsdl:types>
-    <xsd:schema targetNamespace="http://www.example.org/ex2_sub/">
+    <xsd:schema targetNamespace="http://news.subscription.org/">
       <xsd:element name="putElement">
         <xsd:complexType>
           <xsd:sequence>
@@ -9,17 +14,9 @@
           </xsd:sequence>
         </xsd:complexType>
       </xsd:element>
-      <xsd:element name="NewOperationResponse">
-        <xsd:complexType>
-          <xsd:sequence>
-            <xsd:element name="out" type="xsd:string"/>
-          </xsd:sequence>
-        </xsd:complexType>
-      </xsd:element>
-      <xsd:element name="putElementResponse1">
+      <xsd:element name="putElementResponse">
       	<xsd:complexType>
       		<xsd:sequence>
-
       			<xsd:element name="out" type="xsd:string"></xsd:element>
       		</xsd:sequence>
       	</xsd:complexType>
@@ -29,7 +26,6 @@
       		<xsd:sequence>
       			<xsd:element name="name" minOccurs="1" maxOccurs="1"
       				type="xsd:string">
-
       			</xsd:element>
       			<xsd:element name="url" type="xsd:string" minOccurs="1" maxOccurs="unbounded"></xsd:element>
       		</xsd:sequence>
@@ -47,7 +43,6 @@
       <xsd:element name="deleteElement">
       	<xsd:complexType>
       		<xsd:sequence>
-
       			<xsd:element name="in" type="xsd:string"></xsd:element>
       		</xsd:sequence>
       	</xsd:complexType>
@@ -55,7 +50,6 @@
       <xsd:element name="deleteCollection">
       	<xsd:complexType>
       		<xsd:sequence>
-
       			<xsd:element name="in" type="xsd:string"></xsd:element>
       		</xsd:sequence>
       	</xsd:complexType>
@@ -74,43 +68,13 @@
       		</xsd:sequence>
       	</xsd:complexType>
       </xsd:element>
-      <xsd:element name="getURLs">
-      	<xsd:complexType>
-      		<xsd:sequence>
-
-      			<xsd:element name="in" type="xsd:string"></xsd:element>
-      		</xsd:sequence>
-      	</xsd:complexType>
-      </xsd:element>
-            <xsd:complexType name="URLsList"></xsd:complexType>
-            <xsd:element name="URLsList">
-            	<xsd:complexType>
-            		<xsd:sequence>
-            			<xsd:element name="URL"
-            				type="xsd:string" maxOccurs="unbounded" minOccurs="0">
-            			</xsd:element>
-            		</xsd:sequence>
-            	</xsd:complexType>
-            </xsd:element>
-            <xsd:element name="getURLsRequest">
-            	<xsd:complexType>
-            		<xsd:sequence>
-            			<xsd:element name="name"
-            				type="xsd:string" maxOccurs="1" minOccurs="1">
-            			</xsd:element>
-            		</xsd:sequence>
-            	</xsd:complexType>
-            </xsd:element>
-    </xsd:schema>
+  </xsd:schema>
   </wsdl:types>
   <wsdl:message name="putElementRequest">
   	<wsdl:part element="sub:putElementRequest" name="request" />
   </wsdl:message>
-  <wsdl:message name="NewOperationResponse">
-    <wsdl:part element="sub:NewOperationResponse" name="parameters"/>
-  </wsdl:message>
-  <wsdl:message name="putElementResponse1">
-  	<wsdl:part name="responseID" type="xsd:string"></wsdl:part>
+  <wsdl:message name="putElementResponse">
+  	<wsdl:part name="responseID" element="sub:putElementResponse"></wsdl:part>
   </wsdl:message>
   <wsdl:message name="postCollectionRequest">
   	<wsdl:part name="request" element="sub:postCollectionRequest"></wsdl:part>
@@ -130,16 +94,10 @@
   <wsdl:message name="deleteCollectionResponse1">
   	<wsdl:part name="responseID" type="xsd:string"></wsdl:part>
   </wsdl:message>
-  <wsdl:message name="getURLsRequest">
-  	<wsdl:part name="request" element="sub:getURLsRequest"></wsdl:part>
-  </wsdl:message>
-  <wsdl:message name="getURLsResponse1">
-        <wsdl:part name="response" element="sub:URLsList"></wsdl:part>
-  </wsdl:message>
-  <wsdl:portType name="ex2_sub">
+  <wsdl:portType name="ex2_sub">
         <wsdl:operation name="putElement">
         	<wsdl:input message="sub:putElementRequest"></wsdl:input>
-        	<wsdl:output message="sub:putElementResponse1"></wsdl:output>
+        	<wsdl:output message="sub:putElementResponse"></wsdl:output>
         </wsdl:operation>
         <wsdl:operation name="postCollection">
         	<wsdl:input message="sub:postCollectionRequest"></wsdl:input>
@@ -152,10 +110,6 @@
         <wsdl:operation name="deleteCollection">
         	<wsdl:input message="sub:deleteCollectionRequest"></wsdl:input>
         	<wsdl:output message="sub:deleteCollectionResponse1"></wsdl:output>
-        </wsdl:operation>
-        <wsdl:operation name="getURLs">
-        	<wsdl:input message="sub:getURLsRequest"></wsdl:input>
-        	<wsdl:output message="sub:getURLsResponse1"></wsdl:output>
         </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="ex2_subSOAP" type="sub:ex2_sub">
@@ -172,7 +126,7 @@
   </wsdl:binding>
   <wsdl:service name="ex2_sub">
     <wsdl:port binding="sub:ex2_subSOAP" name="ex2_subSOAP">
-      <soap:address location="http://soa3.cs.bgu.ac.il:17171/ex2"/>
+      <soap:address location="http://127.0.0.1:9877/axis2/services/ex2_sub/"/>
     </wsdl:port>
   </wsdl:service>
 </wsdl:definitions>
