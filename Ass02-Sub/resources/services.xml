@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- This file was auto-generated from WSDL -->
+<!-- by the Apache Axis2 version: 1.6.1  Built on : Aug 31, 2011 (12:22:40 CEST) -->
+<serviceGroup>
+    <service name="ex2_sub">
+        <messageReceivers>
+            <messageReceiver mep="http://www.w3.org/ns/wsdl/in-out" class="org.subscription.news.Ex2_subMessageReceiverInOut"/>
+        </messageReceivers>
+        <parameter name="ServiceClass">org.subscription.news.Ex2_subSkeleton</parameter>
+        <parameter name="useOriginalwsdl">true</parameter>
+        <parameter name="modifyUserWSDLPortAddress">true</parameter>
+        <operation name="putElement" mep="http://www.w3.org/ns/wsdl/in-out" namespace="http://news.subscription.org/">
+            <actionMapping>http://www.example.org/ex2_sub/putElement</actionMapping>
+            <outputActionMapping>http://news.subscription.org/ex2_sub/putElementResponse</outputActionMapping>
+        </operation>
+    </service>
+</serviceGroup>
