@@ -46,7 +46,7 @@ public class NewsAggrSkeleton implements NewsAggrSkeletonInterface {
 		// TODO: check it with the xmls from ass1 grading
 		Vector<String> urls = new Vector<String>();
 		// urls.add("http://www.cs.bgu.ac.il/~dwss121/Forum?action=rss");
-		// urls.add("http://www.little-lisper.org/feed1.xml");
+		urls.add("http://www.little-lisper.org/feed1.xml");
 		// urls.add("http://www.cs.bgu.ac.il/~gwiener/feed3.xml");
 		urls.add("/users/studs/bsc/2010/niram/workspace/Ass02-Aggr/test.xml");
 		// urls.add("http://www.cs.bgu.ac.il/~dwss121/Announcements?action=rss");
@@ -54,7 +54,7 @@ public class NewsAggrSkeleton implements NewsAggrSkeletonInterface {
 		// .add("http://www.cs.bgu.ac.il/~dwss121/CsWiki/RecentChanges?action=rss");
 
 		Hashtable<String, Vector<String>> filters = getFilters(getNewsReq0);
-
+		// Channel ch = handleMultiUrls(filters, urls);
 		return handleMultiUrls(filters, urls);
 
 	}
@@ -66,7 +66,6 @@ public class NewsAggrSkeleton implements NewsAggrSkeletonInterface {
 	 * @return the filters from the request
 	 */
 	private Hashtable<String, Vector<String>> getFilters(GetNewsReq getNewsReq0) {
-		// TODO Auto-generated method stub
 		Hashtable<String, Vector<String>> filters = new Hashtable<String, Vector<String>>();
 		Vector<String> author = new Vector<String>();
 		author.add("mike");
@@ -74,7 +73,7 @@ public class NewsAggrSkeleton implements NewsAggrSkeletonInterface {
 
 		Vector<String> title = new Vector<String>();
 		title.add("t1");
-		filters.put("title", title);
+		// filters.put("title", title);
 
 		return filters;
 	}
@@ -127,9 +126,7 @@ public class NewsAggrSkeleton implements NewsAggrSkeletonInterface {
 	 * @return Bad channel
 	 */
 	private Channel handleBadRequest() {
-		// TODO Auto-generated method stub
 		Channel badChannel = new Channel();
-
 		return badChannel;
 	}
 
@@ -151,6 +148,8 @@ public class NewsAggrSkeleton implements NewsAggrSkeletonInterface {
 				&& (itemIndexEnd != -1 + "</item>".length())) {
 			String item = allItems.substring(itemIndexStart, itemIndexEnd);
 
+			// System.out.println(item);
+			// System.out.println("--------------start");
 			org.aggregate.news.Item_type0 itemType0 = createItem(item);
 			ch.addItem(itemType0);
 
@@ -205,7 +204,7 @@ public class NewsAggrSkeleton implements NewsAggrSkeletonInterface {
 			// System.out.println("--"
 			// + item.substring(categoryIndexStart, categoryIndexEnd)
 			// + "--");
-			result.setAuthor(item.substring(categoryIndexStart,
+			result.setCategory(item.substring(categoryIndexStart,
 					categoryIndexEnd));
 		}
 
@@ -218,13 +217,15 @@ public class NewsAggrSkeleton implements NewsAggrSkeletonInterface {
 			// + item
 			// .substring(descriptionIndexStart,
 			// descriptionIndexEnd) + "--");
-			result.setAuthor(item.substring(descriptionIndexStart,
+			result.setDescription(item.substring(descriptionIndexStart,
 					descriptionIndexEnd));
 		}
-
+		// System.out.println("THE author = " + result.getAuthor());
+		// System.out.println("THE title = " + result.getTitle());
+		// System.out.println("THE category = " + result.getCategory());
+		// System.out.println("THE description = " + result.getDescription());
 		// System.out.println("----------------------");
 
 		return result;
 	}
-
 }
