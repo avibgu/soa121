@@ -19,9 +19,7 @@ public class NewsAggrSkeleton implements NewsAggrSkeletonInterface {
 
 	public org.aggregate.news.Channel getNews(
 			org.aggregate.news.GetNewsReq getNewsReq0) {
-		// TODO : fill this with the necessary business logic
-		throw new java.lang.UnsupportedOperationException("Please implement "
-				+ this.getClass().getName() + "#getNews");
+		return new NewsAggrSkeletonDelegate().getNews(getNewsReq0);
 	}
 
 }

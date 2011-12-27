@@ -40,12 +40,12 @@ public class NewsAggrSkeletonDelegate implements NewsAggrSkeletonInterface {
 			ns.getURLs(getURLsRequest);
 		} catch (AxisFault e) {
 			System.out.println("AxisFault");
-			// TODO Auto-generated catch block
 			e.printStackTrace();
+			return handleBadRequest();
 		} catch (RemoteException e) {
 			System.out.println("RemoteException");
-			// TODO Auto-generated catch block
 			e.printStackTrace();
+			return handleBadRequest();
 		}
 
 		//
