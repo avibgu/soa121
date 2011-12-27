@@ -1,8 +1,13 @@
 package org.aggregate.news;
 
 import java.io.IOException;
+import java.rmi.RemoteException;
 import java.util.Hashtable;
 import java.util.Vector;
+
+import org.apache.axis2.AxisFault;
+import org.subscription.news.NewsSubsStub;
+import org.subscription.news.NewsSubsStub.GetURLsRequest;
 
 import XmlNAtomHandler.XmlHandler;
 import XmlNAtomHandler.XmlOrAtomNode;
@@ -16,6 +21,7 @@ public class NewsAggrSkeletonDelegate implements NewsAggrSkeletonInterface {
 	 * 
 	 * @param getNewsReq0
 	 * @return channel1
+	 * @throws AxisFault
 	 */
 
 	public org.aggregate.news.Channel getNews(GetNewsReq getNewsReq0) {
@@ -25,7 +31,23 @@ public class NewsAggrSkeletonDelegate implements NewsAggrSkeletonInterface {
 		// throw new java.lang.UnsupportedOperationException("Please implement "
 		// + this.getClass().getName() + "#getNews");
 
-		// NewsAggrStub na = new NewsAggrStub("http://soa2:17171/ex2");
+		NewsSubsStub ns;
+		try {
+			ns = new NewsSubsStub();
+
+			GetURLsRequest getURLsRequest = new GetURLsRequest();
+			getURLsRequest.setIdentifier(getNewsReq0.getFeed());
+			ns.getURLs(getURLsRequest);
+		} catch (AxisFault e) {
+			System.out.println("AxisFault");
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (RemoteException e) {
+			System.out.println("RemoteException");
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
 		//
 		// GetNewsReq nr = new GetNewsReq();
 		//
@@ -39,7 +61,7 @@ public class NewsAggrSkeletonDelegate implements NewsAggrSkeletonInterface {
 		// urls.add("http://www.cs.bgu.ac.il/~dwss121/Forum?action=rss");
 		urls.add("http://www.little-lisper.org/feed1.xml");
 		// urls.add("http://www.cs.bgu.ac.il/~gwiener/feed3.xml");
-		urls.add("/users/studs/bsc/2010/niram/workspace/Ass02-Aggr/test.xml");
+		// urls.add("/users/studs/bsc/2010/niram/workspace/Ass02-Aggr/test.xml");
 		// urls.add("http://www.cs.bgu.ac.il/~dwss121/Announcements?action=rss");
 		// urls
 		// .add("http://www.cs.bgu.ac.il/~dwss121/CsWiki/RecentChanges?action=rss");
