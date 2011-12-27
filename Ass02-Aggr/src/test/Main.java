@@ -2,7 +2,7 @@ package test;
 
 import org.aggregate.news.Channel;
 import org.aggregate.news.Item_type0;
-import org.aggregate.news.NewsAggrSkeleton;
+import org.aggregate.news.NewsAggrSkeletonDelegate;
 
 /**
  * Test class
@@ -16,7 +16,7 @@ public class Main {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		NewsAggrSkeleton test = new NewsAggrSkeleton();
+		NewsAggrSkeletonDelegate test = new NewsAggrSkeletonDelegate();
 		// test.getNews(null);
 		System.out.println(toString(test.getNews(null)));
 
