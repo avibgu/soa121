@@ -57,72 +57,33 @@
 
                         /**
                         * field for Url
-                        * This was an Array!
                         */
 
                         
-                                    protected java.lang.String[] localUrl ;
+                                    protected java.lang.String localUrl ;
                                 
 
                            /**
                            * Auto generated getter method
-                           * @return java.lang.String[]
+                           * @return java.lang.String
                            */
-                           public  java.lang.String[] getUrl(){
+                           public  java.lang.String getUrl(){
                                return localUrl;
                            }
 
                            
                         
-
-
-                               
-                              /**
-                               * validate the array for Url
+                            /**
+                               * Auto generated setter method
+                               * @param param Url
                                */
-                              protected void validateUrl(java.lang.String[] param){
-                             
-                              if ((param != null) && (param.length < 1)){
-                                throw new java.lang.RuntimeException();
-                              }
-                              
-                              }
-
-
-                             /**
-                              * Auto generated setter method
-                              * @param param Url
-                              */
-                              public void setUrl(java.lang.String[] param){
-                              
-                                   validateUrl(param);
-
-                               
-                                      this.localUrl=param;
-                              }
-
-                               
-                             
-                             /**
-                             * Auto generated add method for the array for convenience
-                             * @param param java.lang.String
-                             */
-                             public void addUrl(java.lang.String param){
-                                   if (localUrl == null){
-                                   localUrl = new java.lang.String[]{};
-                                   }
-
+                               public void setUrl(java.lang.String param){
                             
+                                            this.localUrl=param;
+                                    
 
-                               java.util.List list =
-                            org.apache.axis2.databinding.utils.ConverterUtil.toList(localUrl);
-                               list.add(param);
-                               this.localUrl =
-                             (java.lang.String[])list.toArray(
-                            new java.lang.String[list.size()]);
-
-                             }
-                             
+                               }
+                            
 
      
      
@@ -201,33 +162,24 @@
                                     
                                    xmlWriter.writeEndElement();
                              
-                             if (localUrl!=null) {
-                                   namespace = "";
-                                   for (int i = 0;i < localUrl.length;i++){
-                                        
-                                            if (localUrl[i] != null){
-                                        
-                                                writeStartElement(null, namespace, "url", xmlWriter);
+                                    namespace = "";
+                                    writeStartElement(null, namespace, "url", xmlWriter);
+                             
 
-                                            
-                                                        xmlWriter.writeCharacters(org.apache.axis2.databinding.utils.ConverterUtil.convertToString(localUrl[i]));
-                                                    
-                                                xmlWriter.writeEndElement();
+                                          if (localUrl==null){
+                                              // write the nil attribute
                                               
-                                                } else {
-                                                   
-                                                           throw new org.apache.axis2.databinding.ADBException("url cannot be null!!");
-                                                       
-                                                }
+                                                     throw new org.apache.axis2.databinding.ADBException("url cannot be null!!");
+                                                  
+                                          }else{
 
-                                   }
-                             } else {
-                                 
-                                         throw new org.apache.axis2.databinding.ADBException("url cannot be null!!");
+                                        
+                                                   xmlWriter.writeCharacters(localUrl);
+                                            
+                                          }
                                     
-                             }
-
-                        
+                                   xmlWriter.writeEndElement();
+                             
                     xmlWriter.writeEndElement();
                
 
@@ -422,29 +374,15 @@
                                            throw new org.apache.axis2.databinding.ADBException("name cannot be null!!");
                                         }
                                     
-                            if (localUrl!=null){
-                                  for (int i = 0;i < localUrl.length;i++){
-                                      
-                                         if (localUrl[i] != null){
-                                          elementList.add(new javax.xml.namespace.QName("",
-                                                                              "url"));
-                                          elementList.add(
-                                          org.apache.axis2.databinding.utils.ConverterUtil.convertToString(localUrl[i]));
-                                          } else {
-                                             
-                                                    throw new org.apache.axis2.databinding.ADBException("url cannot be null!!");
-                                                
-                                          }
-                                      
-
-                                  }
-                            } else {
-                              
-                                    throw new org.apache.axis2.databinding.ADBException("url cannot be null!!");
-                                
-                            }
-
-                        
+                                      elementList.add(new javax.xml.namespace.QName("",
+                                                                      "url"));
+                                 
+                                        if (localUrl != null){
+                                            elementList.add(org.apache.axis2.databinding.utils.ConverterUtil.convertToString(localUrl));
+                                        } else {
+                                           throw new org.apache.axis2.databinding.ADBException("url cannot be null!!");
+                                        }
+                                    
 
                 return new org.apache.axis2.databinding.utils.reader.ADBXMLStreamReaderImpl(qName, elementList.toArray(), attribList.toArray());
             
@@ -520,8 +458,6 @@
                     
                     reader.next();
                 
-                        java.util.ArrayList list2 = new java.util.ArrayList();
-                    
                                     
                                     while (!reader.isStartElement() && !reader.isEndElement()) reader.next();
                                 
@@ -546,40 +482,13 @@
                                 
                                     if (reader.isStartElement() && new javax.xml.namespace.QName("","url").equals(reader.getName())){
                                 
+                                    java.lang.String content = reader.getElementText();
                                     
+                                              object.setUrl(
+                                                    org.apache.axis2.databinding.utils.ConverterUtil.convertToString(content));
+                                              
+                                        reader.next();
                                     
-                                    // Process the array and step past its final element's end.
-                                    list2.add(reader.getElementText());
-                                            
-                                            //loop until we find a start element that is not part of this array
-                                            boolean loopDone2 = false;
-                                            while(!loopDone2){
-                                                // Ensure we are at the EndElement
-                                                while (!reader.isEndElement()){
-                                                    reader.next();
-                                                }
-                                                // Step out of this element
-                                                reader.next();
-                                                // Step to next element event.
-                                                while (!reader.isStartElement() && !reader.isEndElement())
-                                                    reader.next();
-                                                if (reader.isEndElement()){
-                                                    //two continuous end elements means we are exiting the xml structure
-                                                    loopDone2 = true;
-                                                } else {
-                                                    if (new javax.xml.namespace.QName("","url").equals(reader.getName())){
-                                                         list2.add(reader.getElementText());
-                                                        
-                                                    }else{
-                                                        loopDone2 = true;
-                                                    }
-                                                }
-                                            }
-                                            // call the converter utility  to convert and set the array
-                                            
-                                                    object.setUrl((java.lang.String[])
-                                                        list2.toArray(new java.lang.String[list2.size()]));
-                                                
                               }  // End of if for expected property start element
                                 
                                 else{
