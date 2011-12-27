@@ -1,10 +1,12 @@
 package XmlNAtomHandler;
+
 import java.util.Hashtable;
 
 /**
  * Utility class for RSS/ATOM conversion
+ * 
  * @author niram
- *
+ * 
  */
 public class XmlOrAtomNode {
 
@@ -12,13 +14,14 @@ public class XmlOrAtomNode {
 	private static Hashtable<Integer, StringBuffer> instances = new Hashtable<Integer, StringBuffer>();
 
 	/**
-	 * implements singelton for each GET request
+	 * implements singleton for each GET request
+	 * 
 	 * @param session
 	 * @return
 	 */
-	public static synchronized StringBuffer getXmlInstance(int session){
+	public static synchronized StringBuffer getXmlInstance(int session) {
 		StringBuffer res = instances.get(new Integer(session));
-		if(res == null){
+		if (res == null) {
 			res = new StringBuffer();
 			instances.put(new Integer(session), res);
 		}
@@ -27,15 +30,17 @@ public class XmlOrAtomNode {
 
 	/**
 	 * RSS prefix
+	 * 
 	 * @return
 	 */
 	public static String getPrefix() {
 		return "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n"
-			+ "<rss version=\"2.0\">\n" + "<channel>\n";
+				+ "<rss version=\"2.0\">\n" + "<channel>\n";
 	}
 
 	/**
 	 * RSS suffix
+	 * 
 	 * @return
 	 */
 	public static String getSuffix() {
@@ -44,6 +49,7 @@ public class XmlOrAtomNode {
 
 	/**
 	 * convert ATOM to RSS
+	 * 
 	 * @param allItems
 	 * @return
 	 */

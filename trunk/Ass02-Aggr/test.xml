@@ -1,0 +1,18 @@
+<rss>
+	 <channel>
+			<item>
+				<title>title</title>
+				<description>description</description>
+				<author>mike</author>
+				<category>category</category>
+			</item>
+			
+			<item>
+				<title>t1</title>
+				<description>description</description>
+				<author>mike</author>
+				<category>category</category>
+			</item>
+			
+	</channel>
+</rss>

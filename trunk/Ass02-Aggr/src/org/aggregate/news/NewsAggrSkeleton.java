@@ -29,7 +29,7 @@ public class NewsAggrSkeleton implements NewsAggrSkeletonInterface {
 
 	public org.aggregate.news.Channel getNews(GetNewsReq getNewsReq0) {
 
-		// TODO : fill this with the necessary business logic
+		// business logic
 
 		// throw new java.lang.UnsupportedOperationException("Please implement "
 		// + this.getClass().getName() + "#getNews");
@@ -43,11 +43,15 @@ public class NewsAggrSkeleton implements NewsAggrSkeletonInterface {
 		// NewsAggrStub.Channel s = na.getNews(nr);
 
 		// TODO: get the url from the sub service
+		// TODO: check it with the xmls from ass1 grading
 		Vector<String> urls = new Vector<String>();
-		urls.add("http://www.cs.bgu.ac.il/~dwss121/Forum?action=rss");
-		urls.add("http://www.cs.bgu.ac.il/~dwss121/Announcements?action=rss");
-		urls
-				.add("http://www.cs.bgu.ac.il/~dwss121/CsWiki/RecentChanges?action=rss");
+		// urls.add("http://www.cs.bgu.ac.il/~dwss121/Forum?action=rss");
+		// urls.add("http://www.little-lisper.org/feed1.xml");
+		// urls.add("http://www.cs.bgu.ac.il/~gwiener/feed3.xml");
+		urls.add("/users/studs/bsc/2010/niram/workspace/Ass02-Aggr/test.xml");
+		// urls.add("http://www.cs.bgu.ac.il/~dwss121/Announcements?action=rss");
+		// urls
+		// .add("http://www.cs.bgu.ac.il/~dwss121/CsWiki/RecentChanges?action=rss");
 
 		Hashtable<String, Vector<String>> filters = getFilters(getNewsReq0);
 
@@ -63,7 +67,16 @@ public class NewsAggrSkeleton implements NewsAggrSkeletonInterface {
 	 */
 	private Hashtable<String, Vector<String>> getFilters(GetNewsReq getNewsReq0) {
 		// TODO Auto-generated method stub
-		return new Hashtable<String, Vector<String>>();
+		Hashtable<String, Vector<String>> filters = new Hashtable<String, Vector<String>>();
+		Vector<String> author = new Vector<String>();
+		author.add("mike");
+		filters.put("author", author);
+
+		Vector<String> title = new Vector<String>();
+		title.add("t1");
+		filters.put("title", title);
+
+		return filters;
 	}
 
 	/**
@@ -84,8 +97,8 @@ public class NewsAggrSkeleton implements NewsAggrSkeletonInterface {
 			try {
 				t.start();
 			} catch (Exception e) {
-				// to do : handle bad request
-				// handleBadRequest(response);
+				// handle bad request
+				return handleBadRequest();
 			}
 		}
 
@@ -93,8 +106,8 @@ public class NewsAggrSkeleton implements NewsAggrSkeletonInterface {
 			try {
 				thr.get(i).join();
 			} catch (InterruptedException e) {
-				// to do : handle bad request
-				// handleBadRequest(response);
+				// handle bad request
+				return handleBadRequest();
 			}
 		}
 		String allItems = XmlOrAtomNode.getXmlInstance(sessionCounter)
@@ -109,7 +122,19 @@ public class NewsAggrSkeleton implements NewsAggrSkeletonInterface {
 	}
 
 	/**
-	 * TODO: do it first converts string of channel to channel object
+	 * return empty channel, indicating bad request
+	 * 
+	 * @return Bad channel
+	 */
+	private Channel handleBadRequest() {
+		// TODO Auto-generated method stub
+		Channel badChannel = new Channel();
+
+		return badChannel;
+	}
+
+	/**
+	 * converts string of channel to channel object
 	 * 
 	 * @param allItems
 	 * @return
@@ -122,7 +147,8 @@ public class NewsAggrSkeleton implements NewsAggrSkeletonInterface {
 
 		int itemIndexStart = allItems.indexOf("<item>");
 		int itemIndexEnd = allItems.indexOf("</item>") + "</item>".length();
-		while (itemIndexStart != -1 && itemIndexEnd != -1 + "</item>".length()) {
+		while ((itemIndexStart != -1)
+				&& (itemIndexEnd != -1 + "</item>".length())) {
 			String item = allItems.substring(itemIndexStart, itemIndexEnd);
 
 			org.aggregate.news.Item_type0 itemType0 = createItem(item);
@@ -137,7 +163,7 @@ public class NewsAggrSkeleton implements NewsAggrSkeletonInterface {
 	}
 
 	/**
-	 * TODO: check this function its not tested
+	 * converts string of item to Item_type0 object
 	 * 
 	 * @param item
 	 *            - item as string
@@ -145,13 +171,19 @@ public class NewsAggrSkeleton implements NewsAggrSkeletonInterface {
 	 */
 	private Item_type0 createItem(String item) {
 		Item_type0 result = new Item_type0();
-		// author title category description
+
+		// gets the - author title category description, to the result
+		// for each part, get the string between the <type> .. </type> - the
+		// type content
+		// and update the result with it
 
 		int authorIndexStart = item.indexOf("<author>");
 		int authorIndexEnd = item.indexOf("</author>");
 		if (authorIndexStart != -1) {
 			authorIndexStart += "<author>".length();
-			authorIndexEnd -= 1;
+			// System.out.println("the author = ");
+			// System.out.println("--"
+			// + item.substring(authorIndexStart, authorIndexEnd) + "--");
 			result.setAuthor(item.substring(authorIndexStart, authorIndexEnd));
 		}
 
@@ -159,7 +191,9 @@ public class NewsAggrSkeleton implements NewsAggrSkeletonInterface {
 		int titleIndexEnd = item.indexOf("</title>");
 		if (titleIndexStart != -1) {
 			titleIndexStart += "<title>".length();
-			titleIndexEnd -= 1;
+			// System.out.println("the title = ");
+			// System.out.println("--"
+			// + item.substring(titleIndexStart, titleIndexEnd) + "--");
 			result.setTitle(item.substring(titleIndexStart, titleIndexEnd));
 		}
 
@@ -167,7 +201,10 @@ public class NewsAggrSkeleton implements NewsAggrSkeletonInterface {
 		int categoryIndexEnd = item.indexOf("</category>");
 		if (categoryIndexStart != -1) {
 			categoryIndexStart += "<category>".length();
-			categoryIndexEnd -= 1;
+			// System.out.println("the category = ");
+			// System.out.println("--"
+			// + item.substring(categoryIndexStart, categoryIndexEnd)
+			// + "--");
 			result.setAuthor(item.substring(categoryIndexStart,
 					categoryIndexEnd));
 		}
@@ -176,10 +213,16 @@ public class NewsAggrSkeleton implements NewsAggrSkeletonInterface {
 		int descriptionIndexEnd = item.indexOf("</description>");
 		if (descriptionIndexStart != -1) {
 			descriptionIndexStart += "<description>".length();
-			descriptionIndexEnd -= 1;
+			// System.out.println("the description = ");
+			// System.out.println("--"
+			// + item
+			// .substring(descriptionIndexStart,
+			// descriptionIndexEnd) + "--");
 			result.setAuthor(item.substring(descriptionIndexStart,
 					descriptionIndexEnd));
 		}
+
+		// System.out.println("----------------------");
 
 		return result;
 	}
