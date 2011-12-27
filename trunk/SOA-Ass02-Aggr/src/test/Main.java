@@ -1,6 +1,7 @@
 package test;
 
 import org.aggregate.news.Channel;
+import org.aggregate.news.GetNewsReq;
 import org.aggregate.news.Item_type0;
 import org.aggregate.news.NewsAggrSkeletonDelegate;
 
@@ -17,8 +18,10 @@ public class Main {
 	 */
 	public static void main(String[] args) {
 		NewsAggrSkeletonDelegate test = new NewsAggrSkeletonDelegate();
-		// test.getNews(null);
-		System.out.println(toString(test.getNews(null)));
+		GetNewsReq getNewsReq0 = new GetNewsReq();
+		getNewsReq0.setFeed("http://www.little-lisper.org/feed1.xml");
+		test.getNews(getNewsReq0);
+		// System.out.println(toString(test.getNews(null)));
 
 	}
 
