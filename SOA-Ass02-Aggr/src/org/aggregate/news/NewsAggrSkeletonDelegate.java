@@ -8,6 +8,7 @@ import java.util.Vector;
 import org.apache.axis2.AxisFault;
 import org.subscription.news.NewsSubsStub;
 import org.subscription.news.NewsSubsStub.GetURLsRequest;
+import org.subscription.news.NewsSubsStub.URLsList;
 
 import XmlNAtomHandler.XmlHandler;
 import XmlNAtomHandler.XmlOrAtomNode;
@@ -23,13 +24,9 @@ public class NewsAggrSkeletonDelegate implements NewsAggrSkeletonInterface {
 	 * @return channel1
 	 * @throws AxisFault
 	 */
-
 	public org.aggregate.news.Channel getNews(GetNewsReq getNewsReq0) {
 
 		// business logic
-
-		// throw new java.lang.UnsupportedOperationException("Please implement "
-		// + this.getClass().getName() + "#getNews");
 
 		NewsSubsStub subscriptionService;
 		try {
@@ -37,40 +34,51 @@ public class NewsAggrSkeletonDelegate implements NewsAggrSkeletonInterface {
 
 			GetURLsRequest getURLsRequest = new GetURLsRequest();
 			getURLsRequest.setIdentifier(getNewsReq0.getFeed());
-			subscriptionService.getURLs(getURLsRequest);
+
+			URLsList urlList = subscriptionService.getURLs(getURLsRequest);
+			String[] urlsArray = urlList.getURL();
+
+			// convert the array to vector
+			Vector<String> urls = new Vector<String>();
+			for (int i = 0; i < urlsArray.length; i++) {
+				urls.add(urlsArray[i]);
+			}
+
+			// get the urls
+			Hashtable<String, Vector<String>> filters = getFilters(getNewsReq0);
+
+			// fetch the urls
+			return handleMultiUrls(filters, urls);
 		} catch (AxisFault e) {
 			System.out.println("AxisFault");
 			e.printStackTrace();
+
 			return handleBadRequest();
 		} catch (RemoteException e) {
-			System.out.println("RemoteException");
+			// System.out.println("RemoteException");
 			e.printStackTrace();
 			return handleBadRequest();
 		}
-		System.out.println("Done");
 
-		//
 		// GetNewsReq nr = new GetNewsReq();
 		//
-		// nr.setFeed("http://news.feedzilla.com/en_us/headlines/sports/football-nfl.rss");
-		//
-		// NewsAggrStub.Channel s = na.getNews(nr);
-
-		// TODO: get the url from the sub service
-		// TODO: check it with the xmls from ass1 grading
-		Vector<String> urls = new Vector<String>();
-		// urls.add("http://www.cs.bgu.ac.il/~dwss121/Forum?action=rss");
-		urls.add("http://www.little-lisper.org/feed1.xml");
-		// urls.add("http://www.cs.bgu.ac.il/~gwiener/feed3.xml");
+		// nr
+		// .setFeed("http://news.feedzilla.com/en_us/headlines/sports/football-nfl.rss");
+		// Vector<String> urls = new Vector<String>();
+		// urls.add("http://www.cs.bgu.ac.il/~dwss121sdfsfsd/Forum?action=rss");
+		// // urls.add("http://www.little-lisper.org/feed1.xml");
+		// // urls.add("http://www.cs.bgu.ac.il/~gwiener/feed3.xml");
+		// //
 		// urls.add("/users/studs/bsc/2010/niram/workspace/Ass02-Aggr/test.xml");
+		// //
 		// urls.add("http://www.cs.bgu.ac.il/~dwss121/Announcements?action=rss");
-		// urls
+		// // urls
+		// //
 		// .add("http://www.cs.bgu.ac.il/~dwss121/CsWiki/RecentChanges?action=rss");
-
-		Hashtable<String, Vector<String>> filters = getFilters(getNewsReq0);
-		// Channel ch = handleMultiUrls(filters, urls);
-		// return handleMultiUrls(filters, urls);
-		return null;
+		//
+		// Channel ch = handleMultiUrls(new Hashtable<String, Vector<String>>(),
+		// urls);
+		// return ch;
 	}
 
 	/**
@@ -80,14 +88,27 @@ public class NewsAggrSkeletonDelegate implements NewsAggrSkeletonInterface {
 	 */
 	private Hashtable<String, Vector<String>> getFilters(GetNewsReq getNewsReq0) {
 		Hashtable<String, Vector<String>> filters = new Hashtable<String, Vector<String>>();
-		Vector<String> author = new Vector<String>();
-		author.add("mike");
-		filters.put("author", author);
 
-		Vector<String> title = new Vector<String>();
-		title.add("t1");
-		// filters.put("title", title);
+		// add the author filter
+		if (getNewsReq0.localAuthorTracker) {
+			Vector<String> author = new Vector<String>();
+			author.add(getNewsReq0.localAuthor);
+			filters.put("author", author);
+		}
 
+		// add the category filter
+		if (getNewsReq0.localCategoryTracker) {
+			Vector<String> category = new Vector<String>();
+			category.add(getNewsReq0.localCategory);
+			filters.put("category", category);
+		}
+
+		// add the title filter
+		if (getNewsReq0.localTitleTracker) {
+			Vector<String> title = new Vector<String>();
+			title.add(getNewsReq0.localTitle);
+			filters.put("title", title);
+		}
 		return filters;
 	}
 
@@ -134,7 +155,6 @@ public class NewsAggrSkeletonDelegate implements NewsAggrSkeletonInterface {
 	}
 
 	/**
-	 * TODO: check if empty channel return empty channel, indicating bad request
 	 * 
 	 * @return Bad channel
 	 */
