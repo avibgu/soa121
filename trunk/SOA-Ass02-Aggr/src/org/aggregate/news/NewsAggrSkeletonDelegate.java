@@ -31,13 +31,13 @@ public class NewsAggrSkeletonDelegate implements NewsAggrSkeletonInterface {
 		// throw new java.lang.UnsupportedOperationException("Please implement "
 		// + this.getClass().getName() + "#getNews");
 
-		NewsSubsStub ns;
+		NewsSubsStub subscriptionService;
 		try {
-			ns = new NewsSubsStub();
+			subscriptionService = new NewsSubsStub();
 
 			GetURLsRequest getURLsRequest = new GetURLsRequest();
 			getURLsRequest.setIdentifier(getNewsReq0.getFeed());
-			ns.getURLs(getURLsRequest);
+			subscriptionService.getURLs(getURLsRequest);
 		} catch (AxisFault e) {
 			System.out.println("AxisFault");
 			e.printStackTrace();
@@ -47,6 +47,7 @@ public class NewsAggrSkeletonDelegate implements NewsAggrSkeletonInterface {
 			e.printStackTrace();
 			return handleBadRequest();
 		}
+		System.out.println("Done");
 
 		//
 		// GetNewsReq nr = new GetNewsReq();
@@ -68,8 +69,8 @@ public class NewsAggrSkeletonDelegate implements NewsAggrSkeletonInterface {
 
 		Hashtable<String, Vector<String>> filters = getFilters(getNewsReq0);
 		// Channel ch = handleMultiUrls(filters, urls);
-		return handleMultiUrls(filters, urls);
-
+		// return handleMultiUrls(filters, urls);
+		return null;
 	}
 
 	/**
@@ -133,7 +134,7 @@ public class NewsAggrSkeletonDelegate implements NewsAggrSkeletonInterface {
 	}
 
 	/**
-	 * return empty channel, indicating bad request
+	 * TODO: check if empty channel return empty channel, indicating bad request
 	 * 
 	 * @return Bad channel
 	 */
