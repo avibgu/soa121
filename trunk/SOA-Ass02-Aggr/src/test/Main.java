@@ -3,7 +3,7 @@ package test;
 import org.aggregate.news.Channel;
 import org.aggregate.news.GetNewsReq;
 import org.aggregate.news.Item_type0;
-import org.aggregate.news.NewsAggrSkeletonDelegate;
+import org.aggregate.news.NewsAggrSkeleton;
 
 /**
  * Test class
@@ -17,11 +17,13 @@ public class Main {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		NewsAggrSkeletonDelegate test = new NewsAggrSkeletonDelegate();
+		NewsAggrSkeleton test = new NewsAggrSkeleton();
 		GetNewsReq getNewsReq0 = new GetNewsReq();
 		getNewsReq0.setFeed("http://www.little-lisper.org/feed1.xml");
-		test.getNews(getNewsReq0);
-		// System.out.println(toString(test.getNews(null)));
+		// System.out.println("before");
+		// test.getNews(getNewsReq0);
+		// System.out.println("after");
+		System.out.println(toString(test.getNews(getNewsReq0)));
 
 	}
 
@@ -61,9 +63,11 @@ public class Main {
 	public static String toString(Channel c) {
 		String result = "";
 		result += "<channel>\n";
-		for (int i = 0; i < c.getItem().length; i++) {
-			result += toString(c.getItem()[i]);
-		}
+		if (c.getItem() != null)
+			for (int i = 0; i < c.getItem().length; i++) {
+				result += toString(c.getItem()[i]);
+			}
+
 		result += "</channel>\n";
 		return result;
 
