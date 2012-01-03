@@ -3,16 +3,13 @@
  * ExtensionMapper.java
  *
  * This file was auto-generated from WSDL
- * by the Apache Axis2 version: 1.6.1  Built on : Aug 31, 2011 (12:23:23 CEST)
+ * by the Apache Axis2 version: 1.5.2  Built on : Sep 06, 2010 (09:42:47 CEST)
  */
 
-        
             package org.subscription.news;
-        
             /**
             *  ExtensionMapper class
             */
-            @SuppressWarnings({"unchecked","unused"})
         
         public  class ExtensionMapper{
 

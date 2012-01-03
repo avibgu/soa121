@@ -3,7 +3,7 @@
  * NewsSubsMessageReceiverInOut.java
  *
  * This file was auto-generated from WSDL
- * by the Apache Axis2 version: 1.6.1  Built on : Aug 31, 2011 (12:22:40 CEST)
+ * by the Apache Axis2 version: 1.5.2  Built on : Sep 06, 2010 (09:42:01 CEST)
  */
         package org.subscription.news;
 
@@ -34,7 +34,6 @@
         java.lang.String methodName;
         if((op.getName() != null) && ((methodName = org.apache.axis2.util.JavaUtils.xmlNameToJavaIdentifier(op.getName().getLocalPart())) != null)){
 
-
         
 
             if("deleteElement".equals(methodName)){
@@ -52,8 +51,7 @@
                                                          skel.deleteElement(wrappedParam)
                                                     ;
                                             
-                                        envelope = toEnvelope(getSOAPFactory(msgContext), deleteElementResponse11, false, new javax.xml.namespace.QName("http://news.subscription.org/",
-                                                    "deleteElement"));
+                                        envelope = toEnvelope(getSOAPFactory(msgContext), deleteElementResponse11, false);
                                     } else 
 
             if("postCollection".equals(methodName)){
@@ -71,8 +69,7 @@
                                                          skel.postCollection(wrappedParam)
                                                     ;
                                             
-                                        envelope = toEnvelope(getSOAPFactory(msgContext), postCollectionResponse13, false, new javax.xml.namespace.QName("http://news.subscription.org/",
-                                                    "postCollection"));
+                                        envelope = toEnvelope(getSOAPFactory(msgContext), postCollectionResponse13, false);
                                     } else 
 
             if("putElement".equals(methodName)){
@@ -90,8 +87,7 @@
                                                          skel.putElement(wrappedParam)
                                                     ;
                                             
-                                        envelope = toEnvelope(getSOAPFactory(msgContext), putElementResponse15, false, new javax.xml.namespace.QName("http://news.subscription.org/",
-                                                    "putElement"));
+                                        envelope = toEnvelope(getSOAPFactory(msgContext), putElementResponse15, false);
                                     } else 
 
             if("getURLs".equals(methodName)){
@@ -109,8 +105,7 @@
                                                          skel.getURLs(wrappedParam)
                                                     ;
                                             
-                                        envelope = toEnvelope(getSOAPFactory(msgContext), uRLsList17, false, new javax.xml.namespace.QName("http://news.subscription.org/",
-                                                    "getURLs"));
+                                        envelope = toEnvelope(getSOAPFactory(msgContext), uRLsList17, false);
                                     } else 
 
             if("deleteCollection".equals(methodName)){
@@ -128,8 +123,7 @@
                                                          skel.deleteCollection(wrappedParam)
                                                     ;
                                             
-                                        envelope = toEnvelope(getSOAPFactory(msgContext), deleteCollectionResponse19, false, new javax.xml.namespace.QName("http://news.subscription.org/",
-                                                    "deleteCollection"));
+                                        envelope = toEnvelope(getSOAPFactory(msgContext), deleteCollectionResponse19, false);
                                     
             } else {
               throw new java.lang.RuntimeException("method not found");
@@ -285,7 +279,7 @@
 
             }
         
-                    private  org.apache.axiom.soap.SOAPEnvelope toEnvelope(org.apache.axiom.soap.SOAPFactory factory, org.subscription.news.DeleteElementResponse param, boolean optimizeContent, javax.xml.namespace.QName methodQName)
+                    private  org.apache.axiom.soap.SOAPEnvelope toEnvelope(org.apache.axiom.soap.SOAPFactory factory, org.subscription.news.DeleteElementResponse param, boolean optimizeContent)
                         throws org.apache.axis2.AxisFault{
                       try{
                           org.apache.axiom.soap.SOAPEnvelope emptyEnvelope = factory.getDefaultEnvelope();
@@ -304,7 +298,7 @@
                                 return wrappedElement;
                          }
                     
-                    private  org.apache.axiom.soap.SOAPEnvelope toEnvelope(org.apache.axiom.soap.SOAPFactory factory, org.subscription.news.PostCollectionResponse param, boolean optimizeContent, javax.xml.namespace.QName methodQName)
+                    private  org.apache.axiom.soap.SOAPEnvelope toEnvelope(org.apache.axiom.soap.SOAPFactory factory, org.subscription.news.PostCollectionResponse param, boolean optimizeContent)
                         throws org.apache.axis2.AxisFault{
                       try{
                           org.apache.axiom.soap.SOAPEnvelope emptyEnvelope = factory.getDefaultEnvelope();
@@ -323,7 +317,7 @@
                                 return wrappedElement;
                          }
                     
-                    private  org.apache.axiom.soap.SOAPEnvelope toEnvelope(org.apache.axiom.soap.SOAPFactory factory, org.subscription.news.PutElementResponse param, boolean optimizeContent, javax.xml.namespace.QName methodQName)
+                    private  org.apache.axiom.soap.SOAPEnvelope toEnvelope(org.apache.axiom.soap.SOAPFactory factory, org.subscription.news.PutElementResponse param, boolean optimizeContent)
                         throws org.apache.axis2.AxisFault{
                       try{
                           org.apache.axiom.soap.SOAPEnvelope emptyEnvelope = factory.getDefaultEnvelope();
@@ -342,7 +336,7 @@
                                 return wrappedElement;
                          }
                     
-                    private  org.apache.axiom.soap.SOAPEnvelope toEnvelope(org.apache.axiom.soap.SOAPFactory factory, org.subscription.news.URLsList param, boolean optimizeContent, javax.xml.namespace.QName methodQName)
+                    private  org.apache.axiom.soap.SOAPEnvelope toEnvelope(org.apache.axiom.soap.SOAPFactory factory, org.subscription.news.URLsList param, boolean optimizeContent)
                         throws org.apache.axis2.AxisFault{
                       try{
                           org.apache.axiom.soap.SOAPEnvelope emptyEnvelope = factory.getDefaultEnvelope();
@@ -361,7 +355,7 @@
                                 return wrappedElement;
                          }
                     
-                    private  org.apache.axiom.soap.SOAPEnvelope toEnvelope(org.apache.axiom.soap.SOAPFactory factory, org.subscription.news.DeleteCollectionResponse param, boolean optimizeContent, javax.xml.namespace.QName methodQName)
+                    private  org.apache.axiom.soap.SOAPEnvelope toEnvelope(org.apache.axiom.soap.SOAPFactory factory, org.subscription.news.DeleteCollectionResponse param, boolean optimizeContent)
                         throws org.apache.axis2.AxisFault{
                       try{
                           org.apache.axiom.soap.SOAPEnvelope emptyEnvelope = factory.getDefaultEnvelope();

@@ -3,7 +3,7 @@
  * NewsSubsSkeletonInterface.java
  *
  * This file was auto-generated from WSDL
- * by the Apache Axis2 version: 1.6.1  Built on : Aug 31, 2011 (12:22:40 CEST)
+ * by the Apache Axis2 version: 1.5.2  Built on : Sep 06, 2010 (09:42:01 CEST)
  */
     package org.subscription.news;
     /**
