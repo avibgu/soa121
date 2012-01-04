@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- This file was auto-generated from WSDL -->
+<!-- by the Apache Axis2 version: 1.5.2  Built on : Sep 06, 2010 (09:42:01 CEST) -->
+<serviceGroup>
+    <service name="NewsAggr">
+        <messageReceivers>
+            <messageReceiver mep="http://www.w3.org/ns/wsdl/in-out" class="org.aggregate.news.NewsAggrMessageReceiverInOut"/>
+        </messageReceivers>
+        <parameter name="ServiceClass">org.aggregate.news.NewsAggrSkeleton</parameter>
+        <parameter name="useOriginalwsdl">true</parameter>
+        <parameter name="modifyUserWSDLPortAddress">true</parameter>
+        <operation name="getNews" mep="http://www.w3.org/ns/wsdl/in-out" namespace="http://news.aggregate.org/">
+            <actionMapping>urn:events</actionMapping>
+            <outputActionMapping>http://news.aggregate.org/newsFeedAggrPT/getNewsResponse</outputActionMapping>
+        </operation>
+    </service>
+</serviceGroup>
