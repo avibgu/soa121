@@ -19,7 +19,7 @@ public class NewsAggrSkeletonDelegate implements NewsAggrSkeletonInterface {
 
 	/**
 	 * Auto generated method signature
-	 *
+	 * 
 	 * @param getNewsReq0
 	 * @return channel1
 	 * @throws AxisFault
@@ -29,7 +29,9 @@ public class NewsAggrSkeletonDelegate implements NewsAggrSkeletonInterface {
 		// business logic
 
 		NewsSubsStub subscriptionService;
+		
 		try {
+			
 			subscriptionService = new NewsSubsStub();
 
 			GetURLsRequest getURLsRequest = new GetURLsRequest();
@@ -50,13 +52,13 @@ public class NewsAggrSkeletonDelegate implements NewsAggrSkeletonInterface {
 			// fetch the urls
 			return handleMultiUrls(filters, urls);
 		} catch (AxisFault e) {
-			System.out.println("AxisFault");
-			e.printStackTrace();
+			System.out.println("AxisFault - getNews");
+//			e.printStackTrace();
 
 			return handleBadRequest();
 		} catch (RemoteException e) {
-			// System.out.println("RemoteException");
-			e.printStackTrace();
+			System.out.println("RemoteException - getNews");
+//			e.printStackTrace();
 			return handleBadRequest();
 		}
 
@@ -82,7 +84,7 @@ public class NewsAggrSkeletonDelegate implements NewsAggrSkeletonInterface {
 	}
 
 	/**
-	 *
+	 * 
 	 * @param getNewsReq0
 	 * @return the filters from the request
 	 */
@@ -114,7 +116,7 @@ public class NewsAggrSkeletonDelegate implements NewsAggrSkeletonInterface {
 
 	/**
 	 * fetch and handle multiple urls.
-	 *
+	 * 
 	 * @param response
 	 * @param filters
 	 * @param col
@@ -131,6 +133,7 @@ public class NewsAggrSkeletonDelegate implements NewsAggrSkeletonInterface {
 				t.start();
 			} catch (Exception e) {
 				// handle bad request
+				System.out.println("Exception - handleMultiUrls - 1");
 				return handleBadRequest();
 			}
 		}
@@ -140,6 +143,7 @@ public class NewsAggrSkeletonDelegate implements NewsAggrSkeletonInterface {
 				thr.get(i).join();
 			} catch (InterruptedException e) {
 				// handle bad request
+				System.out.println("Exception - handleMultiUrls - 2");
 				return handleBadRequest();
 			}
 		}
@@ -155,7 +159,7 @@ public class NewsAggrSkeletonDelegate implements NewsAggrSkeletonInterface {
 	}
 
 	/**
-	 *
+	 * 
 	 * @return Bad channel
 	 */
 	private Channel handleBadRequest() {
@@ -165,7 +169,7 @@ public class NewsAggrSkeletonDelegate implements NewsAggrSkeletonInterface {
 
 	/**
 	 * converts string of channel to channel object
-	 *
+	 * 
 	 * @param allItems
 	 * @return
 	 */
@@ -196,7 +200,7 @@ public class NewsAggrSkeletonDelegate implements NewsAggrSkeletonInterface {
 
 	/**
 	 * converts string of item to Item_type0 object
-	 *
+	 * 
 	 * @param item
 	 *            - item as string
 	 * @return the item as Item_type0
