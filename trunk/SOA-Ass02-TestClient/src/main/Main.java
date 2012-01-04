@@ -30,16 +30,16 @@ public class Main {
 
 		Channel ch = aggr.getNews(gnr);
 
-		int i = 1;
-
-		for (Item_type0 item : ch.getItem()){
-
-			System.out.println("ITEM " + i++ + ":");
-
-			System.out.println(item.getTitle());
-			System.out.println(item.getAuthor());
-			System.out.println(item.getCategory());
-			System.out.println(item.getDescription() + "\n");
-		}
+//		int i = 1;
+//
+//		for (Item_type0 item : ch.getItem()){
+//
+//			System.out.println("ITEM " + i++ + ":");
+//
+//			System.out.println(item.getTitle());
+//			System.out.println(item.getAuthor());
+//			System.out.println(item.getCategory());
+//			System.out.println(item.getDescription() + "\n");
+//		}
 	}
 }
