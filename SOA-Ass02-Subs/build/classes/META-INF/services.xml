@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- This file was auto-generated from WSDL -->
+<!-- by the Apache Axis2 version: 1.6.1  Built on : Aug 31, 2011 (12:22:40 CEST) -->
+<serviceGroup>
+    <service name="NewsSubs">
+        <messageReceivers>
+            <messageReceiver mep="http://www.w3.org/ns/wsdl/in-out" class="org.subscription.news.NewsSubsMessageReceiverInOut"/>
+        </messageReceivers>
+        <parameter name="ServiceClass">org.subscription.news.NewsSubsSkeleton</parameter>
+        <parameter name="useOriginalwsdl">true</parameter>
+        <parameter name="modifyUserWSDLPortAddress">true</parameter>
+        <operation name="deleteElement" mep="http://www.w3.org/ns/wsdl/in-out" namespace="http://news.subscription.org/">
+            <actionMapping>http://news.subscription.org/deleteElement</actionMapping>
+            <outputActionMapping>http://news.subscription.org/NewsSubs/deleteElementResponse</outputActionMapping>
+        </operation>
+        <operation name="postCollection" mep="http://www.w3.org/ns/wsdl/in-out" namespace="http://news.subscription.org/">
+            <actionMapping>http://news.subscription.org/postCollection</actionMapping>
+            <outputActionMapping>http://news.subscription.org/NewsSubs/postCollectionResponse</outputActionMapping>
+        </operation>
+        <operation name="putElement" mep="http://www.w3.org/ns/wsdl/in-out" namespace="http://news.subscription.org/">
+            <actionMapping>http://news.subscription.org/putElement</actionMapping>
+            <outputActionMapping>http://news.subscription.org/NewsSubs/putElementResponse</outputActionMapping>
+        </operation>
+        <operation name="getURLs" mep="http://www.w3.org/ns/wsdl/in-out" namespace="http://news.subscription.org/">
+            <actionMapping>http://news.subscription.org/getURLs</actionMapping>
+            <outputActionMapping>http://news.subscription.org/NewsSubs/getURLsResponse</outputActionMapping>
+        </operation>
+        <operation name="deleteCollection" mep="http://www.w3.org/ns/wsdl/in-out" namespace="http://news.subscription.org/">
+            <actionMapping>http://news.subscription.org/deleteCollection</actionMapping>
+            <outputActionMapping>http://news.subscription.org/NewsSubs/deleteCollectionResponse</outputActionMapping>
+        </operation>
+    </service>
+</serviceGroup>

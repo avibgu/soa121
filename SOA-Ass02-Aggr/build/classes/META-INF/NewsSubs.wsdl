@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions targetNamespace="http://news.subscription.org/" xmlns:sub="http://news.subscription.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/">
+  <wsdl:types>
+    <xsd:schema targetNamespace="http://news.subscription.org/">
+
+			<xsd:element name="PutElementRequest">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element maxOccurs="1" minOccurs="1" name="name" type="xsd:string">
+						</xsd:element>
+						<xsd:element maxOccurs="1" minOccurs="1" name="url" type="xsd:string"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+
+			<xsd:element name="PostCollectionRequest">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element maxOccurs="1" minOccurs="1" name="name" type="xsd:string"/>
+						<xsd:element maxOccurs="1" minOccurs="1" name="url" type="xsd:string"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+
+			<xsd:element name="DeleteElementRequest">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element maxOccurs="1" minOccurs="1" name="name" type="xsd:string"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+
+			<xsd:element name="DeleteCollectionRequest">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element maxOccurs="1" minOccurs="1" name="name" type="xsd:string"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+
+			<xsd:element name="URLsList">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element maxOccurs="unbounded" minOccurs="0" name="URL" type="xsd:string">
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+
+			<xsd:element name="GetURLsRequest">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element maxOccurs="1" minOccurs="1" name="identifier" type="xsd:string">
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+
+			<xsd:element name="PutElementResponse" type="xsd:string"/>
+			<xsd:element name="PostCollectionResponse" type="xsd:string">
+			</xsd:element>
+			<xsd:element name="DeleteElementResponse" type="xsd:string">
+			</xsd:element>
+			<xsd:element name="DeleteCollectionResponse" type="xsd:string">
+			</xsd:element>
+		</xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="getURLsResponse">
+    <wsdl:part name="response" element="sub:URLsList">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="deleteElementRequest">
+    <wsdl:part name="request" element="sub:DeleteElementRequest">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="deleteCollectionRequest">
+    <wsdl:part name="request" element="sub:DeleteCollectionRequest">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="putElementRequest">
+    <wsdl:part name="request" element="sub:PutElementRequest">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="postCollectionResponse">
+    <wsdl:part name="responseID" element="sub:PostCollectionResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="deleteCollectionResponse">
+    <wsdl:part name="responseID" element="sub:DeleteCollectionResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="deleteElementResponse">
+    <wsdl:part name="responseID" element="sub:DeleteElementResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="putElementResponse">
+    <wsdl:part name="responseID" element="sub:PutElementResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getURLsRequest">
+    <wsdl:part name="request" element="sub:GetURLsRequest">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="postCollectionRequest">
+    <wsdl:part name="request" element="sub:PostCollectionRequest">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="NewsSubs">
+    <wsdl:operation name="putElement">
+      <wsdl:input message="sub:putElementRequest">
+    </wsdl:input>
+      <wsdl:output message="sub:putElementResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="postCollection">
+      <wsdl:input message="sub:postCollectionRequest">
+    </wsdl:input>
+      <wsdl:output message="sub:postCollectionResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="deleteElement">
+      <wsdl:input message="sub:deleteElementRequest">
+    </wsdl:input>
+      <wsdl:output message="sub:deleteElementResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="deleteCollection">
+      <wsdl:input message="sub:deleteCollectionRequest">
+    </wsdl:input>
+      <wsdl:output message="sub:deleteCollectionResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getURLs">
+      <wsdl:input message="sub:getURLsRequest">
+    </wsdl:input>
+      <wsdl:output message="sub:getURLsResponse">
+    </wsdl:output>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="NewsFeedSubBinding" type="sub:NewsSubs">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="putElement">
+      <soap:operation soapAction="http://news.subscription.org/putElement"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="postCollection">
+      <soap:operation soapAction="http://news.subscription.org/postCollection"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="deleteElement">
+      <soap:operation soapAction="http://news.subscription.org/deleteElement"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="deleteCollection">
+      <soap:operation soapAction="http://news.subscription.org/deleteCollection"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getURLs">
+      <soap:operation soapAction="http://news.subscription.org/getURLs"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="NewsSubs">
+    <wsdl:port name="NewsSubs" binding="sub:NewsFeedSubBinding">
+      <soap:address location="http://soa3.cs.bgu.ac.il:1710/axis2/services/NewsSubs/"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>
