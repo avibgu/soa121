@@ -176,7 +176,8 @@ public class SubsServer {
 
 		URLsList urls = new URLsList();
 
-		urls.setURL((String[]) urlsVec.toArray());
+		if (urlsVec != null)
+			urls.setURL((String[]) urlsVec.toArray());
 
 		return urls;
 	}
