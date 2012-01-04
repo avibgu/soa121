@@ -37,10 +37,12 @@ public class SubsServer {
 			_feedHandler.postFeed(getRequestPath(name), url);
 		} catch (BadRequestException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.out.println("BadRequestException - postCollection");
+//			e.printStackTrace();
 		} catch (NotImplaementedException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.out.println("NotImplaementedException - postCollection");
+//			e.printStackTrace();
 		}
 
 		PostCollectionResponse answer = new PostCollectionResponse();
@@ -61,6 +63,7 @@ public class SubsServer {
 				return new Vector<String>(Arrays.asList(pathArray).subList(1,
 						pathArray.length));
 		} catch (Exception e) {
+			System.out.println("BadRequestException - getRequestPath");
 			throw new BadRequestException();
 		}
 		throw new BadRequestException();
@@ -82,10 +85,12 @@ public class SubsServer {
 
 		} catch (BadRequestException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.out.println("BadRequestException - putElement");
+//			e.printStackTrace();
 		} catch (NotImplaementedException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.out.println("NotImplaementedException - putElement");
+//			e.printStackTrace();
 		}
 
 		PutElementResponse answer = new PutElementResponse();
@@ -107,10 +112,12 @@ public class SubsServer {
 				_feedHandler.deleteElementFeeds(getRequestPath(name));
 		} catch (BadRequestException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.out.println("BadRequestException - deleteElement");
+//			e.printStackTrace();
 		} catch (NotImplaementedException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.out.println("NotImplaementedException - deleteElement");
+//			e.printStackTrace();
 		}
 
 		DeleteElementResponse answer = new DeleteElementResponse();
@@ -132,10 +139,12 @@ public class SubsServer {
 				throw new NotImplaementedException();
 		} catch (BadRequestException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.out.println("BadRequestException - deleteCollection");
+//			e.printStackTrace();
 		} catch (NotImplaementedException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.out.println("NotImplaementedException - deleteCollection");
+//			e.printStackTrace();
 		}
 
 		DeleteCollectionResponse answer = new DeleteCollectionResponse();
@@ -157,11 +166,12 @@ public class SubsServer {
 		}
 		catch (BadRequestException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.out.println("BadRequestException - getURLs");
+//			e.printStackTrace();
 		}
 		catch (NotImplaementedException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.out.println("NotImplaementedException - getURLs");
 		}
 
 		URLsList urls = new URLsList();
