@@ -3,7 +3,9 @@ package main;
 import java.rmi.RemoteException;
 
 import org.aggregate.news.NewsAggrStub;
+import org.aggregate.news.NewsAggrStub.Channel;
 import org.aggregate.news.NewsAggrStub.GetNewsReq;
+import org.aggregate.news.NewsAggrStub.Item_type0;
 import org.subscription.news.NewsSubsStub;
 import org.subscription.news.NewsSubsStub.PostCollectionRequest;
 
@@ -26,6 +28,18 @@ public class Main {
 
 		gnr.setFeed("test3");
 
-		System.out.println(aggr.getNews(gnr));
+		Channel ch = aggr.getNews(gnr);
+
+		int i = 1;
+
+		for (Item_type0 item : ch.getItem()){
+
+			System.out.println("ITEM " + i++ + ":");
+
+			System.out.println(item.getTitle());
+			System.out.println(item.getAuthor());
+			System.out.println(item.getCategory());
+			System.out.println(item.getDescription() + "\n");
+		}
 	}
 }
