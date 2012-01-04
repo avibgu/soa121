@@ -13,7 +13,7 @@ public interface NewsAggrSkeletonInterface {
 
 	/**
 	 * Auto generated method signature
-	 * 
+	 *
 	 * @param getNewsReq
 	 */
 

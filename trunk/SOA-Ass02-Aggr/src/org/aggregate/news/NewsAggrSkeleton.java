@@ -6,6 +6,7 @@
  */
 package org.aggregate.news;
 
+
 /**
  * NewsAggrSkeleton java skeleton for the axisService
  */
@@ -13,7 +14,7 @@ public class NewsAggrSkeleton implements NewsAggrSkeletonInterface {
 
 	/**
 	 * Auto generated method signature
-	 * 
+	 *
 	 * @param getNewsReq0
 	 */
 

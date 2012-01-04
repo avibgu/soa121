@@ -19,7 +19,7 @@ public class NewsAggrSkeletonDelegate implements NewsAggrSkeletonInterface {
 
 	/**
 	 * Auto generated method signature
-	 * 
+	 *
 	 * @param getNewsReq0
 	 * @return channel1
 	 * @throws AxisFault
@@ -82,7 +82,7 @@ public class NewsAggrSkeletonDelegate implements NewsAggrSkeletonInterface {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param getNewsReq0
 	 * @return the filters from the request
 	 */
@@ -114,7 +114,7 @@ public class NewsAggrSkeletonDelegate implements NewsAggrSkeletonInterface {
 
 	/**
 	 * fetch and handle multiple urls.
-	 * 
+	 *
 	 * @param response
 	 * @param filters
 	 * @param col
@@ -155,7 +155,7 @@ public class NewsAggrSkeletonDelegate implements NewsAggrSkeletonInterface {
 	}
 
 	/**
-	 * 
+	 *
 	 * @return Bad channel
 	 */
 	private Channel handleBadRequest() {
@@ -165,7 +165,7 @@ public class NewsAggrSkeletonDelegate implements NewsAggrSkeletonInterface {
 
 	/**
 	 * converts string of channel to channel object
-	 * 
+	 *
 	 * @param allItems
 	 * @return
 	 */
@@ -196,7 +196,7 @@ public class NewsAggrSkeletonDelegate implements NewsAggrSkeletonInterface {
 
 	/**
 	 * converts string of item to Item_type0 object
-	 * 
+	 *
 	 * @param item
 	 *            - item as string
 	 * @return the item as Item_type0
