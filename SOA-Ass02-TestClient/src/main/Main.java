@@ -17,7 +17,7 @@ public class Main {
 
 		PostCollectionRequest pcr = new PostCollectionRequest();
 
-		pcr.setName("test3");
+		pcr.setName("/test3");
 		pcr.setUrl("http://www.cs.bgu.ac.il/~gwiener/feed3.xml");
 
 		subs.postCollection(pcr);
