@@ -29,7 +29,7 @@ public class Main {
 
 			GetNewsReq gnr = new GetNewsReq();
 
-			gnr.setFeed("/test3/");
+			gnr.setFeed("/test2");
 
 			Channel ch = aggr.getNews(gnr);
 
