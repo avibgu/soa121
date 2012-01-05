@@ -161,10 +161,11 @@ public class SubsServer {
 		String name = getURLsRequest.getIdentifier();
 
 		Vector<URL> urlsVec = null;
-
-		System.out.println("getURLs: " + name);
 		
 		try {
+			
+			System.out.println("getURLs: " + name + ", " + getRequestPath(name));
+			
 			urlsVec = name.endsWith("/") ?
 					_feedHandler.getFeedsCollection(getRequestPath(name)) :
 						_feedHandler.getFeedsElement(getRequestPath(name));
