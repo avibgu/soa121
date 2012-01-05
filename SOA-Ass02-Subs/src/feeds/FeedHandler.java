@@ -129,7 +129,19 @@ public class FeedHandler {
 	 */
 	public Vector<URL> getFeedsElement(Vector<String> requestPath) throws BadRequestException
 	{
-		return findFeed(requestPath, false).getElementsUrls();
+		Feed ans = new Feed();
+		
+		try {
+			ans = findFeed(requestPath, false);
+		}
+		catch (BadRequestException e) {
+			// TODO Auto-generated catch block
+			System.out.println("BadRequestException - getFeedsElement");
+//			e.printStackTrace();
+			throw e;
+		}
+		
+		return ans.getElementsUrls();
 	}
 
 	/**

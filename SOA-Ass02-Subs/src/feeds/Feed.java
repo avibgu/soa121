@@ -76,7 +76,7 @@ public class Feed {
 
 	/**
 	 * 
-	 * @return Vector<URL> which contain the main URL adress of this feed and all URL's of the sub-Feeds (No unnamed URL's included)
+	 * @return Vector<URL> which contain the main URL address of this feed and all URL's of the sub-Feeds (No unnamed URL's included)
 	 */
 	public Vector<URL> getElementsUrls() {
 		Vector<URL> urls = new Vector<URL>();
