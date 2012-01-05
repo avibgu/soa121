@@ -8,6 +8,7 @@ import org.aggregate.news.NewsAggrStub.GetNewsReq;
 import org.aggregate.news.NewsAggrStub.Item_type0;
 import org.subscription.news.NewsSubsStub;
 import org.subscription.news.NewsSubsStub.PostCollectionRequest;
+import org.subscription.news.NewsSubsStub.PutElementRequest;
 
 public class Main {
 
@@ -17,12 +18,12 @@ public class Main {
 			
 			NewsSubsStub subs = new NewsSubsStub();
 
-			PostCollectionRequest pcr = new PostCollectionRequest();
+			PutElementRequest per = new PutElementRequest();
 
-			pcr.setName("/test3/");
-			pcr.setUrl("http://www.cs.bgu.ac.il/~gwiener/feed3.xml");
+			per.setName("/test2");
+			per.setUrl("http://www.cs.bgu.ac.il/~gwiener/feed3.xml");
 
-			subs.postCollection(pcr);
+			subs.putElement(per);
 
 			NewsAggrStub aggr = new NewsAggrStub();
 
