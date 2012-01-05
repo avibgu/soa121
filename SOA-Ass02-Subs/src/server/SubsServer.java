@@ -74,6 +74,9 @@ public class SubsServer {
 		String name = putElementRequest.getName();
 
 		String url = putElementRequest.getUrl();
+		
+		System.out.println("putElement: " + name + ", " + url);
+		
 		try {
 
 			if (name.endsWith("/"))
@@ -159,6 +162,8 @@ public class SubsServer {
 
 		Vector<URL> urlsVec = null;
 
+		System.out.println("getURLs: " + name);
+		
 		try {
 			urlsVec = name.endsWith("/") ?
 					_feedHandler.getFeedsCollection(getRequestPath(name)) :

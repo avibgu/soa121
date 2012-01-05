@@ -9,6 +9,7 @@ import org.aggregate.news.NewsAggrStub.Item_type0;
 import org.subscription.news.NewsSubsStub;
 import org.subscription.news.NewsSubsStub.PostCollectionRequest;
 import org.subscription.news.NewsSubsStub.PutElementRequest;
+import org.subscription.news.NewsSubsStub.PutElementResponse;
 
 public class Main {
 
@@ -23,7 +24,9 @@ public class Main {
 			per.setName("/test2");
 			per.setUrl("http://www.cs.bgu.ac.il/~gwiener/feed3.xml");
 
-			subs.putElement(per);
+			PutElementResponse response = subs.putElement(per);
+			
+			System.out.println("getURLs: " + response.getPutElementResponse());
 
 			NewsAggrStub aggr = new NewsAggrStub();
 
