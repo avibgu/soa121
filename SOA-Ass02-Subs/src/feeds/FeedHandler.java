@@ -61,6 +61,9 @@ public class FeedHandler {
 		//assume requestPath.isEmpty()=false
 		while (!requestPath.isEmpty()) {
 			feedName = requestPath.remove(0);
+			
+			System.out.println("findFeed: " + feedName);
+			
 			newF = f.getNamedFeeds().get(feedName);
 			if(newF == null)
 			{
