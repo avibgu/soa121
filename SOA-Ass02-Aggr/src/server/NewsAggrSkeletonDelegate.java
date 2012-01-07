@@ -1,10 +1,14 @@
-package org.aggregate.news;
+package server;
 
 import java.io.IOException;
 import java.rmi.RemoteException;
 import java.util.Hashtable;
 import java.util.Vector;
 
+import org.aggregate.news.Channel;
+import org.aggregate.news.GetNewsReq;
+import org.aggregate.news.Item_type0;
+import org.aggregate.news.NewsAggrSkeletonInterface;
 import org.apache.axis2.AxisFault;
 import org.subscription.news.NewsSubsStub;
 import org.subscription.news.NewsSubsStub.GetURLsRequest;
@@ -51,12 +55,13 @@ public class NewsAggrSkeletonDelegate implements NewsAggrSkeletonInterface {
 
 			// fetch the urls
 			return handleMultiUrls(filters, urls);
-		} catch (AxisFault e) {
+		}
+		catch (AxisFault e) {
 			System.out.println("AxisFault - getNews");
 //			e.printStackTrace();
-
 			return handleBadRequest();
-		} catch (RemoteException e) {
+		}
+		catch (RemoteException e) {
 			System.out.println("RemoteException - getNews");
 //			e.printStackTrace();
 			return handleBadRequest();

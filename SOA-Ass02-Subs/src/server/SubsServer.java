@@ -186,6 +186,9 @@ public class SubsServer {
 		if (urlsVec != null)
 			urls.setURL((String[]) urlsVec.toArray());
 
+		else
+			urls.setURL(new String[]{"ERROR"});
+		
 		return urls;
 	}
 }
