@@ -6,7 +6,6 @@
  */
 package org.aggregate.news;
 
-import server.NewsAggrSkeletonDelegate;
 
 
 /**
