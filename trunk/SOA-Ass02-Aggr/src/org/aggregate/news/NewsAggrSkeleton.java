@@ -6,6 +6,8 @@
  */
 package org.aggregate.news;
 
+import server.NewsAggrSkeletonDelegate;
+
 
 /**
  * NewsAggrSkeleton java skeleton for the axisService
