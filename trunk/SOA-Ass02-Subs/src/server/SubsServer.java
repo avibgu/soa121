@@ -174,6 +174,7 @@ public class SubsServer {
 			// TODO Auto-generated catch block
 			System.out.println("BadRequestException - getURLs");
 //			e.printStackTrace();
+			return new URLsList();
 		}
 		catch (NotImplaementedException e) {
 			// TODO Auto-generated catch block
