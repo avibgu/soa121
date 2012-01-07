@@ -12,12 +12,7 @@ import feeds.FeedHandler;
 
 public class SubsServer {
 
-	protected FeedHandler _feedHandler;
-
-	public SubsServer() {
-
-		_feedHandler = new FeedHandler();
-	}
+	public static FeedHandler _feedHandler = new FeedHandler();
 
 	public PostCollectionResponse postCollection(
 			PostCollectionRequest postCollectionRequest) {
@@ -184,7 +179,13 @@ public class SubsServer {
 		URLsList urls = new URLsList();
 
 		if (urlsVec != null)
-			urls.setURL((String[]) urlsVec.toArray());
+		{
+		      Object[] Object_Array = urlsVec.toArray();
+		      String[] String_Array = new String[Object_Array.length];
+		      for (int i=0;i<String_Array.length;i++)
+			  String_Array[i]=Object_Array[i].toString();
+			urls.setURL(String_Array);
+		}
 
 		else
 			urls.setURL(new String[]{"ERROR"});
