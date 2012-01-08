@@ -26,11 +26,11 @@ public class Main {
 			NewsSubsStub subs = new NewsSubsStub();
 			NewsAggrStub aggr = new NewsAggrStub();
 
-//			putGet(subs, aggr);
-//			postGet(subs, aggr);
-//			putGetDeleteGet(subs, aggr);
+			putGet(subs, aggr);
+			postGet(subs, aggr);
+			putGetDeleteGet(subs, aggr);
 			postGetDeleteGet(subs, aggr);
-//			putGetWithFilters(subs, aggr);
+			putGetWithFilters(subs, aggr);
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -201,6 +201,50 @@ public class Main {
 	}
 
 	private static void putGetWithFilters(NewsSubsStub subs, NewsAggrStub aggr) throws Exception{
-		// TODO Auto-generated method stub
+
+		PutElementRequest per = new PutElementRequest();
+
+		per.setName("/test6");
+		per.setUrl("http://www.little-lisper.org/feed1.xml");
+
+		PutElementResponse response = subs.putElement(per);
+
+		System.out.println("response: " + response.getPutElementResponse());
+
+		GetNewsReq gnr = new GetNewsReq();
+		gnr.setFeed("/test6");
+		gnr.setAuthor("tajel");
+		gnr.setCategory("money");
+		Channel ch = aggr.getNews(gnr);
+
+		int i = 1;
+
+		for (Item_type0 item : ch.getItem()) {
+
+			System.out.println("ITEM " + i++ + ":");
+
+			System.out.println(item.getTitle());
+			System.out.println(item.getAuthor());
+			System.out.println(item.getCategory());
+			System.out.println(item.getDescription() + "\n");
+		}
+
+		gnr = new GetNewsReq();
+		gnr.setFeed("/test6");
+		gnr.setCategory("funny");
+		gnr.setTitle("suprise");
+		ch = aggr.getNews(gnr);
+
+		i = 1;
+
+		for (Item_type0 item : ch.getItem()) {
+
+			System.out.println("ITEM " + i++ + ":");
+
+			System.out.println(item.getTitle());
+			System.out.println(item.getAuthor());
+			System.out.println(item.getCategory());
+			System.out.println(item.getDescription() + "\n");
+		}
 	}
 }
