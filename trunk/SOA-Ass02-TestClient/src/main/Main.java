@@ -8,6 +8,8 @@ import org.aggregate.news.NewsAggrStub.GetNewsReq;
 import org.aggregate.news.NewsAggrStub.Item_type0;
 import org.apache.axis2.AxisFault;
 import org.subscription.news.NewsSubsStub;
+import org.subscription.news.NewsSubsStub.DeleteCollectionRequest;
+import org.subscription.news.NewsSubsStub.DeleteCollectionResponse;
 import org.subscription.news.NewsSubsStub.DeleteElementRequest;
 import org.subscription.news.NewsSubsStub.DeleteElementResponse;
 import org.subscription.news.NewsSubsStub.PostCollectionRequest;
@@ -29,8 +31,8 @@ public class Main {
 
 //			putGet(subs, aggr);
 //			postGet(subs, aggr);
-			putGetDeleteGet(subs, aggr);
-//			postGetDeleteGet(subs, aggr);
+//			putGetDeleteGet(subs, aggr);
+			postGetDeleteGet(subs, aggr);
 //			putGetWithFilters(subs, aggr);
 		}
 		catch (Exception e) {
@@ -123,7 +125,6 @@ public class Main {
 			System.out.println(item.getDescription() + "\n");
 		}
 
-
 		DeleteElementRequest der = new DeleteElementRequest();
 
 		der.setName(peResponse.getPutElementResponse());
@@ -141,6 +142,7 @@ public class Main {
 		for (Item_type0 item : ch.getItem()) {
 
 			System.out.println("ITEM " + i++ + ":");
+			System.out.flush();
 
 			System.out.println(item.getTitle());
 			System.out.println(item.getAuthor());
@@ -150,7 +152,55 @@ public class Main {
 	}
 
 	private static void postGetDeleteGet(NewsSubsStub subs, NewsAggrStub aggr) throws Exception{
-		// TODO Auto-generated method stub
+
+		PostCollectionRequest pcr = new PostCollectionRequest();
+
+		pcr.setName("/test5/");
+		pcr.setUrl("http://dl.dropbox.com/u/28965452/feed4.xml");
+
+		PostCollectionResponse pcResponse = subs.postCollection(pcr);
+
+		System.out.println("response: " + pcResponse.getPostCollectionResponse());
+
+		GetNewsReq gnr = new GetNewsReq();
+		gnr.setFeed("/test5/");
+		Channel ch = aggr.getNews(gnr);
+
+		int i = 1;
+
+		for (Item_type0 item : ch.getItem()) {
+
+			System.out.println("ITEM " + i++ + ":");
+
+			System.out.println(item.getTitle());
+			System.out.println(item.getAuthor());
+			System.out.println(item.getCategory());
+			System.out.println(item.getDescription() + "\n");
+		}
+
+		DeleteCollectionRequest dcr = new DeleteCollectionRequest();
+
+		dcr.setName("/test5/");
+
+		DeleteCollectionResponse dcResponse = subs.deleteCollection(dcr);
+
+		System.out.println("\ndeResponse: " + dcResponse.getDeleteCollectionResponse() + "\n");
+
+		gnr = new GetNewsReq();
+		gnr.setFeed("/test5/");
+		ch = aggr.getNews(gnr);
+
+		i = 1;
+
+		for (Item_type0 item : ch.getItem()) {
+
+			System.out.println("ITEM " + i++ + ":");
+
+			System.out.println(item.getTitle());
+			System.out.println(item.getAuthor());
+			System.out.println(item.getCategory());
+			System.out.println(item.getDescription() + "\n");
+		}
 	}
 
 	private static void putGetWithFilters(NewsSubsStub subs, NewsAggrStub aggr) throws Exception{
