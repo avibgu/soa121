@@ -69,9 +69,9 @@ public class SubsServer {
 		String name = putElementRequest.getName();
 
 		String url = putElementRequest.getUrl();
-		
+
 		System.out.println("putElement: " + name + ", " + url);
-		
+
 		try {
 
 			if (name.endsWith("/"))
@@ -156,11 +156,11 @@ public class SubsServer {
 		String name = getURLsRequest.getIdentifier();
 
 		Vector<URL> urlsVec = null;
-		
+
 		try {
-			
+
 			System.out.println("getURLs: " + name + ", " + getRequestPath(name));
-			
+
 			urlsVec = name.endsWith("/") ?
 					_feedHandler.getFeedsCollection(getRequestPath(name)) :
 						_feedHandler.getFeedsElement(getRequestPath(name));
@@ -188,8 +188,8 @@ public class SubsServer {
 		}
 
 		else
-			urls.setURL(new String[]{"ERROR"});
-		
+			urls.setURL(new String[]{});
+
 		return urls;
 	}
 }
