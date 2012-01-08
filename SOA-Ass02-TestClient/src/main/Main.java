@@ -27,12 +27,7 @@ public class Main {
 
 			PutElementResponse response = subs.putElement(per);
 
-//			System.out.println("response: " + response.getPutElementResponse());
-//			GetURLsRequest gur = new GetURLsRequest();
-//			gur.setIdentifier("/test2");
-//			String[] uRLsList = subs.getURLs(gur).getURL();
-//			for (int i=0;i<uRLsList.length;i++)
-//			  System.out.println("uRLsList["+i+"]: " + uRLsList[i]);
+			System.out.println("response: " + response.getPutElementResponse());
 
 			NewsAggrStub aggr = new NewsAggrStub();
 			GetNewsReq gnr = new GetNewsReq();
@@ -50,30 +45,6 @@ public class Main {
 				System.out.println(item.getCategory());
 				System.out.println(item.getDescription() + "\n");
 			}
-//
-//			public URLsList getURLs(GetURLsRequest getURLsRequest)
-//			System.out.println("getURLs: " + response.getPutElementResponse());
-//
-//			NewsAggrStub aggr = new NewsAggrStub();
-//
-//			GetNewsReq gnr = new GetNewsReq();
-//
-//			gnr.setFeed("/test2");
-//
-//			Channel ch = aggr.getNews(gnr);
-//
-//			int i = 1;
-//
-//			for (Item_type0 item : ch.getItem()) {
-//
-//				System.out.println("ITEM " + i++ + ":");
-//
-//				System.out.println(item.getTitle());
-//				System.out.println(item.getAuthor());
-//				System.out.println(item.getCategory());
-//				System.out.println(item.getDescription() + "\n");
-//			}
-
 		}
 		catch (Exception e) {
 			e.printStackTrace();
