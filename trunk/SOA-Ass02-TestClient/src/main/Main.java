@@ -6,6 +6,8 @@ import org.aggregate.news.NewsAggrStub.GetNewsReq;
 import org.aggregate.news.NewsAggrStub.Item_type0;
 import org.apache.axis2.AxisFault;
 import org.subscription.news.NewsSubsStub;
+import org.subscription.news.NewsSubsStub.PostCollectionRequest;
+import org.subscription.news.NewsSubsStub.PostCollectionResponse;
 import org.subscription.news.NewsSubsStub.PutElementRequest;
 import org.subscription.news.NewsSubsStub.PutElementResponse;
 
@@ -17,10 +19,11 @@ public class Main {
 		System.out.flush();
 
 		try {
-			putGet();
+//			putGet();
 			postGet();
-			putGetDeleteGet();
-			postGetDeleteGet();
+//			putGetDeleteGet();
+//			postGetDeleteGet();
+//			putGetWithFilters();
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -58,9 +61,35 @@ public class Main {
 		}
 	}
 
-	private static void postGet() {
+	private static void postGet() throws Exception {
 
+		NewsSubsStub subs = new NewsSubsStub();
 
+		PostCollectionRequest pcr = new PostCollectionRequest();
+
+		pcr.setName("/test3/");
+		pcr.setUrl("http://dl.dropbox.com/u/28965452/feed4.xml");
+
+		PostCollectionResponse response = subs.postCollection(pcr);
+
+		System.out.println("response: " + response.getPostCollectionResponse());
+
+		NewsAggrStub aggr = new NewsAggrStub();
+		GetNewsReq gnr = new GetNewsReq();
+		gnr.setFeed("/test3/");
+		Channel ch = aggr.getNews(gnr);
+
+		int i = 1;
+
+		for (Item_type0 item : ch.getItem()) {
+
+			System.out.println("ITEM " + i++ + ":");
+
+			System.out.println(item.getTitle());
+			System.out.println(item.getAuthor());
+			System.out.println(item.getCategory());
+			System.out.println(item.getDescription() + "\n");
+		}
 	}
 
 	private static void putGetDeleteGet() {
@@ -68,6 +97,10 @@ public class Main {
 	}
 
 	private static void postGetDeleteGet() {
+		// TODO Auto-generated method stub
+	}
+
+	private static void putGetWithFilters() {
 		// TODO Auto-generated method stub
 	}
 }
