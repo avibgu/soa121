@@ -180,15 +180,17 @@ public class SubsServer {
 
 		if (urlsVec != null)
 		{
-		      Object[] Object_Array = urlsVec.toArray();
-		      String[] String_Array = new String[Object_Array.length];
-		      for (int i=0;i<String_Array.length;i++)
-			  String_Array[i]=Object_Array[i].toString();
-			urls.setURL(String_Array);
+			Object[] Object_Array = urlsVec.toArray();
+			String[] String_Array = new String[Object_Array.length];
+
+			for (int i=0;i<String_Array.length;i++)
+				String_Array[i]=Object_Array[i].toString();
+
+			urls.setURL((String_Array.length != 0) ? String_Array : new String[]{""});
 		}
 
 		else
-			urls.setURL(new String[]{});
+			urls.setURL(new String[]{""});
 
 		return urls;
 	}
