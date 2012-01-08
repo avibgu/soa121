@@ -1,12 +1,9 @@
 package main;
 
-import java.rmi.RemoteException;
-
 import org.aggregate.news.NewsAggrStub;
 import org.aggregate.news.NewsAggrStub.Channel;
 import org.aggregate.news.NewsAggrStub.GetNewsReq;
 import org.aggregate.news.NewsAggrStub.Item_type0;
-import org.apache.axis2.AxisFault;
 import org.subscription.news.NewsSubsStub;
 import org.subscription.news.NewsSubsStub.DeleteCollectionRequest;
 import org.subscription.news.NewsSubsStub.DeleteCollectionResponse;
