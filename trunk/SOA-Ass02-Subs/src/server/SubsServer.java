@@ -31,13 +31,11 @@ public class SubsServer {
 
 			_feedHandler.postFeed(getRequestPath(name), url);
 		} catch (BadRequestException e) {
-			// TODO Auto-generated catch block
 			System.out.println("BadRequestException - postCollection");
-//			e.printStackTrace();
 		} catch (NotImplaementedException e) {
-			// TODO Auto-generated catch block
 			System.out.println("NotImplaementedException - postCollection");
-//			e.printStackTrace();
+		} catch (Exception e) {
+			System.out.println("Exception - postCollection");
 		}
 
 		PostCollectionResponse answer = new PostCollectionResponse();
@@ -53,7 +51,6 @@ public class SubsServer {
 
 			String[] pathArray = name.split("/");
 
-			// TODO: IF THERE IS A BUG.. START HERE..
 			if (pathArray[0].isEmpty())
 				return new Vector<String>(Arrays.asList(pathArray).subList(1,
 						pathArray.length));
@@ -82,13 +79,11 @@ public class SubsServer {
 			_feedHandler.putFeed(getRequestPath(name), url);
 
 		} catch (BadRequestException e) {
-			// TODO Auto-generated catch block
 			System.out.println("BadRequestException - putElement");
-//			e.printStackTrace();
 		} catch (NotImplaementedException e) {
-			// TODO Auto-generated catch block
 			System.out.println("NotImplaementedException - putElement");
-//			e.printStackTrace();
+		} catch (Exception e) {
+			System.out.println("Exception - putElement");
 		}
 
 		PutElementResponse answer = new PutElementResponse();
@@ -109,13 +104,11 @@ public class SubsServer {
 			else
 				_feedHandler.deleteElementFeeds(getRequestPath(name));
 		} catch (BadRequestException e) {
-			// TODO Auto-generated catch block
 			System.out.println("BadRequestException - deleteElement");
-//			e.printStackTrace();
 		} catch (NotImplaementedException e) {
-			// TODO Auto-generated catch block
 			System.out.println("NotImplaementedException - deleteElement");
-//			e.printStackTrace();
+		} catch (Exception e) {
+			System.out.println("Exception - deleteElement");
 		}
 
 		DeleteElementResponse answer = new DeleteElementResponse();
@@ -136,13 +129,11 @@ public class SubsServer {
 			else
 				throw new NotImplaementedException();
 		} catch (BadRequestException e) {
-			// TODO Auto-generated catch block
 			System.out.println("BadRequestException - deleteCollection");
-//			e.printStackTrace();
 		} catch (NotImplaementedException e) {
-			// TODO Auto-generated catch block
 			System.out.println("NotImplaementedException - deleteCollection");
-//			e.printStackTrace();
+		} catch (Exception e) {
+			System.out.println("Exception - deleteCollection");
 		}
 
 		DeleteCollectionResponse answer = new DeleteCollectionResponse();
@@ -166,31 +157,34 @@ public class SubsServer {
 						_feedHandler.getFeedsElement(getRequestPath(name));
 		}
 		catch (BadRequestException e) {
-			// TODO Auto-generated catch block
 			System.out.println("BadRequestException - getURLs");
-//			e.printStackTrace();
-			return new URLsList();
 		}
 		catch (NotImplaementedException e) {
-			// TODO Auto-generated catch block
 			System.out.println("NotImplaementedException - getURLs");
+		}
+		catch (Exception e) {
+			System.out.println("Exception - getURLs");
 		}
 
 		URLsList urls = new URLsList();
 
-		if (urlsVec != null)
-		{
-			Object[] Object_Array = urlsVec.toArray();
-			String[] String_Array = new String[Object_Array.length];
+		try {
+			if (urlsVec != null)
+			{
+				Object[] Object_Array = urlsVec.toArray();
+				String[] String_Array = new String[Object_Array.length];
 
-			for (int i=0;i<String_Array.length;i++)
-				String_Array[i]=Object_Array[i].toString();
+				for (int i=0;i<String_Array.length;i++)
+					String_Array[i]=Object_Array[i].toString();
 
-			urls.setURL((String_Array.length != 0) ? String_Array : new String[]{""});
-		}
+				urls.setURL((String_Array.length != 0) ? String_Array : new String[]{""});
+			}
 
-		else
+			else
+				urls.setURL(new String[]{""});
+		} catch (Exception e) {
 			urls.setURL(new String[]{""});
+		}
 
 		return urls;
 	}
