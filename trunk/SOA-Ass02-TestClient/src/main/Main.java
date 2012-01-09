@@ -37,6 +37,21 @@ public class Main {
 		}
 	}
 
+	private static void printChannel(Channel ch) {
+
+		int i = 1;
+
+		for (Item_type0 item : ch.getItem()) {
+
+			System.out.println("ITEM " + i++ + ":");
+
+			System.out.println(item.getTitle());
+			System.out.println(item.getAuthor());
+			System.out.println(item.getCategory());
+			System.out.println(item.getDescription() + "\n");
+		}
+	}
+
 	private static void putGet(NewsSubsStub subs, NewsAggrStub aggr) throws Exception {
 
 		PutElementRequest per = new PutElementRequest();
@@ -52,17 +67,7 @@ public class Main {
 		gnr.setFeed("/test2");
 		Channel ch = aggr.getNews(gnr);
 
-		int i = 1;
-
-		for (Item_type0 item : ch.getItem()) {
-
-			System.out.println("ITEM " + i++ + ":");
-
-			System.out.println(item.getTitle());
-			System.out.println(item.getAuthor());
-			System.out.println(item.getCategory());
-			System.out.println(item.getDescription() + "\n");
-		}
+		printChannel(ch);
 	}
 
 	private static void postGet(NewsSubsStub subs, NewsAggrStub aggr) throws Exception {
@@ -80,17 +85,7 @@ public class Main {
 		gnr.setFeed("/test3/");
 		Channel ch = aggr.getNews(gnr);
 
-		int i = 1;
-
-		for (Item_type0 item : ch.getItem()) {
-
-			System.out.println("ITEM " + i++ + ":");
-
-			System.out.println(item.getTitle());
-			System.out.println(item.getAuthor());
-			System.out.println(item.getCategory());
-			System.out.println(item.getDescription() + "\n");
-		}
+		printChannel(ch);
 	}
 
 	private static void putGetDeleteGet(NewsSubsStub subs, NewsAggrStub aggr) throws Exception {
@@ -110,17 +105,7 @@ public class Main {
 
 		Channel ch = aggr.getNews(gnr);
 
-		int i = 1;
-
-		for (Item_type0 item : ch.getItem()) {
-
-			System.out.println("ITEM " + i++ + ":");
-
-			System.out.println(item.getTitle());
-			System.out.println(item.getAuthor());
-			System.out.println(item.getCategory());
-			System.out.println(item.getDescription() + "\n");
-		}
+		printChannel(ch);
 
 		DeleteElementRequest der = new DeleteElementRequest();
 
@@ -134,18 +119,7 @@ public class Main {
 		gnr.setFeed("/test4");
 		ch = aggr.getNews(gnr);
 
-		i = 1;
-
-		for (Item_type0 item : ch.getItem()) {
-
-			System.out.println("ITEM " + i++ + ":");
-			System.out.flush();
-
-			System.out.println(item.getTitle());
-			System.out.println(item.getAuthor());
-			System.out.println(item.getCategory());
-			System.out.println(item.getDescription() + "\n");
-		}
+		printChannel(ch);
 	}
 
 	private static void postGetDeleteGet(NewsSubsStub subs, NewsAggrStub aggr) throws Exception{
@@ -163,17 +137,7 @@ public class Main {
 		gnr.setFeed("/test5/");
 		Channel ch = aggr.getNews(gnr);
 
-		int i = 1;
-
-		for (Item_type0 item : ch.getItem()) {
-
-			System.out.println("ITEM " + i++ + ":");
-
-			System.out.println(item.getTitle());
-			System.out.println(item.getAuthor());
-			System.out.println(item.getCategory());
-			System.out.println(item.getDescription() + "\n");
-		}
+		printChannel(ch);
 
 		DeleteCollectionRequest dcr = new DeleteCollectionRequest();
 
@@ -187,17 +151,7 @@ public class Main {
 		gnr.setFeed("/test5/");
 		ch = aggr.getNews(gnr);
 
-		i = 1;
-
-		for (Item_type0 item : ch.getItem()) {
-
-			System.out.println("ITEM " + i++ + ":");
-
-			System.out.println(item.getTitle());
-			System.out.println(item.getAuthor());
-			System.out.println(item.getCategory());
-			System.out.println(item.getDescription() + "\n");
-		}
+		printChannel(ch);
 	}
 
 	private static void putGetWithFilters(NewsSubsStub subs, NewsAggrStub aggr) throws Exception{
@@ -217,17 +171,7 @@ public class Main {
 		gnr.setCategory("money");
 		Channel ch = aggr.getNews(gnr);
 
-		int i = 1;
-
-		for (Item_type0 item : ch.getItem()) {
-
-			System.out.println("ITEM " + i++ + ":");
-
-			System.out.println(item.getTitle());
-			System.out.println(item.getAuthor());
-			System.out.println(item.getCategory());
-			System.out.println(item.getDescription() + "\n");
-		}
+		printChannel(ch);
 
 		gnr = new GetNewsReq();
 		gnr.setFeed("/test6");
@@ -235,16 +179,6 @@ public class Main {
 		gnr.setTitle("suprise");
 		ch = aggr.getNews(gnr);
 
-		i = 1;
-
-		for (Item_type0 item : ch.getItem()) {
-
-			System.out.println("ITEM " + i++ + ":");
-
-			System.out.println(item.getTitle());
-			System.out.println(item.getAuthor());
-			System.out.println(item.getCategory());
-			System.out.println(item.getDescription() + "\n");
-		}
+		printChannel(ch);
 	}
 }
