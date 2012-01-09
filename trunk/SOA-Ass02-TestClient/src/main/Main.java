@@ -261,6 +261,45 @@ public class Main {
 	// check that the other a stays
 	private static void test4(NewsSubsStub subs, NewsAggrStub aggr)
 			throws Exception {
+		
+		System.out.println("\n\n---------------------\n\n");
+		
+		System.out.println("test4:");
+		
+		PutElementRequest per1 = new PutElementRequest();
+		per1.setName("/a");
+		per1.setUrl("http://www.little-lisper.org/feed1.xml");
+		PutElementResponse response1 = subs.putElement(per1);
+		
+		System.out.println(response1.getPutElementResponse());
+		
+		PostCollectionRequest pcr2 = new PostCollectionRequest();
+		pcr2.setName("/b");
+		pcr2.setUrl("http://www.little-lisper.org/feed1.xml");
+		PostCollectionResponse response2 = subs.postCollection(pcr2);
+		
+		System.out.println(response2.getPostCollectionResponse());
+		
+		PutElementRequest per3 = new PutElementRequest();
+		per3.setName("/b/a");
+		per3.setUrl("http://www.little-lisper.org/feed1.xml");
+		PutElementResponse response3 = subs.putElement(per3);
+		
+		System.out.println(response3.getPutElementResponse());
+		
+		DeleteElementRequest der = new DeleteElementRequest();
+		der.setName("/a");
+		DeleteElementResponse response = subs.deleteElement(der);
+
+		System.out.println("get /b/a:");
+		
+		GetNewsReq gnr = new GetNewsReq();
+		gnr.setFeed(response3.getPutElementResponse());
+		Channel ch = aggr.getNews(gnr);
+		
+		printChannel(ch);
+		
+		System.out.println("\n\n---------------------\n\n");
 	}
 
 	// /a
