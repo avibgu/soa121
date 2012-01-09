@@ -19,7 +19,7 @@ public class NewsAggrSkeletonDelegate implements NewsAggrSkeletonInterface {
 
 	/**
 	 * Auto generated method signature
-	 *
+	 * 
 	 * @param getNewsReq0
 	 * @return channel1
 	 * @throws AxisFault
@@ -54,15 +54,17 @@ public class NewsAggrSkeletonDelegate implements NewsAggrSkeletonInterface {
 
 			// fetch the urls
 			return handleMultiUrls(filters, urls);
-		}
-		catch (AxisFault e) {
+		} catch (AxisFault e) {
 			System.out.println("AxisFault - getNews");
-//			e.printStackTrace();
+			// e.printStackTrace();
 			return handleBadRequest();
-		}
-		catch (RemoteException e) {
+		} catch (RemoteException e) {
 			System.out.println("RemoteException - getNews");
-//			e.printStackTrace();
+			// e.printStackTrace();
+			return handleBadRequest();
+		} catch (Exception e) {
+			System.out.println("Exception - getNews");
+			// e.printStackTrace();
 			return handleBadRequest();
 		}
 
@@ -88,7 +90,7 @@ public class NewsAggrSkeletonDelegate implements NewsAggrSkeletonInterface {
 	}
 
 	/**
-	 *
+	 * 
 	 * @param getNewsReq0
 	 * @return the filters from the request
 	 */
@@ -120,7 +122,7 @@ public class NewsAggrSkeletonDelegate implements NewsAggrSkeletonInterface {
 
 	/**
 	 * fetch and handle multiple urls.
-	 *
+	 * 
 	 * @param response
 	 * @param filters
 	 * @param col
@@ -163,7 +165,7 @@ public class NewsAggrSkeletonDelegate implements NewsAggrSkeletonInterface {
 	}
 
 	/**
-	 *
+	 * 
 	 * @return Bad channel
 	 */
 	private Channel handleBadRequest() {
@@ -173,13 +175,13 @@ public class NewsAggrSkeletonDelegate implements NewsAggrSkeletonInterface {
 		badItem.setDescription("");
 		badItem.setAuthor("");
 		badItem.setCategory("");
-		badChannel.setItem(new Item_type0[]{badItem});
+		badChannel.setItem(new Item_type0[] { badItem });
 		return badChannel;
 	}
 
 	/**
 	 * converts string of channel to channel object
-	 *
+	 * 
 	 * @param allItems
 	 * @return
 	 */
@@ -210,7 +212,7 @@ public class NewsAggrSkeletonDelegate implements NewsAggrSkeletonInterface {
 
 	/**
 	 * converts string of item to Item_type0 object
-	 *
+	 * 
 	 * @param item
 	 *            - item as string
 	 * @return the item as Item_type0
