@@ -33,6 +33,7 @@ public class Main {
 			putGetWithFilters(subs, aggr);
 			testElementInFile(subs, aggr);
 			test4(subs, aggr);
+			test6(subs, aggr);
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -316,6 +317,26 @@ public class Main {
 	// check a
 	private static void test6(NewsSubsStub subs, NewsAggrStub aggr)
 			throws Exception {
-	}
+		
+		System.out.println("\n\n---------------------\n\n");
+		
+		System.out.println("test6:\n");
 
+		PutElementRequest per = new PutElementRequest();
+		per.setName("/x/y");
+		per.setUrl("http://www.wisdom.weizmann.ac.il/~gwiener/feed2.xml");
+		PutElementResponse response = subs.putElement(per);
+		
+		System.out.println(response.getPutElementResponse());
+
+		System.out.println("get /x/y:\n");
+		
+		GetNewsReq gnr = new GetNewsReq();
+		gnr.setFeed(response.getPutElementResponse());
+		Channel ch = aggr.getNews(gnr);
+		
+		printChannel(ch);
+		
+		System.out.println("\n\n---------------------\n\n");
+	}
 }
