@@ -45,10 +45,10 @@ public class Main {
 
 			System.out.println("ITEM " + i++ + ":");
 
-			System.out.println(item.getTitle());
-			System.out.println(item.getAuthor());
-			System.out.println(item.getCategory());
-			System.out.println(item.getDescription() + "\n");
+			System.out.println("title:       " + item.getTitle());
+			System.out.println("author:      " + item.getAuthor());
+			System.out.println("category:    " + item.getCategory());
+			System.out.println("description: " + item.getDescription() + "\n");
 		}
 	}
 
