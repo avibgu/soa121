@@ -31,6 +31,7 @@ public class Main {
 			// putGetDeleteGet(subs, aggr);
 			// postGetDeleteGet(subs, aggr);
 			// putGetWithFilters(subs, aggr);
+			testElementInFile(subs, aggr);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -217,7 +218,7 @@ public class Main {
 		printChannel(ch);
 		System.out.println("\n\n---------------------\n\n");
 
-		System.out.println("/b/a");
+		System.out.println("/b/a:");
 		GetNewsReq gnr2 = new GetNewsReq();
 		gnr2.setFeed(response2.getPutElementResponse());
 		Channel ch2 = aggr.getNews(gnr2);
@@ -265,6 +266,13 @@ public class Main {
 	// delete /b/a
 	// check that the other a stays
 	private static void test5(NewsSubsStub subs, NewsAggrStub aggr)
+			throws Exception {
+	}
+
+	// /b/a
+	// check that b is created empty
+	// check a
+	private static void test6(NewsSubsStub subs, NewsAggrStub aggr)
 			throws Exception {
 	}
 
