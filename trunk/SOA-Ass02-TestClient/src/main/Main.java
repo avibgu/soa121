@@ -283,7 +283,7 @@ public class Main {
 		
 		PutElementRequest per3 = new PutElementRequest();
 		per3.setName("/b/a");
-		per3.setUrl("http://www.little-lisper.org/feed1.xml");
+		per3.setUrl("http://www.wisdom.weizmann.ac.il/~gwiener/feed2.xml");
 		PutElementResponse response3 = subs.putElement(per3);
 		
 		System.out.println(response3.getPutElementResponse());
