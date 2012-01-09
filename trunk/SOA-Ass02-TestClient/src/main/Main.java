@@ -26,13 +26,12 @@ public class Main {
 			NewsSubsStub subs = new NewsSubsStub();
 			NewsAggrStub aggr = new NewsAggrStub();
 
-			putGet(subs, aggr);
-			postGet(subs, aggr);
-			putGetDeleteGet(subs, aggr);
-			postGetDeleteGet(subs, aggr);
-			putGetWithFilters(subs, aggr);
-		}
-		catch (Exception e) {
+			// putGet(subs, aggr);
+			// postGet(subs, aggr);
+			// putGetDeleteGet(subs, aggr);
+			// postGetDeleteGet(subs, aggr);
+			// putGetWithFilters(subs, aggr);
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
@@ -52,7 +51,8 @@ public class Main {
 		}
 	}
 
-	private static void putGet(NewsSubsStub subs, NewsAggrStub aggr) throws Exception {
+	private static void putGet(NewsSubsStub subs, NewsAggrStub aggr)
+			throws Exception {
 
 		PutElementRequest per = new PutElementRequest();
 
@@ -70,7 +70,8 @@ public class Main {
 		printChannel(ch);
 	}
 
-	private static void postGet(NewsSubsStub subs, NewsAggrStub aggr) throws Exception {
+	private static void postGet(NewsSubsStub subs, NewsAggrStub aggr)
+			throws Exception {
 
 		PostCollectionRequest pcr = new PostCollectionRequest();
 
@@ -84,11 +85,14 @@ public class Main {
 		GetNewsReq gnr = new GetNewsReq();
 		gnr.setFeed("/test3/");
 		Channel ch = aggr.getNews(gnr);
-
+		System.out.println("before");
 		printChannel(ch);
+		System.out.println("End");
+
 	}
 
-	private static void putGetDeleteGet(NewsSubsStub subs, NewsAggrStub aggr) throws Exception {
+	private static void putGetDeleteGet(NewsSubsStub subs, NewsAggrStub aggr)
+			throws Exception {
 
 		PutElementRequest per = new PutElementRequest();
 
@@ -97,7 +101,8 @@ public class Main {
 
 		PutElementResponse peResponse = subs.putElement(per);
 
-		System.out.println("pe response: " + peResponse.getPutElementResponse());
+		System.out
+				.println("pe response: " + peResponse.getPutElementResponse());
 
 		GetNewsReq gnr = new GetNewsReq();
 
@@ -106,14 +111,15 @@ public class Main {
 		Channel ch = aggr.getNews(gnr);
 
 		printChannel(ch);
-
+		System.out.println("\n\n--------------------------\n\n");
 		DeleteElementRequest der = new DeleteElementRequest();
 
 		der.setName(peResponse.getPutElementResponse());
 
 		DeleteElementResponse deResponse = subs.deleteElement(der);
 
-		System.out.println("deResponse: " + deResponse.getDeleteElementResponse());
+		System.out.println("deResponse: "
+				+ deResponse.getDeleteElementResponse());
 
 		gnr = new GetNewsReq();
 		gnr.setFeed("/test4");
@@ -122,7 +128,8 @@ public class Main {
 		printChannel(ch);
 	}
 
-	private static void postGetDeleteGet(NewsSubsStub subs, NewsAggrStub aggr) throws Exception{
+	private static void postGetDeleteGet(NewsSubsStub subs, NewsAggrStub aggr)
+			throws Exception {
 
 		PostCollectionRequest pcr = new PostCollectionRequest();
 
@@ -131,7 +138,8 @@ public class Main {
 
 		PostCollectionResponse pcResponse = subs.postCollection(pcr);
 
-		System.out.println("response: " + pcResponse.getPostCollectionResponse());
+		System.out.println("response: "
+				+ pcResponse.getPostCollectionResponse());
 
 		GetNewsReq gnr = new GetNewsReq();
 		gnr.setFeed("/test5/");
@@ -145,7 +153,8 @@ public class Main {
 
 		DeleteCollectionResponse dcResponse = subs.deleteCollection(dcr);
 
-		System.out.println("\ndeResponse: " + dcResponse.getDeleteCollectionResponse() + "\n");
+		System.out.println("\ndeResponse: "
+				+ dcResponse.getDeleteCollectionResponse() + "\n");
 
 		gnr = new GetNewsReq();
 		gnr.setFeed("/test5/");
@@ -154,7 +163,8 @@ public class Main {
 		printChannel(ch);
 	}
 
-	private static void putGetWithFilters(NewsSubsStub subs, NewsAggrStub aggr) throws Exception{
+	private static void putGetWithFilters(NewsSubsStub subs, NewsAggrStub aggr)
+			throws Exception {
 
 		PutElementRequest per = new PutElementRequest();
 
@@ -172,6 +182,7 @@ public class Main {
 		Channel ch = aggr.getNews(gnr);
 
 		printChannel(ch);
+		System.out.println("\n\n---------------------\n\n");
 
 		gnr = new GetNewsReq();
 		gnr.setFeed("/test6");
@@ -181,4 +192,80 @@ public class Main {
 
 		printChannel(ch);
 	}
+
+	// b/
+	// /b/a
+	// print everything individually
+	private static void testElementInFile(NewsSubsStub subs, NewsAggrStub aggr)
+			throws Exception {
+
+		PostCollectionRequest pcr = new PostCollectionRequest();
+		pcr.setName("/b/");
+		PostCollectionResponse pcResponse = subs.postCollection(pcr);
+		// System.out.println("response: "
+		// + pcResponse.getPostCollectionResponse());
+
+		PutElementRequest per2 = new PutElementRequest();
+		per2.setName("/b/a");
+		per2.setUrl("http://www.little-lisper.org/feed1.xml");
+		PutElementResponse response2 = subs.putElement(per2);
+
+		System.out.println("b:");
+		GetNewsReq gnr = new GetNewsReq();
+		gnr.setFeed(pcResponse.getPostCollectionResponse());
+		Channel ch = aggr.getNews(gnr);
+		printChannel(ch);
+		System.out.println("\n\n---------------------\n\n");
+
+		System.out.println("/b/a");
+		GetNewsReq gnr2 = new GetNewsReq();
+		gnr2.setFeed(response2.getPutElementResponse());
+		Channel ch2 = aggr.getNews(gnr2);
+		printChannel(ch2);
+		System.out.println("\n\n---------------------\n\n");
+
+	}
+
+	// /a
+	// /b/
+	// /b/a
+	// prints each a (make different feeds)
+	private static void test1(NewsSubsStub subs, NewsAggrStub aggr)
+			throws Exception {
+	}
+
+	// /b/
+	// /b/a with feed 1
+	// /b/c with feed 1
+	// print get on b with filters ant check that each item appereas twice
+	private static void test2(NewsSubsStub subs, NewsAggrStub aggr)
+			throws Exception {
+	}
+
+	// /a/
+	// /a/b/
+	// /a/b/c
+	// (make different feeds)
+	// delete /a/b
+	// check that a and only a stay
+	private static void test3(NewsSubsStub subs, NewsAggrStub aggr)
+			throws Exception {
+	}
+
+	// /a
+	// /b/a
+	// delete /a
+	// check that the other a stays
+	private static void test4(NewsSubsStub subs, NewsAggrStub aggr)
+			throws Exception {
+	}
+
+	// /a
+	// /b/a
+	// delete /b/a
+	// check that the other a stays
+	private static void test5(NewsSubsStub subs, NewsAggrStub aggr)
+			throws Exception {
+	}
+
 }
