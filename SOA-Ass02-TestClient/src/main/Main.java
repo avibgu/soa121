@@ -32,6 +32,7 @@ public class Main {
 			postGetDeleteGet(subs, aggr);
 			putGetWithFilters(subs, aggr);
 			testElementInFile(subs, aggr);
+			test4(subs, aggr);
 		}
 		catch (Exception e) {
 			e.printStackTrace();
