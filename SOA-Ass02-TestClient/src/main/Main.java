@@ -237,7 +237,7 @@ public class Main {
 	// /b/
 	// /b/a with feed 1
 	// /b/c with feed 1
-	// print get on b with filters ant check that each item appereas twice
+	// print get on b with filters ant check that each item appears twice
 	private static void test2(NewsSubsStub subs, NewsAggrStub aggr)
 			throws Exception {
 	}
