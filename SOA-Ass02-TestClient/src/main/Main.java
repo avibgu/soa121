@@ -26,13 +26,14 @@ public class Main {
 			NewsSubsStub subs = new NewsSubsStub();
 			NewsAggrStub aggr = new NewsAggrStub();
 
-			// putGet(subs, aggr);
-			// postGet(subs, aggr);
-			// putGetDeleteGet(subs, aggr);
-			// postGetDeleteGet(subs, aggr);
-			// putGetWithFilters(subs, aggr);
+			putGet(subs, aggr);
+			postGet(subs, aggr);
+			putGetDeleteGet(subs, aggr);
+			postGetDeleteGet(subs, aggr);
+			putGetWithFilters(subs, aggr);
 			testElementInFile(subs, aggr);
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
@@ -202,6 +203,7 @@ public class Main {
 
 		PostCollectionRequest pcr = new PostCollectionRequest();
 		pcr.setName("/b/");
+		pcr.setUrl("http://www.little-lisper.org/feed1.xml");
 		PostCollectionResponse pcResponse = subs.postCollection(pcr);
 		// System.out.println("response: "
 		// + pcResponse.getPostCollectionResponse());
