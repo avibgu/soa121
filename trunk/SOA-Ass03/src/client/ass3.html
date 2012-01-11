@@ -9,7 +9,8 @@
 var putReq;
 var postReq;
 // enter the server address here
-var serverUrl = "http://localhost:8090/people.json";
+//var serverUrl = "http://132.72.44.36:8994/ex3";
+var serverUrl = "http://127.0.0.1:8994/ex1";
 
 
 function update() {
@@ -30,14 +31,7 @@ function update() {
   }
 }
 
-function fetch() {
-  req = new XMLHttpRequest();
-  req.onreadystatechange = update;
-  req.open("GET", "http://localhost:8090/people.json", true);
-  req.send();
-}
-
-
+// create coockie, value = the new path
 function createCookie(value,days) {
 	alert("createCookie");
 
@@ -48,7 +42,6 @@ function createCookie(value,days) {
 	}
 	else var expires = "";
 
-	//document.cookie = "currPath" +"="+value+expires+"; path=/";
 	document.cookie = "currPath=/" + value + "/" + expires+"; path=/";
 }
 
@@ -65,13 +58,12 @@ function readCookie() {
 		}
 	}
 	alert("readCookie null");
-
 	return null;
 }
 
 function eraseCookie() {
-		alert("eraseCookie");
-		createCookie("",-100);
+	alert("eraseCookie");
+	createCookie("",-100);
 }
 
 function debugFunc() {
@@ -95,8 +87,43 @@ function getFeedUrl(){
 	return feedUrlElement.value;
 }
 
-function doPut(){
+function handlePutReply(){
+	if (putReq.readyState == 4){
+		alert("handlePutReply");
+		if(putReq.status == 200) {
+			alert("result status = 200");
+		}
+		else{
+			alert("result status != 200");
+			alert(putReq.responseText);
+		}
+	}
+}
 
+function handlePostReply(){
+	if (postReq.readyState == 4){
+		alert("handlePostReply");
+		if(postReq.status == 200) {
+			alert("result status = 200");
+		}
+		else{
+			alert("result status != 200");
+			alert(postReq.responseText);
+			alert("next is post response");
+			table = document.getElementById("tbl");
+		    proto = document.getElementById("proto");
+			row = proto.cloneNode(true);
+			row.childNodes[0].innerHTML = "hhhhhhh " + postReq.status + " content = " + postReq.responseText;
+			row.style.visibility = "visible";
+			table.appendChild(row);
+
+		}
+	}
+}
+
+//TODO - NOT WORKING!!
+function doPut(){
+	alert("doPut");
 	// first check if cookie exist, if so read it
 	// else , alert the user to login (the cookie should have been created on login)
 	// now we have the current path - stored in the cookie - should be initilized on login to /username/
@@ -127,11 +154,11 @@ function doPut(){
 
 	// make put request with the name and url
 	// need TODO function that gets the response and update the display
-
+	alert("send to " + serverUrl + absFeedName);
 	putReq = new XMLHttpRequest();
-	putReq.onreadystatechange = update;
-	putReq.open("PUT", serverUrl, true);
-	putReq.send();
+	putReq.onreadystatechange = handlePutReply;
+	putReq.open("PUT", serverUrl + absFeedName, true);
+	putReq.send(feedUrl);
 
 	//alert("before");
 	//alert("after");
@@ -172,29 +199,34 @@ function doPost(){
 
 	// make put request with the name and url
 	// need TODO function that gets the response and update the display
-	//postReq = new XMLHttpRequest();
-	//postReq.onreadystatechange = update;
-	//postReq.open("PUT", serverUrl, true);
-	//postReq.send();
+	alert("send to " + serverUrl + absFeedName);
+	postReq = new XMLHttpRequest();
+	postReq.onreadystatechange = handlePostReply;
+	postReq.open("POST", serverUrl + absFeedName, true);
+	postReq.send(feedUrl);
 
 	//alert("before");
 	//alert("after");
 }
 
 
+function load(){
+	alert("nir");
+}
+
 </script>
  <title>SOA 3</title>
 </head>
-<body>
+<body onload="load()">
   <form action="" name="formName" id="formName">
 	<button type="button" onclick="doPut()"> Put request</button>
-	<button type="button" onclick="doPost()"> POST request</button>
+	<button type="button" onclick="doPost()"> Post request</button>
 	<!--enter the page implementation here  -->
 	<div class="span14">
 		<div class="well" style="padding: 14px 19px;">
 			<div class="inline-inputs">
-				<input class="small" value="Name" id="feedName" type="text">
-				<input class="xlarge" value="URL" id="feedUrl" type="text">
+				<input class="small" value="Name" id="feedName" type="text"/>
+				<input class="xlarge" value="URL" id="feedUrl" type="text"/>
 			</div>
 		</div>
 	</div>
