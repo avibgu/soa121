@@ -1,0 +1,102 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
+"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <script type="text/javascript">
+var req;
+
+function update() {
+  if (req.readyState == 4 && req.status == 200) {
+    table = document.getElementById("tbl");
+    proto = document.getElementById("proto");
+    people = eval('(' + req.responseText + ')');
+    for (k in people) {
+      person = people[k];
+      row = proto.cloneNode(true);
+      row.childNodes[0].innerHTML = person.firstName;
+      row.childNodes[1].innerHTML = person.lastName;
+      row.childNodes[2].innerHTML = person.age;
+      row.childNodes[3].innerHTML = person.sex;
+      row.style.visibility = "visible";
+      table.appendChild(row);
+    }
+  }
+}
+
+function fetch() {
+  req = new XMLHttpRequest();
+  req.onreadystatechange = update;
+  req.open("GET", "http://localhost:8090/people.json", true);
+  req.send();
+}
+
+
+function createCookie(value,days) {
+		alert("createCookie");
+	if (days) {
+		var date = new Date();
+		date.setTime(date.getTime()+(days*24*60*60*1000));
+		var expires = "; expires="+date.toGMTString();
+	}
+	else var expires = "";
+	document.cookie = "username" +"="+value+expires+"; path=/";
+}
+
+function readCookie() {
+	alert("readCookie");
+	var nameEQ = "username" + "=";
+	var ca = document.cookie.split(';');
+	for(var i=0;i < ca.length;i++) {
+		var c = ca[i];
+		while (c.charAt(0)==' ') c = c.substring(1,c.length);
+		if (c.indexOf(nameEQ) == 0){
+				alert("return in read " + c.substring(nameEQ.length,c.length));
+				return c.substring(nameEQ.length,c.length);
+		}
+	}
+		alert("readCookie null");
+
+	return null;
+}
+
+function eraseCookie() {
+		alert("eraseCookie");
+		createCookie("",-100);
+}
+
+function doPut(){
+//  req = new XMLHttpRequest();
+//  req.onreadystatechange = update;
+//  req.open("PUT", "http://localhost:8090/people.json", true);
+//  req.send();
+
+	alert("doPut1");
+		//eraseCookie("nir");
+	//createCookie("nir");
+		//readCookie();
+	if(!readCookie()){
+	//	alert("doPut2");
+		createCookie("nir2");
+	}
+	else
+	{
+	//	alert("doPut3");
+		value = readCookie();
+	//	alert(value);
+	}
+}
+
+
+  </script>
+  <title>AJAX/JSON</title>
+</head>
+<body>
+  <form action="">
+	<button type="button" onclick="doPut()">Fill table</button>
+  </form>
+  <table id="tbl">
+    <tr id="proto" style="visibility: collapse"><td/><td/><td/><td/></tr>
+  </table>
+</body>
+</html>
