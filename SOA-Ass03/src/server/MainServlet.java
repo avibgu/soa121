@@ -272,27 +272,34 @@ public class MainServlet extends HttpServlet {
 			HttpServletResponse response) throws ServletException, IOException {
 		System.out.println("got post");
 		System.out.println("POST");
-
 		String content = getRequestContent(request);
 
+		System.out.println("content = " + content);
+
 		try {
+			System.out.println("getRequestPath(request) = "
+					+ getRequestPath(request));
+
 			if (!request.getRequestURI().endsWith("/"))
 				// throw exception => POST method is unsupported for Feed
 				// elements
 				throw new NotImplaementedException();
 			_feedHandler.postFeed(getRequestPath(request), content);
 
-			response.setStatus(HttpServletResponse.SC_OK);
-			response.setCharacterEncoding("UTF-8");
-			PrintWriter out = response.getWriter();
-			out.println("hello");
-			out.close();
-			System.out.println("DONE");
+			//
+			// response.setStatus(HttpServletResponse.SC_OK);
+			// response.setCharacterEncoding("UTF-8");
+			// PrintWriter out = response.getWriter();
+			// out.println("hello");
+			// out.close();
+			// System.out.println("DONE");
 
 		} catch (NotImplaementedException e) {
+			System.out.println("excpetion 1");
 			response.sendError(HttpServletResponse.SC_NOT_IMPLEMENTED);
 			return;
 		} catch (BadRequestException e) {
+			System.out.println("excpetion 2");
 			response.sendError(HttpServletResponse.SC_BAD_REQUEST);
 			return;
 		}
@@ -360,7 +367,7 @@ public class MainServlet extends HttpServlet {
 			throws NotImplaementedException, BadRequestException {
 		try {
 			String[] pathArray = request.getRequestURI().split("/");
-			if (pathArray[0].isEmpty() && pathArray[1].equalsIgnoreCase("ex1"))
+			if (pathArray[0].isEmpty() && pathArray[1].equalsIgnoreCase("ex3"))
 				return new Vector<String>(Arrays.asList(pathArray).subList(2,
 						pathArray.length));
 		} catch (Exception e) {

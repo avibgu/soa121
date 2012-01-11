@@ -3,22 +3,234 @@
 <html lang="en">
 
   <head>
-  
+
+   <script type="text/javascript">
+
+		var putReq;
+		var postReq;
+		// enter the server address here
+		//var serverUrl = "http://132.72.44.36:8994/ex3";
+		var serverUrl = "http://127.0.0.1:8994/ex3";
+
+
+		function update() {
+		  if (req.readyState == 4 && req.status == 200) {
+		    table = document.getElementById("tbl");
+		    proto = document.getElementById("proto");
+		    people = eval('(' + req.responseText + ')');
+		    for (k in people) {
+		      person = people[k];
+		      row = proto.cloneNode(true);
+		      row.childNodes[0].innerHTML = person.firstName;
+		      row.childNodes[1].innerHTML = person.lastName;
+		      row.childNodes[2].innerHTML = person.age;
+		      row.childNodes[3].innerHTML = person.sex;
+		      row.style.visibility = "visible";
+		      table.appendChild(row);
+		    }
+		  }
+		}
+
+		// create coockie, value = the new path
+		function createCookie(value,days) {
+			alert("createCookie");
+
+			if (days) {
+				var date = new Date();
+				date.setTime(date.getTime()+(days*24*60*60*1000));
+				var expires = "; expires="+date.toGMTString();
+			}
+			else var expires = "";
+
+			document.cookie = "currPath=/" + value + "/" + expires+"; path=/";
+		}
+
+		function readCookie() {
+			alert("readCookie");
+			var nameEQ = "currPath" + "=";
+			var ca = document.cookie.split(';');
+			for(var i=0;i < ca.length;i++) {
+				var c = ca[i];
+				while (c.charAt(0)==' ') c = c.substring(1,c.length);
+				if (c.indexOf(nameEQ) == 0){
+						alert("return in readCookie " + c.substring(nameEQ.length,c.length));
+						return c.substring(nameEQ.length,c.length);
+				}
+			}
+			alert("readCookie null");
+			return null;
+		}
+
+		function eraseCookie() {
+			alert("eraseCookie");
+			createCookie("",-100);
+		}
+
+		function debugFunc() {
+			createCookie("nir",100);
+		}
+
+
+		// get the absolute feedName
+		// absFeedName = path + feedName
+		function getAbsoluteFeedName(){
+			feedNameElement = document.getElementById("feedName");
+			if(!feedNameElement.value){
+				return null;
+			}
+			return currPath + "/" + feedNameElement.value;
+		}
+
+		// get the feedURL
+		function getFeedUrl(){
+			feedUrlElement = document.getElementById("feedUrl");
+			return feedUrlElement.value;
+		}
+
+		function handlePutReply(){
+			if (putReq.readyState == 4){
+				alert("handlePutReply");
+				if(putReq.status == 200) {
+					alert("result status = 200");
+				}
+				else{
+					alert("result status != 200");
+					alert(putReq.responseText);
+				}
+			}
+		}
+
+		function handlePostReply(){
+			if (postReq.readyState == 4){
+				alert("handlePostReply");
+				if(postReq.status == 200) {
+					alert("result status = 200");
+				}
+				else{
+					alert("result status != 200");
+					alert(postReq.responseText);
+					alert("next is post response");
+					table = document.getElementById("tbl");
+				    proto = document.getElementById("proto");
+					row = proto.cloneNode(true);
+					row.childNodes[0].innerHTML = "hhhhhhh " + postReq.status + " content = " + postReq.responseText;
+					row.style.visibility = "visible";
+					table.appendChild(row);
+
+				}
+			}
+		}
+
+		//TODO - NOT WORKING!!
+		function doPut(){
+			alert("doPut");
+			// first check if cookie exist, if so read it
+			// else , alert the user to login (the cookie should have been created on login)
+			// now we have the current path - stored in the cookie - should be initilized on login to /username/
+			currPath = readCookie();
+			if(!currPath){
+				alert("You are not loggen in,\n please log in to continue.");
+				return;
+			}
+			alert("currPath =" + currPath);
+
+			// get the feedName
+			// absFeedName = path + feedName
+			absFeedName = getAbsoluteFeedName();
+			if(!absFeedName){
+				alert("You did not enter feed name!");
+				return;
+			}
+			alert("absFeedName = " + absFeedName);
+
+
+			// get the feedURL
+			feedUrl = getFeedUrl();
+			if(feedUrl == ""){
+				alert("You did not enter feed url!");
+				return;
+			}
+			alert("feedUrl = " + feedUrl);
+
+			// make put request with the name and url
+			// need TODO function that gets the response and update the display
+			alert("send to " + serverUrl + absFeedName);
+			putReq = new XMLHttpRequest();
+			putReq.onreadystatechange = handlePutReply;
+			putReq.open("PUT", serverUrl + absFeedName, true);
+			putReq.send(feedUrl);
+
+			//alert("before");
+			//alert("after");
+		}
+
+		function doPost(){
+
+			// first check if cookie exist, if so read it
+			// else , alert the user to login (the cookie should have been created on login)
+			// TODO - redirect to login page
+			// now we have the current path - stored in the cookie - should be initilized on login to /username/
+			currPath = readCookie();
+			if(!currPath){
+				alert("You are not loggen in,\n please log in to continue.");
+				//TODO -redirect to login
+				return;
+			}
+			alert("currPath =" + currPath);
+
+			// get the feedName
+			// absFeedName = path + feedName
+			absFeedName = getAbsoluteFeedName();
+			if(!absFeedName){
+				alert("You did not enter feed name!");
+				return;
+			}
+			absFeedName = absFeedName + "/";
+			alert("absFeedName = " + absFeedName);
+
+
+			// get the feedURL
+			feedUrl = getFeedUrl();
+			if(feedUrl == ""){
+				alert("You did not enter feed url!");
+				return;
+			}
+			alert("feedUrl = " + feedUrl);
+
+			// make put request with the name and url
+			// need TODO function that gets the response and update the display
+			alert("send to " + serverUrl + absFeedName);
+			postReq = new XMLHttpRequest();
+			postReq.onreadystatechange = handlePostReply;
+			postReq.open("POST", serverUrl + absFeedName, true);
+			postReq.send(feedUrl);
+
+			//alert("before");
+			//alert("after");
+		}
+
+
+		function load(){
+			alert("nir");
+		}
+
+	</script>
+
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta charset="utf-8">
     <meta name="description" content="">
     <meta name="author" content="">
 
     <title>News Feeds Reader</title>
-		
+
 	<link rel="shortcut icon" href="http://twitter.github.com/bootstrap/examples/images/favicon.ico">
     <link rel="apple-touch-icon" href="http://twitter.github.com/bootstrap/examples/images/apple-touch-icon.png">
     <link rel="apple-touch-icon" sizes="72x72" href="http://twitter.github.com/bootstrap/examples/images/apple-touch-icon-72x72.png">
     <link rel="apple-touch-icon" sizes="114x114" href="http://twitter.github.com/bootstrap/examples/images/apple-touch-icon-114x114.png">
-    
+
 	<link rel="stylesheet" href="http://twitter.github.com/bootstrap/1.4.0/bootstrap.css">
     <style type="text/css">
-	
+
       /* Override some defaults */
       html, body {
         background-color: #eee;
@@ -70,9 +282,9 @@
       }
 
     </style>
-	
+
   </head>
-  
+
   <body>
 
     <div class="topbar">
@@ -94,15 +306,15 @@
     </div>
 
     <div class="container">
-	
+
       <div class="content">
-	  
+
         <div class="page-header">
           <h1>News Feeds Reader</h1>
         </div>
-		
+
 		<div id="mainDiv">
-		
+
 			<div class="row">
 			  <div class="span14" id="tree">
 				<ul class="breadcrumb">
@@ -113,7 +325,7 @@
 				</ul>
 			  </div>
 			</div>
-			
+
 			<div class="span14">
 				<div class="well" style="padding: 14px 19px;">
 					<table class="condensed-table">
@@ -152,22 +364,22 @@
 					</table>
 				</div>
 			</div>
-			
+
 			<div class="span14">
 				<div class="well" style="padding: 14px 19px;">
 					<div class="inline-inputs">
 						<input class="small" type="text" value="Name" id="feedName"/>
 						<input class="xlarge" type="text" value="URL" id="feedUrl"/>
-						<button class="btn primary">Add Collection</button>
+						<button class="btn primary" onclick="doPost()">Add Collection</button>
 						&nbsp;
-						<button class="btn info">Add Element</button>
+						<button class="btn info" onclick="doPut()">Add Element</button>
 					</div>
 				</div>
 			</div>
-			
+
 			<div class="span14">
 				<div class="well" style="padding: 14px 19px;">
-				
+
 				  <table class="condensed-table">
 					<thead>
 					  <tr>
@@ -198,16 +410,22 @@
 					  </tr>
 					</tbody>
 				  </table>
-				
+
 				</div>
 			</div>
 		</div>
       </div>
 
+	  <table id="tbl">
+	    <tr id="proto" style="visibility: collapse">
+		    <td/>
+	    </tr>
+	  </table>
+
       <footer>
-        <p>© Avi, Chezi & Nir</p>
+        <p>Avi, Chezi & Nir</p>
       </footer>
-	  
+
     </div> <!-- /container -->
 
   </body>
