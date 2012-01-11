@@ -4,7 +4,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
   <script type="text/javascript">
-var req;
+
+
+var putReq;
+var postReq;
+// enter the server address here
+var serverUrl = "http://localhost:8090/people.json";
+
 
 function update() {
   if (req.readyState == 4 && req.status == 200) {
@@ -33,29 +39,32 @@ function fetch() {
 
 
 function createCookie(value,days) {
-		alert("createCookie");
+	alert("createCookie");
+
 	if (days) {
 		var date = new Date();
 		date.setTime(date.getTime()+(days*24*60*60*1000));
 		var expires = "; expires="+date.toGMTString();
 	}
 	else var expires = "";
-	document.cookie = "username" +"="+value+expires+"; path=/";
+
+	//document.cookie = "currPath" +"="+value+expires+"; path=/";
+	document.cookie = "currPath=/" + value + "/" + expires+"; path=/";
 }
 
 function readCookie() {
 	alert("readCookie");
-	var nameEQ = "username" + "=";
+	var nameEQ = "currPath" + "=";
 	var ca = document.cookie.split(';');
 	for(var i=0;i < ca.length;i++) {
 		var c = ca[i];
 		while (c.charAt(0)==' ') c = c.substring(1,c.length);
 		if (c.indexOf(nameEQ) == 0){
-				alert("return in read " + c.substring(nameEQ.length,c.length));
+				alert("return in readCookie " + c.substring(nameEQ.length,c.length));
 				return c.substring(nameEQ.length,c.length);
 		}
 	}
-		alert("readCookie null");
+	alert("readCookie null");
 
 	return null;
 }
@@ -65,35 +74,132 @@ function eraseCookie() {
 		createCookie("",-100);
 }
 
-function doPut(){
-//  req = new XMLHttpRequest();
-//  req.onreadystatechange = update;
-//  req.open("PUT", "http://localhost:8090/people.json", true);
-//  req.send();
-
-	alert("doPut1");
-		//eraseCookie("nir");
-	//createCookie("nir");
-		//readCookie();
-	if(!readCookie()){
-	//	alert("doPut2");
-		createCookie("nir2");
-	}
-	else
-	{
-	//	alert("doPut3");
-		value = readCookie();
-	//	alert(value);
-	}
+function debugFunc() {
+	createCookie("nir",100);
 }
 
 
-  </script>
-  <title>AJAX/JSON</title>
+// get the absolute feedName
+// absFeedName = path + feedName
+function getAbsoluteFeedName(){
+	feedNameElement = document.getElementById("feedName");
+	if(!feedNameElement.value){
+		return null;
+	}
+	return currPath + "/" + feedNameElement.value;
+}
+
+// get the feedURL
+function getFeedUrl(){
+	feedUrlElement = document.getElementById("feedUrl");
+	return feedUrlElement.value;
+}
+
+function doPut(){
+
+	// first check if cookie exist, if so read it
+	// else , alert the user to login (the cookie should have been created on login)
+	// TODO - redirect to login page
+	// now we have the current path - stored in the cookie - should be initilized on login to /username/
+	currPath = readCookie();
+	if(!currPath){
+		alert("You are not loggen in,\n please log in to continue.");
+		//TODO -redirect to login
+		return;
+	}
+	alert("currPath =" + currPath);
+
+	// get the feedName
+	// absFeedName = path + feedName
+	absFeedName = getAbsoluteFeedName();
+	if(!absFeedName){
+		alert("You did not enter feed name!");
+		return;
+	}
+	alert("absFeedName = " + absFeedName);
+
+
+	// get the feedURL
+	feedUrl = getFeedUrl();
+	if(feedUrl == ""){
+		alert("You did not enter feed url!");
+		return;
+	}
+	alert("feedUrl = " + feedUrl);
+
+	// make put request with the name and url
+	// need TODO function that gets the response and update the display
+	//putReq = new XMLHttpRequest();
+	//putReq.onreadystatechange = update;
+	//putReq.open("PUT", serverUrl, true);
+	//putReq.send();
+
+	//alert("before");
+	//alert("after");
+}
+
+function doPost(){
+
+	// first check if cookie exist, if so read it
+	// else , alert the user to login (the cookie should have been created on login)
+	// TODO - redirect to login page
+	// now we have the current path - stored in the cookie - should be initilized on login to /username/
+	currPath = readCookie();
+	if(!currPath){
+		alert("You are not loggen in,\n please log in to continue.");
+		//TODO -redirect to login
+		return;
+	}
+	alert("currPath =" + currPath);
+
+	// get the feedName
+	// absFeedName = path + feedName
+	absFeedName = getAbsoluteFeedName();
+	if(!absFeedName){
+		alert("You did not enter feed name!");
+		return;
+	}
+	absFeedName = absFeedName + "/";
+	alert("absFeedName = " + absFeedName);
+
+
+	// get the feedURL
+	feedUrl = getFeedUrl();
+	if(feedUrl == ""){
+		alert("You did not enter feed url!");
+		return;
+	}
+	alert("feedUrl = " + feedUrl);
+
+	// make put request with the name and url
+	// need TODO function that gets the response and update the display
+	//postReq = new XMLHttpRequest();
+	//postReq.onreadystatechange = update;
+	//postReq.open("PUT", serverUrl, true);
+	//postReq.send();
+
+	//alert("before");
+	//alert("after");
+}
+
+
+</script>
+ <title>SOA 3</title>
 </head>
 <body>
-  <form action="">
-	<button type="button" onclick="doPut()">Fill table</button>
+  <form action="" name="formName" id="formName">
+	<button type="button" onclick="doPut()"> Put request</button>
+	<button type="button" onclick="doPost()"> POST request</button>
+	<!--enter the page implementation here  -->
+	<div class="span14">
+		<div class="well" style="padding: 14px 19px;">
+			<div class="inline-inputs">
+				<input class="small" value="Name" id="feedName" type="text">
+				<input class="xlarge" value="URL" id="feedUrl" type="text">
+			</div>
+		</div>
+	</div>
+
   </form>
   <table id="tbl">
     <tr id="proto" style="visibility: collapse"><td/><td/><td/><td/></tr>
