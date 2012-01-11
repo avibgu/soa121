@@ -31,7 +31,12 @@ import exceptions.NotImplaementedException;
 import feeds.FeedHandler;
 import filter.RSSAtomFilter;
 
+import java.io.BufferedInputStream;
 import java.io.BufferedReader;
+import java.io.DataInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.URL;
@@ -69,36 +74,63 @@ public class MainServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		
-		StringBuilder answer = new StringBuilder();
-		
-		try {
-			
-			Vector<URL> urls = request.getRequestURI().endsWith("/")? 
-						_feedHandler.getFeedsCollection(getRequestPath(request)) : _feedHandler.getFeedsElement(getRequestPath(request)); 
-			
-			ArrayList<Node> fetchedFeeds = fetchFeeds(urls, request.getParameterMap());
-			
-			response.setCharacterEncoding("UTF-8");
-			
-			sendResultDocumentToCaller(createDocumentFromFeeds(fetchedFeeds), response.getWriter());
-		}
-		catch (NotImplaementedException e) {
-			response.sendError(HttpServletResponse.SC_NOT_IMPLEMENTED);
-			return;
-		}
-		catch (BadRequestException e) {
-			response.sendError(HttpServletResponse.SC_BAD_REQUEST);
-			return;
-		}
 
 		response.setCharacterEncoding("UTF-8");
-		PrintWriter out = response.getWriter();
-		out.println(answer.toString());
-		out.close();
+		
+		responseWithTheMainHtmlFile(response.getWriter());
+
+//		
+//		try {
+//			
+//			Vector<URL> urls = request.getRequestURI().endsWith("/")? 
+//						_feedHandler.getFeedsCollection(getRequestPath(request)) : _feedHandler.getFeedsElement(getRequestPath(request)); 
+//			
+//			ArrayList<Node> fetchedFeeds = fetchFeeds(urls, request.getParameterMap());
+//			
+//			response.setCharacterEncoding("UTF-8");
+//			
+//			sendResultDocumentToCaller(createDocumentFromFeeds(fetchedFeeds), response.getWriter());
+//		}
+//		catch (NotImplaementedException e) {
+//			response.sendError(HttpServletResponse.SC_NOT_IMPLEMENTED);
+//			return;
+//		}
+//		catch (BadRequestException e) {
+//			response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+//			return;
+//		}
 	}
-	
-	
+
+	private void responseWithTheMainHtmlFile(PrintWriter printWriter) {
+
+		File file = new File("html/container-app.html");
+
+		FileInputStream fis = null;
+		BufferedInputStream bis = null;
+		DataInputStream dis = null;
+
+		try {
+
+			fis = new FileInputStream(file);
+			bis = new BufferedInputStream(fis);
+			dis = new DataInputStream(bis);
+
+			while (dis.available() != 0)
+				printWriter.println(dis.readLine());
+		      
+			printWriter.flush();
+
+			fis.close();
+			bis.close();
+			dis.close();
+
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
 	public ArrayList<Node> fetchFeeds(Vector<URL> urls, Map<String,String[]> filters){
 		
 		ArrayList<Node> fetchedFeeds = new ArrayList<Node>();
