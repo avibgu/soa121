@@ -1,0 +1,3 @@
+#!/bin/sh
+python -m SimpleHTTPServer 8090
+google-chrome "http://localhost:8090/ass3.html"
