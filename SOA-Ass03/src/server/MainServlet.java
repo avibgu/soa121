@@ -76,29 +76,58 @@ public class MainServlet extends HttpServlet {
 			throws ServletException, IOException {
 
 		response.setCharacterEncoding("UTF-8");
-		
-		responseWithTheMainHtmlFile(response.getWriter());
 
-//		
-//		try {
-//			
-//			Vector<URL> urls = request.getRequestURI().endsWith("/")? 
-//						_feedHandler.getFeedsCollection(getRequestPath(request)) : _feedHandler.getFeedsElement(getRequestPath(request)); 
-//			
-//			ArrayList<Node> fetchedFeeds = fetchFeeds(urls, request.getParameterMap());
-//			
-//			response.setCharacterEncoding("UTF-8");
-//			
-//			sendResultDocumentToCaller(createDocumentFromFeeds(fetchedFeeds), response.getWriter());
-//		}
-//		catch (NotImplaementedException e) {
-//			response.sendError(HttpServletResponse.SC_NOT_IMPLEMENTED);
-//			return;
-//		}
-//		catch (BadRequestException e) {
-//			response.sendError(HttpServletResponse.SC_BAD_REQUEST);
-//			return;
-//		}
+		Map<String,String[]> params = request.getParameterMap();
+
+		String[] paramValues = null;
+		
+		if (params != null && !params.isEmpty()){
+			
+			if (params.containsKey("list")){
+				
+				paramValues = params.get("list");
+				
+				for (String value : paramValues)
+					if (value.equals("true"))
+						getFolderContent(request, response);
+			}
+			else if (params.containsKey("feeds")){
+				
+				paramValues = params.get("feeds");
+				
+				for (String value : paramValues)
+					if (value.equals("true"))
+						readAndSendFeeds(request, response);
+			}
+			else responseWithTheMainHtmlFile(response.getWriter());	
+		}
+	}
+
+	private void getFolderContent(HttpServletRequest request, HttpServletResponse response) {
+		// TODO Auto-generated method stub
+	}
+
+	private void readAndSendFeeds(HttpServletRequest request,
+			HttpServletResponse response) throws IOException {
+		try {
+			
+			Vector<URL> urls = request.getRequestURI().endsWith("/")? 
+						_feedHandler.getFeedsCollection(getRequestPath(request)) : _feedHandler.getFeedsElement(getRequestPath(request)); 
+			
+			ArrayList<Node> fetchedFeeds = fetchFeeds(urls, request.getParameterMap());
+			
+			response.setCharacterEncoding("UTF-8");
+			
+			sendResultDocumentToCaller(createDocumentFromFeeds(fetchedFeeds), response.getWriter());
+		}
+		catch (NotImplaementedException e) {
+			response.sendError(HttpServletResponse.SC_NOT_IMPLEMENTED);
+			return;
+		}
+		catch (BadRequestException e) {
+			response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+			return;
+		}
 	}
 
 	private void responseWithTheMainHtmlFile(PrintWriter printWriter) {
