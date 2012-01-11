@@ -108,15 +108,20 @@
 				}
 				else{
 					alert("result status != 200");
-					alert(postReq.responseText);
-					alert("next is post response");
-					table = document.getElementById("tbl");
+					alert("postReq.responseText = " + postReq.responseText);
+					alert("postReq.status = " + postReq.status);
+					document.getElementById("DebugDiv").innerHTML=postReq.responseText;
+					alert("done");
+
+					/*
 				    proto = document.getElementById("proto");
 					row = proto.cloneNode(true);
-					row.childNodes[0].innerHTML = "hhhhhhh " + postReq.status + " content = " + postReq.responseText;
+					row.childNodes[0].innerHTML = "status = " + postReq.status;
+					row.childNodes[1].innerHTML = "content = " + postReq.responseText;
 					row.style.visibility = "visible";
 					table.appendChild(row);
-
+					*/
+					postReq = 0;
 				}
 			}
 		}
@@ -416,11 +421,12 @@
 		</div>
       </div>
 
-	  <table id="tbl">
-	    <tr id="proto" style="visibility: collapse">
-		    <td/>
-	    </tr>
-	  </table>
+	 <table id="tbl">
+	   <tr id="proto" style="visibility: collapse"><td/><td/><td/><td/></tr>
+	 </table>
+
+	<div id="DebugDiv"> my div</div>
+
 
       <footer>
         <p>Avi, Chezi & Nir</p>
