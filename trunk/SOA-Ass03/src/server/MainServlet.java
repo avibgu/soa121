@@ -241,6 +241,8 @@ public class MainServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
+		System.out.println("POST");
+		
 		String content = getRequestContent(request);
 		
 		try
@@ -263,6 +265,8 @@ public class MainServlet extends HttpServlet {
 	@Override
 	protected void doPut(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		
+		System.out.println("PUT");
 		
 		String content = getRequestContent(request);
 		

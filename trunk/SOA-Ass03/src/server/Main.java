@@ -21,8 +21,7 @@ public class Main {
 		
 		ctx.setContextPath("/ex1");
 		ctx.addServlet(new ServletHolder(new MainServlet(new FeedHandler())), "/*");
-		
-		
+
 		ResourceHandler res = new ResourceHandler();
 		
 		res.setResourceBase("/resources");
