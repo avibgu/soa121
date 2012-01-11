@@ -74,7 +74,7 @@ public class MainServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
-
+		System.out.println("do get");
 		response.setCharacterEncoding("UTF-8");
 
 		Map<String, String[]> params = request.getParameterMap();
@@ -286,13 +286,12 @@ public class MainServlet extends HttpServlet {
 				throw new NotImplaementedException();
 			_feedHandler.postFeed(getRequestPath(request), content);
 
-			//
-			// response.setStatus(HttpServletResponse.SC_OK);
-			// response.setCharacterEncoding("UTF-8");
-			// PrintWriter out = response.getWriter();
-			// out.println("hello");
-			// out.close();
-			// System.out.println("DONE");
+			response.setStatus(HttpServletResponse.SC_OK);
+			response.setCharacterEncoding("UTF-8");
+			PrintWriter out = response.getWriter();
+			out.println("hello");
+			out.close();
+			System.out.println("done post");
 
 		} catch (NotImplaementedException e) {
 			System.out.println("excpetion 1");
