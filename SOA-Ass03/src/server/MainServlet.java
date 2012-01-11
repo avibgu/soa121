@@ -99,14 +99,15 @@ public class MainServlet extends HttpServlet {
 					if (value.equals("true"))
 						readAndSendFeeds(request, response);
 			}
-			else responseWithTheMainHtmlFile(response.getWriter());	
 		}
+		else responseWithTheMainHtmlFile(response.getWriter());	
 	}
 
 	private void getFolderContent(HttpServletRequest request, HttpServletResponse response) {
 		// TODO Auto-generated method stub
 	}
 
+	@SuppressWarnings("unchecked")
 	private void readAndSendFeeds(HttpServletRequest request,
 			HttpServletResponse response) throws IOException {
 		try {
@@ -132,7 +133,7 @@ public class MainServlet extends HttpServlet {
 
 	private void responseWithTheMainHtmlFile(PrintWriter printWriter) {
 
-		File file = new File("html/container-app.html");
+		File file = new File("html/template.html");
 
 		FileInputStream fis = null;
 		BufferedInputStream bis = null;
