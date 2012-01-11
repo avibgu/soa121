@@ -22,14 +22,9 @@ public class Main {
 		ctx.setContextPath("/ex1");
 		ctx.addServlet(new ServletHolder(new MainServlet(new FeedHandler())), "/*");
 
-		ResourceHandler res = new ResourceHandler();
-		
-		res.setResourceBase("/resources");
-
 		HandlerList list = new HandlerList();
 		
 		list.addHandler(ctx);
-		list.addHandler(res);
 		
 		server.setHandler(list);
 		
