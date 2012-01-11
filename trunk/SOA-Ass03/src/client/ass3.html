@@ -99,12 +99,10 @@ function doPut(){
 
 	// first check if cookie exist, if so read it
 	// else , alert the user to login (the cookie should have been created on login)
-	// TODO - redirect to login page
 	// now we have the current path - stored in the cookie - should be initilized on login to /username/
 	currPath = readCookie();
 	if(!currPath){
 		alert("You are not loggen in,\n please log in to continue.");
-		//TODO -redirect to login
 		return;
 	}
 	alert("currPath =" + currPath);
@@ -129,10 +127,11 @@ function doPut(){
 
 	// make put request with the name and url
 	// need TODO function that gets the response and update the display
-	//putReq = new XMLHttpRequest();
-	//putReq.onreadystatechange = update;
-	//putReq.open("PUT", serverUrl, true);
-	//putReq.send();
+
+	putReq = new XMLHttpRequest();
+	putReq.onreadystatechange = update;
+	putReq.open("PUT", serverUrl, true);
+	putReq.send();
 
 	//alert("before");
 	//alert("after");
