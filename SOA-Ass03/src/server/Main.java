@@ -9,8 +9,8 @@ import feeds.FeedHandler;
 public class Main {
 	
 	public static final int		SERVER_PORT			= 8994;
-	public static final String	SERVER_NAME			= "soa1";
-	public static final String	FULL_SERVER_NAME	= "http://soa2.cs.bgu.ac.il:8994/ex1";
+	public static final String	SERVER_NAME			= "soa2";
+	public static final String	FULL_SERVER_NAME	= "http://soa2.cs.bgu.ac.il:8994/ex3";
 
 	public static void main(String[] args) {
 
@@ -22,9 +22,15 @@ public class Main {
 		ctx.setContextPath("/ex1");
 		ctx.addServlet(new ServletHolder(new MainServlet(new FeedHandler())), "/*");
 		
+		
+		ResourceHandler res = new ResourceHandler();
+		
+		res.setResourceBase("/resources");
+
 		HandlerList list = new HandlerList();
 		
 		list.addHandler(ctx);
+		list.addHandler(res);
 		
 		server.setHandler(list);
 		
