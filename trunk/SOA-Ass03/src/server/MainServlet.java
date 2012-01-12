@@ -124,9 +124,45 @@ public class MainServlet extends HttpServlet {
 			
 			Vector<Vector<String>> folderContent = _feedHandler.getFolderContent(path);
 			
-			Document doc = createDocumentFromFolderContent(folderContent);
+			sendJasonAnswerFromFolderContent(folderContent, response.getWriter());
 			
-			sendResultDocumentToCaller(doc, response.getWriter());
+//			Document doc = createDocumentFromFolderContent(folderContent);
+//			
+//			sendResultDocumentToCaller(doc, response.getWriter());
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	private void sendJasonAnswerFromFolderContent(
+			Vector<Vector<String>> folderContent, PrintWriter writer) {
+		
+		StringBuffer sb = new StringBuffer();
+
+//		[
+//			{ firstName: "John", lastName: "Doe",
+//			age: 40, sex: "male" },
+//			{ firstName: "Jane", lastName: "Doe",
+//			age: 30, sex: "female" }
+//		]
+		
+		sb.append("[\n");
+		
+		for (Vector<String> pair : folderContent)
+			if (pair.get(0).equals("SUBFOLDER"))
+				sb.append("{ type: \"subfolder\", name: \"" + pair.get(1) + "\" }");
+		
+		for (Vector<String> pair : folderContent)	
+			if (pair.get(0).equals("ELEMENT"))
+				sb.append("{ type: \"element\", name: \"" + pair.get(1) + "\" }");
+		
+		sb.append("]");
+
+		try {
+
+			writer.print(sb.toString());
+			writer.flush();
 		}
 		catch (Exception e) {
 			e.printStackTrace();
