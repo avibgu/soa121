@@ -94,4 +94,29 @@ public class Feed {
 		setNamedFeeds(new HashMap<String, Feed>());
 		setUrl(null);
 	}
+
+	public Vector<Vector<String>> getFolderContent() {
+
+		Vector<Vector<String>> content = new Vector<Vector<String>>();
+		
+		for (String key : _namedFeeds.keySet()){
+			
+			Vector<String> pair = new Vector<String>(2);
+			
+			if (_namedFeeds.get(key).getNamedFeeds().isEmpty()){
+
+				pair.add("ELEMENT");
+				pair.add(key);
+				content.add(pair);
+			}
+			else{
+
+				pair.add("SUBFOLDER");
+				pair.add(key);
+				content.add(pair);
+			}
+		}
+		
+		return content;
+	}
 }

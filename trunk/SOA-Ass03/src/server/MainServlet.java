@@ -74,6 +74,7 @@ public class MainServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
+		
 		System.out.println("do get");
 		response.setCharacterEncoding("UTF-8");
 
@@ -109,8 +110,72 @@ public class MainServlet extends HttpServlet {
 	}
 
 	private void getFolderContent(HttpServletRequest request,
-			HttpServletResponse response) {
-		// TODO Auto-generated method stub
+			HttpServletResponse response){
+		
+		try {
+			
+			if (!request.getRequestURI().endsWith("/")){
+				
+				response.sendError(HttpServletResponse.SC_NOT_IMPLEMENTED);
+				return;
+			}
+			
+			Vector<String> path = getRequestPath(request);
+			
+			Vector<Vector<String>> folderContent = _feedHandler.getFolderContent(path);
+			
+			Document doc = createDocumentFromFolderContent(folderContent);
+			
+			sendResultDocumentToCaller(doc, response.getWriter());
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	private Document createDocumentFromFolderContent(
+			Vector<Vector<String>> folderContent) {
+		
+		if (null == folderContent)
+			return null;
+
+		Document document = null;
+
+		try {
+
+			DocumentBuilderFactory f = DocumentBuilderFactory.newInstance();
+			DocumentBuilder b = f.newDocumentBuilder();
+			document = b.newDocument();
+
+			Element folder = document.createElement("folder");
+			document.appendChild(folder);
+
+			for (Vector<String> pair : folderContent){
+				
+				if (pair.get(0).equals("SUBFOLDER")){
+					
+					Element e = document.createElement("subfolder");
+					e.appendChild(document.createTextNode(pair.get(1)));
+					folder.appendChild(e);
+				}
+			}
+			
+			for (Vector<String> pair : folderContent){
+				
+				if (pair.get(0).equals("ELEMENT")){
+					
+					Element e = document.createElement("element");
+					e.appendChild(document.createTextNode(pair.get(1)));
+					folder.appendChild(e);
+				}
+			}
+		}
+		catch (ParserConfigurationException e) {
+			System.out.println(e.toString());
+		}
+
+		return document;
+		
 	}
 
 	@SuppressWarnings("unchecked")
