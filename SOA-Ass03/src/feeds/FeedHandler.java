@@ -160,4 +160,9 @@ public class FeedHandler {
 				throw new BadRequestException();
 			}
 	}
+
+	public Vector<Vector<String>> getFolderContent(Vector<String> requestPath) throws BadRequestException {
+
+		return findFeed(requestPath, false).getFolderContent();
+	}
 }
