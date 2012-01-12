@@ -90,16 +90,22 @@ public class MainServlet extends HttpServlet {
 				for (String value : paramValues)
 					if (value.equals("true"))
 						getFolderContent(request, response);
-			} else if (params.containsKey("feeds")) {
+			}
+			else if (params.containsKey("feeds")) {
 
 				paramValues = params.get("feeds");
 
-				for (String value : paramValues)
-					if (value.equals("true"))
+				for (String value : paramValues){
+					
+					if (value.equals("true")){
+						
+						params.remove("feeds");
 						readAndSendFeeds(request, response);
+					}
+				}
 			}
-		} else
-			responseWithTheMainHtmlFile(response.getWriter());
+		}
+		else responseWithTheMainHtmlFile(response.getWriter());
 	}
 
 	private void getFolderContent(HttpServletRequest request,
