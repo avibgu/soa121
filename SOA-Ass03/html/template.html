@@ -260,25 +260,22 @@
 					
 					x = folderContent[fc];
 					
+					row = element.cloneNode(true);
+					
 					if (x.type == "subfolder"){
-						
-						row = subfolder.cloneNode(true);
+
 						row.childNodes[0].innerHTML = x.name;
-						row.childNodes[1].childNodes[0].setAttribute('onClick', 'SHOW');
-						row.childNodes[1].childNodes[2].setAttribute('onClick', 'DELETE');
-						table.appendChild(row);
-						row.style.visibility = "visible";
 					}
 					else if (x.type == "element"){
-					
-						row = element.cloneNode(true);
+
 						row.childNodes[0].childNodes[0].innerHTML = x.name;
 						row.childNodes[0].childNodes[0].setAttribute('onClick', 'TREE');
-						row.childNodes[1].childNodes[0].setAttribute('onClick', 'SHOW');
-						row.childNodes[1].childNodes[2].setAttribute('onClick', 'DELETE');
-						table.appendChild(row);
-						row.style.visibility = "visible";
 					}
+					
+					row.childNodes[1].childNodes[0].setAttribute('onClick', 'SHOW: ' + currPath);
+					row.childNodes[1].childNodes[2].setAttribute('onClick', 'DELETE: ' + currPath + x.name);
+					table.appendChild(row);
+					row.style.visibility = "visible";
 				}
 			  }
 			}
