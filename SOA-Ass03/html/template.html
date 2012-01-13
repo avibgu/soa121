@@ -8,6 +8,7 @@
 
 		var putReq;
 		var postReq;
+		var folderContentReq;
 		// enter the server address here
 		//var serverUrl = "http://132.72.44.36:8994/ex3";
 		var serverUrl = "http://127.0.0.1:8994/ex3";
@@ -218,6 +219,69 @@
 		function load(){
 			alert("nir");
 		}
+		
+		function updateFolderContent() {
+			
+			  if (folderContentReq.readyState == 4 && folderContentReq.status == 200) {
+				  
+			    table = document.getElementById("folderContentTable");
+			    subfolder = document.getElementById("subFolderProto");
+			    element = document.getElementById("elementProto");
+			    folderContent = eval('(' + folderContentReq.responseText + ')');
+			    
+			    /*
+			    
+				[
+					{ type: "subfolder", name: "a" },
+					{ type: "element", name: "b" }
+				]
+			    
+			    <tr id="subFolderProto" style="visibility: collapse;">
+					<td><a href="#" onClick="#">container1</a></td>
+					<td class="span6 offset4">
+						<button class="btn success" onClick="#">Show</button>
+						&nbsp;
+						<button class="btn danger" onClick="#">Delete</button>
+					</td>
+				</tr>
+				
+				<tr id="elementProto" style="visibility: collapse;">
+					<td>element3</td>
+					<td class="span6 offset4">
+						<button class="btn success" onClick="#">Show</button>
+						&nbsp;
+						<button class="btn danger" onClick="#">Delete</button>
+					</td>
+				</tr>
+				
+				*/
+			
+				for (fc in folderContent) {
+					
+					x = folderContent[fc];
+					
+					if (x.type == "subfolder"){
+						
+						row = subfolder.cloneNode(true);
+						row.childNodes[0].innerHTML = x.name;
+						row.childNodes[1].childNodes[0].setAttribute('onClick', 'SHOW');
+						row.childNodes[1].childNodes[2].setAttribute('onClick', 'DELETE');
+						table.appendChild(row);
+						row.style.visibility = "visible";
+					}
+					else if (x.type == "element"){
+					
+						row = element.cloneNode(true);
+						row.childNodes[0].childNodes[0].innerHTML = x.name;
+						row.childNodes[0].childNodes[0].setAttribute('onClick', 'TREE');
+						row.childNodes[1].childNodes[0].setAttribute('onClick', 'SHOW');
+						row.childNodes[1].childNodes[2].setAttribute('onClick', 'DELETE');
+						table.appendChild(row);
+						row.style.visibility = "visible";
+					}
+				}
+			  }
+			}
 
 	</script>
 
@@ -320,7 +384,7 @@
 
 		<div id="mainDiv">
 
-			<div class="row">
+			<div id="treeDiv" class="row">
 			  <div class="span14" id="tree">
 				<ul class="breadcrumb">
 					<li><a href="#" onClick="#">Home</a> <span class="divider">/</span></li>
@@ -333,7 +397,26 @@
 
 			<div class="span14">
 				<div class="well" style="padding: 14px 19px;">
-					<table class="condensed-table">
+					<table id="folderContentTable" class="condensed-table">
+						
+						<tr id="subFolderProto" style="visibility: collapse;">
+							<td><a href="#" onClick="#">container1</a></td>
+							<td class="span6 offset4">
+								<button class="btn success" onClick="#">Show</button>
+								&nbsp;
+								<button class="btn danger" onClick="#">Delete</button>
+							</td>
+						</tr>
+						
+						<tr id="elementProto" style="visibility: collapse;">
+							<td></td>
+							<td class="span6 offset4">
+								<button class="btn success" onClick="#">Show</button>
+								&nbsp;
+								<button class="btn danger" onClick="#">Delete</button>
+							</td>
+						</tr>
+						
 						<tr>
 							<td><a href="#" onClick="#">container1</a></td>
 							<td class="span6 offset4">
