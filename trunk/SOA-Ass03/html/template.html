@@ -255,24 +255,28 @@
 				</tr>
 				
 				*/
+				
+				if ( table.hasChildNodes() )
+				    while ( table.childNodes.length > 0 )
+				    	table.removeChild( table.firstChild );
 			
 				for (fc in folderContent) {
 					
 					x = folderContent[fc];
 					
-					row = element.cloneNode(true);
-					
-					if (x.type == "subfolder"){
+					if (x.type == "element"){
 
+						row = element.cloneNode(true);
 						row.childNodes[0].innerHTML = x.name;
 					}
-					else if (x.type == "element"){
+					else if (x.type == "subfolder"){
 
+						row = subfolder.cloneNode(true);
 						row.childNodes[0].childNodes[0].innerHTML = x.name;
-						row.childNodes[0].childNodes[0].setAttribute('onClick', 'TREE');
+						row.childNodes[0].childNodes[0].theNewParagraph.onclick = 'TREE';
 					}
 					
-					row.childNodes[1].childNodes[0].setAttribute('onClick', 'SHOW: ' + currPath);
+					row.childNodes[1].childNodes[0].setAttribute('onClick', 'SHOW: ' + currPath + x.name);
 					row.childNodes[1].childNodes[2].setAttribute('onClick', 'DELETE: ' + currPath + x.name);
 					table.appendChild(row);
 					row.style.visibility = "visible";
