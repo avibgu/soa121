@@ -141,23 +141,21 @@ public class MainServlet extends HttpServlet {
 		StringBuffer sb = new StringBuffer();
 
 //		[
-//			{ firstName: "John", lastName: "Doe",
-//			age: 40, sex: "male" },
-//			{ firstName: "Jane", lastName: "Doe",
-//			age: 30, sex: "female" }
+//			{ type: "folder", name: "a" },
+//			{ type: "element", name: "b" }
 //		]
 		
 		sb.append("[\n");
 		
 		for (Vector<String> pair : folderContent)
 			if (pair.get(0).equals("SUBFOLDER"))
-				sb.append("{ type: \"subfolder\", name: \"" + pair.get(1) + "\" }");
+				sb.append("{ type: \"subfolder\", name: \"" + pair.get(1) + "\" },");
 		
 		for (Vector<String> pair : folderContent)	
 			if (pair.get(0).equals("ELEMENT"))
-				sb.append("{ type: \"element\", name: \"" + pair.get(1) + "\" }");
+				sb.append("{ type: \"element\", name: \"" + pair.get(1) + "\" },");
 		
-		sb.append("]");
+		sb.replace(sb.length()-1, sb.length(), "]");
 
 		try {
 
