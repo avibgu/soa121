@@ -88,6 +88,8 @@ public class FeedHandler {
 		try {
 			findFeed(requestPath, true).addUnnamedFeedURL(new URL(address));
 		} catch (Exception e) {//catch any IO exceptions and return Bad Request response
+			System.out.println("Exception - postFeed");
+			e.printStackTrace();
 			throw new BadRequestException();
 		}
 	}
@@ -163,6 +165,6 @@ public class FeedHandler {
 
 	public Vector<Vector<String>> getFolderContent(Vector<String> requestPath) throws BadRequestException {
 
-		return findFeed(requestPath, false).getFolderContent();
+		return findFeed(requestPath, true).getFolderContent();
 	}
 }
