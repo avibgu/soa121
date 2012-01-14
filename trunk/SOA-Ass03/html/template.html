@@ -31,6 +31,13 @@
 		    }
 		  }
 		}
+		
+		function login(){
+			
+			username = document.getElementById("username").value;
+			createCookie(username,1);
+			<!-- updateFolderContent(); -->
+		}
 
 		// create coockie, value = the new path
 		function createCookie(value,days) {
@@ -79,7 +86,7 @@
 			if(!feedNameElement.value){
 				return null;
 			}
-			return currPath + "/" + feedNameElement.value;
+			return currPath + feedNameElement.value;
 		}
 
 		// get the feedURL
@@ -93,6 +100,7 @@
 				alert("handlePutReply");
 				if(putReq.status == 200) {
 					alert("result status = 200");
+					updateFolderContent();
 				}
 				else{
 					alert("result status != 200");
@@ -106,6 +114,7 @@
 				alert("handlePostReply");
 				if(postReq.status == 200) {
 					alert("result status = 200");
+					updateFolderContent();
 				}
 				else{
 					alert("result status != 200");
@@ -156,6 +165,12 @@
 				alert("You did not enter feed url!");
 				return;
 			}
+			
+			var urlProtocol = feedUrl.substr(0,7);
+			
+			if (urlProtocol != 'http://')
+				feedUrl = 'http://' + feedUrl;
+			
 			alert("feedUrl = " + feedUrl);
 
 			// make put request with the name and url
@@ -201,6 +216,12 @@
 				alert("You did not enter feed url!");
 				return;
 			}
+			
+			var urlProtocol = feedUrl.substr(0,7);
+			
+			if (urlProtocol != 'http://')
+				feedUrl = 'http://' + feedUrl;			
+
 			alert("feedUrl = " + feedUrl);
 
 			// make put request with the name and url
@@ -368,8 +389,8 @@
             <li><a href="http://www.cs.bgu.ac.il/~dwss121/Programming/Ex3">About</a></li>
           </ul>
           <form action="" class="pull-right">
-            <input class="input-small" type="text" placeholder="Username">
-            <button class="btn" type="submit">Sign in</button>
+            <input id="username" class="input-small" type="text" placeholder="Username">
+            <button class="btn" type="submit" onClick="login()">Sign in</button>
           </form>
         </div>
       </div>
@@ -400,56 +421,7 @@
 				<div class="well" style="padding: 14px 19px;">
 					<table id="folderContentTable" class="condensed-table">
 						
-						<tr id="subFolderProto" style="visibility: collapse">
-							<td><a href="#" onClick="#">container1</a></td>
-							<td class="span6 offset4">
-								<button class="btn success" onClick="#">Show</button>
-								&nbsp;
-								<button class="btn danger" onClick="#">Delete</button>
-							</td>
-						</tr>
 						
-						<tr id="elementProto" style="visibility: collapse">
-							<td></td>
-							<td class="span6 offset4">
-								<button class="btn success" onClick="#">Show</button>
-								&nbsp;
-								<button class="btn danger" onClick="#">Delete</button>
-							</td>
-						</tr>
-						
-						<tr>
-							<td><a href="#" onClick="#">container1</a></td>
-							<td class="span6 offset4">
-								<button class="btn success">Show</button>
-								&nbsp;
-								<button class="btn danger">Delete</button>
-							</td>
-						</tr>
-						<tr>
-							<td><a href="#" onClick="#">container2</a></td>
-							<td class="span6 offset4">
-								<button class="btn success">Show</button>
-								&nbsp;
-								<button class="btn danger">Delete</button>
-							</td>
-						</tr>
-						<tr>
-							<td>element3</td>
-							<td class="span6 offset4">
-								<button class="btn success">Show</button>
-								&nbsp;
-								<button class="btn danger">Delete</button>
-							</td>
-						</tr>
-						<tr>
-							<td>element4</td>
-							<td class="span6 offset4">
-								<button class="btn success">Show</button>
-								&nbsp;
-								<button class="btn danger">Delete</button>
-							</td>
-						</tr>
 					</table>
 				</div>
 			</div>
@@ -509,15 +481,34 @@
 	   <tr id="proto" style="visibility: collapse"><td/><td/><td/><td/></tr>
 	 </table>
 
-	<div id="DebugDiv"> my div</div>
-
-
       <footer>
         <p>Avi, Chezi & Nir</p>
       </footer>
 
     </div> <!-- /container -->
 
+
+	<div id="DebugDiv" style="visibility: collapse"> my div</div>
+	<!--  PROTOTYPES -->
+	<table>
+		<tr id="subFolderProto" style="visibility: collapse">
+			<td><a href="#" onClick="#">container1</a></td>
+			<td class="span6 offset4">
+				<button class="btn success" onClick="#">Show</button>
+				&nbsp;
+				<button class="btn danger" onClick="#">Delete</button>
+			</td>
+		</tr>
+		
+		<tr id="elementProto" style="visibility: collapse">
+			<td></td>
+			<td class="span6 offset4">
+				<button class="btn success" onClick="#">Show</button>
+				&nbsp;
+				<button class="btn danger" onClick="#">Delete</button>
+			</td>
+		</tr>
+	</table>
   </body>
 
 </html>
