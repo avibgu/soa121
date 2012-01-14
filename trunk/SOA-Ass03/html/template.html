@@ -35,8 +35,8 @@
 		function login(){
 			
 			username = document.getElementById("username").value;
-			createCookie(username,1);
-			<!-- updateFolderContent(); -->
+			createCookie(username, 1);
+			updateFolderContent("/" + username);
 		}
 
 		// create coockie, value = the new path
@@ -100,7 +100,7 @@
 				alert("handlePutReply");
 				if(putReq.status == 200) {
 					alert("result status = 200");
-					updateFolderContent();
+					updateFolderContent(currPath);
 				}
 				else{
 					alert("result status != 200");
@@ -114,7 +114,7 @@
 				alert("handlePostReply");
 				if(postReq.status == 200) {
 					alert("result status = 200");
-					updateFolderContent();
+					updateFolderContent(currPath);
 				}
 				else{
 					alert("result status != 200");
@@ -241,10 +241,22 @@
 			alert("nir");
 		}
 		
-		function updateFolderContent() {
+		function updateFolderContent(path){
 			
-			  if (folderContentReq.readyState == 4 && folderContentReq.status == 200) {
-				  
+			alert("updateFolderContent: " + path)
+			
+			folderContentReq = new XMLHttpRequest();
+			folderContentReq.onreadystatechange = updateFolderContentCallback;
+			folderContentReq.open("GET", serverUrl + path + "?list=true", true);
+			folderContentReq.send(feedUrl);
+		}
+		
+		function updateFolderContentCallback() {
+			
+			alert("updateFolderContentCallback");
+			
+			if (folderContentReq.readyState == 4 && folderContentReq.status == 200) {
+				
 			    table = document.getElementById("folderContentTable");
 			    subfolder = document.getElementById("subFolderProto");
 			    element = document.getElementById("elementProto");
@@ -286,25 +298,40 @@
 					x = folderContent[fc];
 					
 					if (x.type == "element"){
-
+	
+						alert("element" + x.name + ", ");
 						row = element.cloneNode(true);
 						row.childNodes[0].innerHTML = x.name;
 					}
 					else if (x.type == "subfolder"){
-
+	
+						alert("element" + x.name + ", ");
 						row = subfolder.cloneNode(true);
 						row.childNodes[0].childNodes[0].innerHTML = x.name;
-						row.childNodes[0].childNodes[0].theNewParagraph.onclick = 'TREE';
+						row.childNodes[0].childNodes[0].onclick = treeNavigartion(currPath + x.name);
 					}
 					
-					row.childNodes[1].childNodes[0].setAttribute('onClick', 'SHOW: ' + currPath + x.name);
-					row.childNodes[1].childNodes[2].setAttribute('onClick', 'DELETE: ' + currPath + x.name);
+					// row.childNodes[1].childNodes[0].onclick = showFeed(currPath + x.name);
+					// row.childNodes[1].childNodes[2].onclick = deleteElementOrSubFolder(currPath + x.name);
 					table.appendChild(row);
 					row.style.visibility = "visible";
+	
+				  }
 				}
-			  }
 			}
-
+		
+		function showFeed(x){
+			alert("showFeed: " + x);
+		}
+		
+		function deleteElementOrSubFolder(x){
+			alert("deleteElementOrSubFolder: " + x);
+		}
+		
+		function treeNavigartion(x){
+			alert("treeNavigartion: " + x);
+		}
+		
 	</script>
 
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
