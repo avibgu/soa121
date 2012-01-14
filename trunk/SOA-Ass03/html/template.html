@@ -307,8 +307,9 @@
 	
 						alert("subfolder: " + x.name);
 						row = subfolder.cloneNode(true);
-						row.childNodes[0].childNodes[0].nodeValue = x.name;
-						row.childNodes[0].childNodes[0].onclick = treeNavigartion(currPath + x.name);
+						
+						row.getElementsByTagName("td")[0].childNodes[0].nodeValue = x.name;
+						//row.getElementsByTagName("td")[0].setAttribute('ocClick', treeNavigation(currPath + x.name));
 					}
 					
 					// row.childNodes[1].childNodes[0].onclick = showFeed(currPath + x.name);
@@ -328,7 +329,7 @@
 			alert("deleteElementOrSubFolder: " + x);
 		}
 		
-		function treeNavigartion(x){
+		function treeNavigation(x){
 			alert("treeNavigartion: " + x);
 		}
 		
@@ -519,7 +520,7 @@
 	<!--  PROTOTYPES -->
 	<table>
 		<tr id="subFolderProto" style="visibility: collapse">
-			<td><a href="#" onClick="#">container1</a></td>
+			<td>xx</td>
 			<td class="span6 offset4">
 				<button class="btn success" onClick="#">Show</button>
 				&nbsp;
