@@ -114,12 +114,6 @@ public class MainServlet extends HttpServlet {
 		
 		try {
 			
-			if (!request.getRequestURI().endsWith("/")){
-				
-				response.sendError(HttpServletResponse.SC_NOT_IMPLEMENTED);
-				return;
-			}
-			
 			Vector<String> path = getRequestPath(request);
 			
 			Vector<Vector<String>> folderContent = _feedHandler.getFolderContent(path);
