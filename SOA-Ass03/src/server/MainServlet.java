@@ -149,7 +149,7 @@ public class MainServlet extends HttpServlet {
 			if (pair.get(0).equals("ELEMENT"))
 				sb.append("{ type: \"element\", name: \"" + pair.get(1) + "\" },");
 		
-		sb.replace(sb.length()-1, sb.length(), "]");
+		sb.replace(sb.length()-1, sb.length(), "\n]");
 
 		try {
 
