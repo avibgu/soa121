@@ -103,7 +103,7 @@ public class Feed {
 			
 			Vector<String> pair = new Vector<String>(2);
 			
-			if (_namedFeeds.get(key).getNamedFeeds().isEmpty()){
+			if (_namedFeeds.get(key).getUnnamedFeedsUrls().isEmpty()){
 
 				pair.add("ELEMENT");
 				pair.add(key);
