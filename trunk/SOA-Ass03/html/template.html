@@ -299,15 +299,15 @@
 					
 					if (x.type == "element"){
 	
-						alert("element" + x.name + ", ");
+						alert("element: " + x.name);
 						row = element.cloneNode(true);
-						row.childNodes[0].innerHTML = x.name;
+						row.childNodes[0].nodeValue = x.name;
 					}
 					else if (x.type == "subfolder"){
 	
-						alert("element" + x.name + ", ");
+						alert("subfolder: " + x.name);
 						row = subfolder.cloneNode(true);
-						row.childNodes[0].childNodes[0].innerHTML = x.name;
+						row.childNodes[0].childNodes[0].nodeValue = x.name;
 						row.childNodes[0].childNodes[0].onclick = treeNavigartion(currPath + x.name);
 					}
 					
