@@ -201,7 +201,7 @@
 				    while ( table.childNodes.length > 0 )
 				    	table.removeChild( table.firstChild );
 			
-				var path = username + "/";
+				var path = currPath;
 			
 				for (fc in folderContent) {
 					
@@ -243,12 +243,12 @@
 			    while ( list.childNodes.length > 0 )
 			    	list.removeChild( list.firstChild );
 			
-			var path = "/";
+			var path = currPath;
 			
 			var li = entry.cloneNode(true);
 			li.getElementsByTagName("a")[0].innerHTML = username;
 			li.getElementsByTagName("a")[0].href = '#';
-			li.getElementsByTagName("a")[0].onclick = treeNavigation(username + "/");
+			li.getElementsByTagName("a")[0].onclick = treeNavigation("/");
 			list.appendChild(li);
 					
 			for(var i=0; i < splitted.length; i++) {
@@ -277,6 +277,8 @@
 			
 			return function(){
 
+				alert(path);
+				
 				currPath = path;
 				updateFolderContent(path);
 			}
