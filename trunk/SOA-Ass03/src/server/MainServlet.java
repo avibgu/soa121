@@ -390,13 +390,6 @@ public class MainServlet extends HttpServlet {
 				throw new NotImplaementedException();
 			_feedHandler.postFeed(getRequestPath(request), content);
 
-			response.setStatus(HttpServletResponse.SC_OK);
-			response.setCharacterEncoding("UTF-8");
-			PrintWriter out = response.getWriter();
-			out.println("hello");
-			out.close();
-			System.out.println("done post");
-
 		} catch (NotImplaementedException e) {
 			System.out.println("excpetion 1");
 			response.sendError(HttpServletResponse.SC_NOT_IMPLEMENTED);
@@ -425,7 +418,7 @@ public class MainServlet extends HttpServlet {
 		} catch (NotImplaementedException e) {
 			response.sendError(HttpServletResponse.SC_NOT_IMPLEMENTED);
 			return;
-		} catch (BadRequestException e) {
+		}catch (BadRequestException e) {
 			response.sendError(HttpServletResponse.SC_BAD_REQUEST);
 			return;
 		}
@@ -435,6 +428,8 @@ public class MainServlet extends HttpServlet {
 	protected void doDelete(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 
+		System.out.println("doDelete - entering");
+		
 		try {
 			if (request.getRequestURI().endsWith("/"))
 				_feedHandler.deleteCollectionFeeds(getRequestPath(request));
@@ -442,11 +437,15 @@ public class MainServlet extends HttpServlet {
 				_feedHandler.deleteElementFeeds(getRequestPath(request));
 		} catch (NotImplaementedException e) {
 			response.sendError(HttpServletResponse.SC_NOT_IMPLEMENTED);
+			System.err.println("doDelete: NotImplaementedException");
 			return;
 		} catch (BadRequestException e) {
 			response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+			System.err.println("doDelete: BadRequestException");
 			return;
 		}
+		
+		System.out.println("doDelete: OK");
 	}
 
 	protected String getRequestContent(HttpServletRequest request) {
@@ -460,7 +459,8 @@ public class MainServlet extends HttpServlet {
 
 			while ((line = reader.readLine()) != null)
 				sb.append(line);
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 		}
 
 		return sb.toString();
