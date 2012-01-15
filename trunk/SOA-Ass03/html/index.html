@@ -6,83 +6,94 @@
 
    <script type="text/javascript">
 
+		var serverUrl = "http://127.0.0.1:8994/ex3/";
+		var username;
+		var currPath;
+		var feedName;
+		var feedUrl;
+		
 		var putReq;
 		var postReq;
 		var folderContentReq;
-		// enter the server address here
-		//var serverUrl = "http://132.72.44.36:8994/ex3";
-		var serverUrl = "http://127.0.0.1:8994/ex3";
-		var localCurrPath;
-		var listContentReq;
+		
+		function bodyLoad(){
+
+			username = getCookie("username");
+			
+			if (username != ""){
+				document.getElementById("mainDiv").style.visibility = "visible";
+				currPath = "/";
+				updateFolderContent(currPath);
+			}
+		}
+		
+		function getCookie(c_name) {
+		
+			var i,x,y,ARRcookies=document.cookie.split(";");
+			
+			for (i=0;i<ARRcookies.length;i++){
+				
+				x=ARRcookies[i].substr(0,ARRcookies[i].indexOf("="));
+				y=ARRcookies[i].substr(ARRcookies[i].indexOf("=")+1);
+				x = x.replace(/^\s+|\s+$/g,"");
+			  
+				if (x==c_name)
+					return unescape(y);
+			}
+		}
+
+		function setCookie(c_name,value,exdays){
+		
+			var exdate=new Date();
+			
+			exdate.setDate(exdate.getDate() + exdays);
+			
+			var c_value=escape(value) + ((exdays==null) ? "" : "; expires="+exdate.toUTCString());
+			
+			document.cookie=c_name + "=" + c_value;
+		}
 		
 		function login(){
-			
+
 			username = document.getElementById("username").value;
-			eraseCookie();
-			createCookie(username, 1);
-		}
 
-		// create coockie, value = the new path
-		function createCookie(value,days) {
-
-			if (days) {
-				var date = new Date();
-				date.setTime(date.getTime()+(days*24*60*60*1000));
-				var expires = "; expires="+date.toGMTString();
+			if (username != ""){
+				document.getElementById("mainDiv").style.visibility = "visible";
+				setCookie("username", username, 10);
 			}
-			else var expires = "";
-
-			document.cookie = "username=" + value + "; currPath=/" + value + "/" + expires+"; path=/";
-		}
-
-		function readCookie() {
-			return getFromCookie("currPath" + "=");
-		}
-		
-		function getUsername(){
-			return getFromCookie("username" + "=");
-		}
-		
-		function getFromCookie(nameEQ) {
-			
-			var ca = document.cookie.split(';');
-			
-			for(var i=0;i < ca.length;i++) {
-				
-				var c = ca[i];
-				
-				while (c.charAt(0)==' ')
-					c = c.substring(1,c.length);
-				
-				if (c.indexOf(nameEQ) == 0)
-					return c.substring(nameEQ.length,c.length);
-			}
-			
-			return null;
-		}
-		
-		function eraseCookie() {
-			createCookie("",-100);
+			else alert("enter username");
 		}
 
 		// get the absolute feedName
 		// absFeedName = path + feedName
-		function getAbsoluteFeedName(){
+		function getFeedName(){
+		
 			feedNameElement = document.getElementById("feedName");
-			if(!feedNameElement.value){
+			
+			if(feedNameElement.value == "")
 				return null;
-			}
-			return currPath + feedNameElement.value;
+				
+			return feedNameElement.value;
 		}
 
 		// get the feedURL
 		function getFeedUrl(){
+		
 			feedUrlElement = document.getElementById("feedUrl");
-			return feedUrlElement.value;
+			
+			var feedUrl = feedUrlElement.value;
+			var urlProtocol = feedUrl.substr(0,7);
+			
+			if (urlProtocol != 'http://')
+				feedUrl = 'http://' + feedUrl;
+				
+			return feedUrl;
 		}
 
 		function handlePutReply(){
+		
 			if (putReq.readyState == 4){
+			
 				if(putReq.status == 200) {
 					updateFolderContent(currPath);
 				}
@@ -94,7 +105,9 @@
 		}
 
 		function handlePostReply(){
+		
 			if (postReq.readyState == 4){
+			
 				if(postReq.status == 200) {
 					updateFolderContent(currPath);
 				}
@@ -104,36 +117,17 @@
 					alert("postReq.status = " + postReq.status);
 					document.getElementById("DebugDiv").innerHTML=postReq.responseText;
 					alert("done");
-
-					/*
-				    proto = document.getElementById("proto");
-					row = proto.cloneNode(true);
-					row.childNodes[0].innerHTML = "status = " + postReq.status;
-					row.childNodes[1].innerHTML = "content = " + postReq.responseText;
-					row.style.visibility = "visible";
-					table.appendChild(row);
-					*/
 					postReq = 0;
 				}
 			}
 		}
 
-		//TODO - NOT WORKING!!
 		function doPut(){
-
-			// first check if cookie exist, if so read it
-			// else , alert the user to login (the cookie should have been created on login)
-			// now we have the current path - stored in the cookie - should be initilized on login to /username/
-			currPath = readCookie();
-			if(!currPath){
-				alert("You are not loggen in,\n please log in to continue.");
-				return;
-			}
 
 			// get the feedName
 			// absFeedName = path + feedName
-			absFeedName = getAbsoluteFeedName();
-			if(!absFeedName){
+			feedName = getFeedName();
+			if(feedName == ""){
 				alert("You did not enter feed name!");
 				return;
 			}
@@ -144,42 +138,28 @@
 				alert("You did not enter feed url!");
 				return;
 			}
-			
-			var urlProtocol = feedUrl.substr(0,7);
-			
-			if (urlProtocol != 'http://')
-				feedUrl = 'http://' + feedUrl;
 
 			// make put request with the name and url
 			// need TODO function that gets the response and update the display
 
+			var fullPath = serverUrl + username + currPath + feedName;
+			
 			putReq = new XMLHttpRequest();
 			putReq.onreadystatechange = handlePutReply;
-			putReq.open("PUT", serverUrl + absFeedName, true);
+			putReq.open("PUT", fullPath, true);
 			putReq.send(feedUrl);
 		}
 
 		function doPost(){
 
-			// first check if cookie exist, if so read it
-			// else , alert the user to login (the cookie should have been created on login)
-			// TODO - redirect to login page
-			// now we have the current path - stored in the cookie - should be initilized on login to /username/
-			currPath = readCookie();
-			if(!currPath){
-				alert("You are not loggen in,\n please log in to continue.");
-				//TODO -redirect to login
-				return;
-			}
-
 			// get the feedName
 			// absFeedName = path + feedName
-			absFeedName = getAbsoluteFeedName();
-			if(!absFeedName){
+			feedName = getFeedName();
+			if(feedName == ""){
 				alert("You did not enter feed name!");
 				return;
 			}
-			absFeedName = absFeedName + "/";
+			localFeedName = feedName + "/";
 
 			// get the feedURL
 			feedUrl = getFeedUrl();
@@ -187,31 +167,22 @@
 				alert("You did not enter feed url!");
 				return;
 			}
-			
-			var urlProtocol = feedUrl.substr(0,7);
-			
-			if (urlProtocol != 'http://')
-				feedUrl = 'http://' + feedUrl;			
 
+			var fullPath = serverUrl + username + currPath + localFeedName;
+			
 			// make put request with the name and url
 			// need TODO function that gets the response and update the display
 			postReq = new XMLHttpRequest();
 			postReq.onreadystatechange = handlePostReply;
-			postReq.open("POST", serverUrl + absFeedName, true);
+			postReq.open("POST", fullPath, true);
 			postReq.send(feedUrl);
 		}
-		
-		function bodyLoad(){
 
-			localCurrPath = readCookie();
-			updateFolderContent(localCurrPath);
-		}
-		
 		function updateFolderContent(path){
 
 			folderContentReq = new XMLHttpRequest();
 			folderContentReq.onreadystatechange = updateFolderContentCallback;
-			folderContentReq.open("GET", serverUrl + path + "?list=true", true);
+			folderContentReq.open("GET", serverUrl + username + path + "?list=true", true);
 			folderContentReq.send(feedUrl);
 		}
 		
@@ -230,9 +201,15 @@
 				    while ( table.childNodes.length > 0 )
 				    	table.removeChild( table.firstChild );
 			
+				var path = username + "/";
+			
 				for (fc in folderContent) {
 					
 					x = folderContent[fc];
+					
+					path = path + x.name + "/";
+					
+					var row;
 					
 					if (x.type == "element"){
 						row = element.cloneNode(true);
@@ -242,7 +219,7 @@
 						row = subfolder.cloneNode(true);
 						row.getElementsByTagName("td")[0].innerHTML = x.name;
 						row.getElementsByTagName("td")[0].href = '#';
-						row.getElementsByTagName("td")[0].onclick = treeNavigation(x.name);
+						row.getElementsByTagName("td")[0].onclick = treeNavigation(path);
 						//row.getElementsByTagName("td")[0].setAttribute('ocClick', treeNavigation(currPath + x.name));
 					}
 					
@@ -254,54 +231,63 @@
 			}
 		}
 		
+		function treeUpdateCallback(){
+		
+			var list = document.getElementById("treeItems");
+		    var entry = document.getElementById("treeEntry");
+		    var youAreHere = document.getElementById("youAreHere");
+			
+		    var splitted = currPath.split('/');
+		
+			if ( list.hasChildNodes() )
+			    while ( list.childNodes.length > 0 )
+			    	list.removeChild( list.firstChild );
+			
+			var path = "/";
+			
+			var li = entry.cloneNode(true);
+			li.getElementsByTagName("a")[0].innerHTML = username;
+			li.getElementsByTagName("a")[0].href = '#';
+			li.getElementsByTagName("a")[0].onclick = treeNavigation(username + "/");
+			list.appendChild(li);
+					
+			for(var i=0; i < splitted.length; i++) {
+			
+				var e = splitted[i];
+				
+				while (e.charAt(0)==' ')
+					e = e.substring(1,e.length);
+
+				if (e.length != 0){
+				
+					path = path + e + "/";
+				
+					li = entry.cloneNode(true);
+					li.getElementsByTagName("a")[0].innerHTML = e;
+					li.getElementsByTagName("a")[0].href = '#';
+					li.getElementsByTagName("a")[0].onclick = treeNavigation(path);
+					list.appendChild(li);
+				}
+			}			    
+			
+			list.appendChild(youAreHere.cloneNode(true));
+		}
+		
+		function treeNavigation(path){
+			
+			return function(){
+
+				currPath = path;
+				updateFolderContent(path);
+			}
+		}
+		
 		function showFeed(x){
 			alert("showFeed: " + x);
 		}
 		
 		function deleteElementOrSubFolder(x){
 			alert("deleteElementOrSubFolder: " + x);
-		}
-		
-		function treeNavigation(path){
-			alert("treeNavigation " + path);
-			return function(){
-				eraseCookie();
-				createCookie(path,1);
-				updateFolderContent("/" + getUsername() + "/" + path);
-			}
-		}
-		
-		function treeUpdateCallback(){
-		
-			var list = document.getElementById("treeItems");
-		    var entry = document.getElementById("treeEntry");
-		    var youAreHere = document.getElementById("youAreHere");
-		    
-		    var localCurrPath = readCookie();
-		    var splitted = localCurrPath.split('/');
-		
-			if ( list.hasChildNodes() )
-			    while ( list.childNodes.length > 0 )
-			    	list.removeChild( list.firstChild );
-			
-			for(var i=0; i < splitted.length; i++) {
-			
-				var e = splitted[i];
-			
-				while (e.charAt(0)==' ')
-					e = e.substring(1,e.length);
-			
-				if (e.length != 0){
-					
-					li = entry.cloneNode(true);
-					li.getElementsByTagName("a")[0].innerHTML = e;
-					li.getElementsByTagName("a")[0].href = '#';
-					li.getElementsByTagName("a")[0].onclick = treeNavigation(e);
-					list.appendChild(li);
-				}
-			}			    
-			
-			list.appendChild(youAreHere.cloneNode(true));
 		}
 		
 	</script>
@@ -403,7 +389,7 @@
           <h1>News Feeds Reader</h1>
         </div>
 
-		<div id="mainDiv">
+		<div id="mainDiv" style="visibility: collapse">
 
 			<div id="treeDiv" class="row">
 			  <div class="span14" id="tree">
