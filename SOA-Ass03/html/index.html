@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+  <head>
+
+   <script type="text/javascript">
+
+		var putReq;
+		var postReq;
+		var folderContentReq;
+		// enter the server address here
+		//var serverUrl = "http://132.72.44.36:8994/ex3";
+		var serverUrl = "http://127.0.0.1:8994/ex3";
+		var localCurrPath;
+		var listContentReq;
+		
+		function login(){
+			
+			username = document.getElementById("username").value;
+			eraseCookie();
+			createCookie(username, 1);
+		}
+
+		// create coockie, value = the new path
+		function createCookie(value,days) {
+
+			if (days) {
+				var date = new Date();
+				date.setTime(date.getTime()+(days*24*60*60*1000));
+				var expires = "; expires="+date.toGMTString();
+			}
+			else var expires = "";
+
+			document.cookie = "username=" + value + "; currPath=/" + value + "/" + expires+"; path=/";
+		}
+
+		function readCookie() {
+			return getFromCookie("currPath" + "=");
+		}
+		
+		function getUsername(){
+			return getFromCookie("username" + "=");
+		}
+		
+		function getFromCookie(nameEQ) {
+			
+			var ca = document.cookie.split(';');
+			
+			for(var i=0;i < ca.length;i++) {
+				
+				var c = ca[i];
+				
+				while (c.charAt(0)==' ')
+					c = c.substring(1,c.length);
+				
+				if (c.indexOf(nameEQ) == 0)
+					return c.substring(nameEQ.length,c.length);
+			}
+			
+			return null;
+		}
+		
+		function eraseCookie() {
+			createCookie("",-100);
+		}
+
+		// get the absolute feedName
+		// absFeedName = path + feedName
+		function getAbsoluteFeedName(){
+			feedNameElement = document.getElementById("feedName");
+			if(!feedNameElement.value){
+				return null;
+			}
+			return currPath + feedNameElement.value;
+		}
+
+		// get the feedURL
+		function getFeedUrl(){
+			feedUrlElement = document.getElementById("feedUrl");
+			return feedUrlElement.value;
+		}
+
+		function handlePutReply(){
+			if (putReq.readyState == 4){
+				if(putReq.status == 200) {
+					updateFolderContent(currPath);
+				}
+				else{
+					alert("result status != 200");
+					alert(putReq.responseText);
+				}
+			}
+		}
+
+		function handlePostReply(){
+			if (postReq.readyState == 4){
+				if(postReq.status == 200) {
+					updateFolderContent(currPath);
+				}
+				else{
+					alert("result status != 200");
+					alert("postReq.responseText = " + postReq.responseText);
+					alert("postReq.status = " + postReq.status);
+					document.getElementById("DebugDiv").innerHTML=postReq.responseText;
+					alert("done");
+
+					/*
+				    proto = document.getElementById("proto");
+					row = proto.cloneNode(true);
+					row.childNodes[0].innerHTML = "status = " + postReq.status;
+					row.childNodes[1].innerHTML = "content = " + postReq.responseText;
+					row.style.visibility = "visible";
+					table.appendChild(row);
+					*/
+					postReq = 0;
+				}
+			}
+		}
+
+		//TODO - NOT WORKING!!
+		function doPut(){
+
+			// first check if cookie exist, if so read it
+			// else , alert the user to login (the cookie should have been created on login)
+			// now we have the current path - stored in the cookie - should be initilized on login to /username/
+			currPath = readCookie();
+			if(!currPath){
+				alert("You are not loggen in,\n please log in to continue.");
+				return;
+			}
+
+			// get the feedName
+			// absFeedName = path + feedName
+			absFeedName = getAbsoluteFeedName();
+			if(!absFeedName){
+				alert("You did not enter feed name!");
+				return;
+			}
+
+			// get the feedURL
+			feedUrl = getFeedUrl();
+			if(feedUrl == ""){
+				alert("You did not enter feed url!");
+				return;
+			}
+			
+			var urlProtocol = feedUrl.substr(0,7);
+			
+			if (urlProtocol != 'http://')
+				feedUrl = 'http://' + feedUrl;
+
+			// make put request with the name and url
+			// need TODO function that gets the response and update the display
+
+			putReq = new XMLHttpRequest();
+			putReq.onreadystatechange = handlePutReply;
+			putReq.open("PUT", serverUrl + absFeedName, true);
+			putReq.send(feedUrl);
+		}
+
+		function doPost(){
+
+			// first check if cookie exist, if so read it
+			// else , alert the user to login (the cookie should have been created on login)
+			// TODO - redirect to login page
+			// now we have the current path - stored in the cookie - should be initilized on login to /username/
+			currPath = readCookie();
+			if(!currPath){
+				alert("You are not loggen in,\n please log in to continue.");
+				//TODO -redirect to login
+				return;
+			}
+
+			// get the feedName
+			// absFeedName = path + feedName
+			absFeedName = getAbsoluteFeedName();
+			if(!absFeedName){
+				alert("You did not enter feed name!");
+				return;
+			}
+			absFeedName = absFeedName + "/";
+
+			// get the feedURL
+			feedUrl = getFeedUrl();
+			if(feedUrl == ""){
+				alert("You did not enter feed url!");
+				return;
+			}
+			
+			var urlProtocol = feedUrl.substr(0,7);
+			
+			if (urlProtocol != 'http://')
+				feedUrl = 'http://' + feedUrl;			
+
+			// make put request with the name and url
+			// need TODO function that gets the response and update the display
+			postReq = new XMLHttpRequest();
+			postReq.onreadystatechange = handlePostReply;
+			postReq.open("POST", serverUrl + absFeedName, true);
+			postReq.send(feedUrl);
+		}
+		
+		function bodyLoad(){
+
+			localCurrPath = readCookie();
+			updateFolderContent(localCurrPath);
+		}
+		
+		function updateFolderContent(path){
+
+			folderContentReq = new XMLHttpRequest();
+			folderContentReq.onreadystatechange = updateFolderContentCallback;
+			folderContentReq.open("GET", serverUrl + path + "?list=true", true);
+			folderContentReq.send(feedUrl);
+		}
+		
+		function updateFolderContentCallback() {
+			
+			if (folderContentReq.readyState == 4 && folderContentReq.status == 200) {
+				
+				treeUpdateCallback();
+				
+			    var table = document.getElementById("folderContentTable");
+			    var subfolder = document.getElementById("subFolderProto");
+			    var element = document.getElementById("elementProto");
+			    var folderContent = eval('(' + folderContentReq.responseText + ')');
+				
+				if ( table.hasChildNodes() )
+				    while ( table.childNodes.length > 0 )
+				    	table.removeChild( table.firstChild );
+			
+				for (fc in folderContent) {
+					
+					x = folderContent[fc];
+					
+					if (x.type == "element"){
+						row = element.cloneNode(true);
+						row.getElementsByTagName("td")[0].innerHTML = x.name;
+					}
+					else if (x.type == "subfolder"){
+						row = subfolder.cloneNode(true);
+						row.getElementsByTagName("td")[0].innerHTML = x.name;
+						row.getElementsByTagName("td")[0].href = '#';
+						row.getElementsByTagName("td")[0].onclick = treeNavigation(x.name);
+						//row.getElementsByTagName("td")[0].setAttribute('ocClick', treeNavigation(currPath + x.name));
+					}
+					
+					// row.childNodes[1].childNodes[0].onclick = showFeed(currPath + x.name);
+					// row.childNodes[1].childNodes[2].onclick = deleteElementOrSubFolder(currPath + x.name);
+					table.appendChild(row);
+					row.style.visibility = "visible";
+				  }
+			}
+		}
+		
+		function showFeed(x){
+			alert("showFeed: " + x);
+		}
+		
+		function deleteElementOrSubFolder(x){
+			alert("deleteElementOrSubFolder: " + x);
+		}
+		
+		function treeNavigation(path){
+			alert("treeNavigation " + path);
+			return function(){
+				eraseCookie();
+				createCookie(path,1);
+				updateFolderContent("/" + getUsername() + "/" + path);
+			}
+		}
+		
+		function treeUpdateCallback(){
+		
+			var list = document.getElementById("treeItems");
+		    var entry = document.getElementById("treeEntry");
+		    var youAreHere = document.getElementById("youAreHere");
+		    
+		    var localCurrPath = readCookie();
+		    var splitted = localCurrPath.split('/');
+		
+			if ( list.hasChildNodes() )
+			    while ( list.childNodes.length > 0 )
+			    	list.removeChild( list.firstChild );
+			
+			for(var i=0; i < splitted.length; i++) {
+			
+				var e = splitted[i];
+			
+				while (e.charAt(0)==' ')
+					e = e.substring(1,e.length);
+			
+				if (e.length != 0){
+					
+					li = entry.cloneNode(true);
+					li.getElementsByTagName("a")[0].innerHTML = e;
+					li.getElementsByTagName("a")[0].href = '#';
+					li.getElementsByTagName("a")[0].onclick = treeNavigation(e);
+					list.appendChild(li);
+				}
+			}			    
+			
+			list.appendChild(youAreHere.cloneNode(true));
+		}
+		
+	</script>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>News Feeds Reader</title>
+
+	<link rel="shortcut icon" href="http://twitter.github.com/bootstrap/examples/images/favicon.ico">
+    <link rel="apple-touch-icon" href="http://twitter.github.com/bootstrap/examples/images/apple-touch-icon.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="http://twitter.github.com/bootstrap/examples/images/apple-touch-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="http://twitter.github.com/bootstrap/examples/images/apple-touch-icon-114x114.png">
+
+	<link rel="stylesheet" href="http://twitter.github.com/bootstrap/1.4.0/bootstrap.css">
+    <style type="text/css">
+
+      /* Override some defaults */
+      html, body {
+        background-color: #eee;
+      }
+      body {
+        padding-top: 40px; /* 40px to make the container go all the way to the bottom of the topbar */
+      }
+      .container > footer p {
+        text-align: center; /* center align it with the container */
+      }
+      .container {
+        width: 820px; /* downsize our container to make the content feel a bit tighter and more cohesive. NOTE: this removes two full columns from the grid, meaning you only go to 14 columns and not 16. */
+      }
+
+      /* The white background content wrapper */
+      .content {
+        background-color: #fff;
+        padding: 20px;
+        margin: 0 -20px; /* negative indent the amount of the padding to maintain the grid system */
+        -webkit-border-radius: 0 0 6px 6px;
+           -moz-border-radius: 0 0 6px 6px;
+                border-radius: 0 0 6px 6px;
+        -webkit-box-shadow: 0 1px 2px rgba(0,0,0,.15);
+           -moz-box-shadow: 0 1px 2px rgba(0,0,0,.15);
+                box-shadow: 0 1px 2px rgba(0,0,0,.15);
+      }
+
+      /* Page header tweaks */
+      .page-header {
+        background-color: #f5f5f5;
+        padding: 20px 20px 10px;
+        margin: -20px -20px 20px;
+      }
+
+      /* Styles you shouldn't keep as they are for displaying this base example only */
+      .content .span10,
+      .content .span4 {
+        min-height: 500px;
+      }
+      /* Give a quick and non-cross-browser friendly divider */
+      .content .span4 {
+        margin-left: 0;
+        padding-left: 19px;
+        border-left: 1px solid #eee;
+      }
+
+      .topbar .btn {
+        border: 0;
+      }
+
+    </style>
+
+  </head>
+
+  <body onload="bodyLoad()">
+
+    <div class="topbar">
+      <div class="fill">
+        <div class="container">
+          <a class="brand" href="#">
+			DWSS - 2012/Fall - Assignment 3
+		  </a>
+          <ul class="nav">
+            <li class="active"><a href="#">Home</a></li>
+            <li><a href="http://www.cs.bgu.ac.il/~dwss121/Programming/Ex3">About</a></li>
+          </ul>
+          <form action="" class="pull-right">
+            <input id="username" class="input-small" type="text" placeholder="Username">
+            <button class="btn" type="submit" onClick="login()">Sign in</button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+
+      <div class="content">
+
+        <div class="page-header">
+          <h1>News Feeds Reader</h1>
+        </div>
+
+		<div id="mainDiv">
+
+			<div id="treeDiv" class="row">
+			  <div class="span14" id="tree">
+				<ul class="breadcrumb" id="treeItems">
+				</ul>
+			  </div>
+			</div>
+
+			<div class="span14">
+				<div class="well" style="padding: 14px 19px;">
+					<table id="folderContentTable" class="condensed-table">			
+					</table>
+				</div>
+			</div>
+
+			<div class="span14">
+				<div class="well" style="padding: 14px 19px;">
+					<div class="inline-inputs">
+						<input class="small" type="text" value="Name" id="feedName"/>
+						<input class="xlarge" type="text" value="URL" id="feedUrl"/>
+						<button class="btn primary" onclick="doPost()">Add Collection</button>
+						&nbsp;
+						<button class="btn info" onclick="doPut()">Add Element</button>
+					</div>
+				</div>
+			</div>
+
+			<div class="span14">
+				<div class="well" style="padding: 14px 19px;">
+
+				  <table class="condensed-table">
+					<thead>
+					  <tr>
+						<th>Title</th>
+						<th>Author</th>
+						<th>Category</th>
+						<th>Description</th>
+					  </tr>
+					</thead>
+					<tbody>
+					  <tr>
+						<td>Some</td>
+						<td>Some</td>
+						<td>One</td>
+						<td>DDDDDDDDDDDDDD</td>
+					  </tr>
+					  <tr>
+						<td>Some</td>
+						<td>Joe</td>
+						<td>Sixpack</td>
+						<td>English</td>
+					  </tr>
+					  <tr>
+						<td>Some</td>
+						<td>Stu</td>
+						<td>Dent</td>
+						<td>Code</td>
+					  </tr>
+					</tbody>
+				  </table>
+
+				</div>
+			</div>
+		</div>
+      </div>
+
+      <footer>
+        <p>Avi, Chezi & Nir</p>
+      </footer>
+
+    </div> <!-- /container -->
+
+
+	<div id="DebugDiv" style="visibility: collapse"> my div</div>
+	<!--  PROTOTYPES -->
+	<table style="visibility: collapse">
+		<tr id="subFolderProto" style="visibility: collapse">
+			<td></td>
+			<td class="span6 offset4">
+				<button class="btn success" onClick="#">Show</button>
+				&nbsp;
+				<button class="btn danger" onClick="#">Delete</button>
+			</td>
+		</tr>
+		
+		<tr id="elementProto" style="visibility: collapse">
+			<td></td>
+			<td class="span6 offset4">
+				<button class="btn success" onClick="#">Show</button>
+				&nbsp;
+				<button class="btn danger" onClick="#">Delete</button>
+			</td>
+		</tr>
+	</table>
+	
+	<ul style="visibility: collapse">
+		<li id="treeEntry"><a href="#" onClick="#"></a> <span class="divider">/</span></li>
+		<li id="youAreHere" class="active">You are here</li>
+	</ul>
+	
+  </body>
+
+</html>
