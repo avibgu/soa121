@@ -223,7 +223,8 @@
 						row = element.cloneNode(true);
 						row.getElementsByTagName("td")[0].innerHTML = x.name;
 						row.getElementsByTagName("td")[1].getElementsByTagName("button")[0].onclick = showFeed(path);
-						row.getElementsByTagName("td")[1].getElementsByTagName("button")[1].onclick = deleteElementOrSubFolder(path);
+						row.getElementsByTagName("td")[1].getElementsByTagName("button")[1].onclick = showFeedWithFilters(path);
+						row.getElementsByTagName("td")[1].getElementsByTagName("button")[2].onclick = deleteElementOrSubFolder(path);
 					}
 					else if (x.type == "subfolder"){
 						
@@ -234,7 +235,8 @@
 						row.getElementsByTagName("td")[0].getElementsByTagName("a")[0].href = '#';
 						row.getElementsByTagName("td")[0].getElementsByTagName("a")[0].onclick = treeNavigation(path);
 						row.getElementsByTagName("td")[1].getElementsByTagName("button")[0].onclick = showFeed(path);
-						row.getElementsByTagName("td")[1].getElementsByTagName("button")[1].onclick = deleteElementOrSubFolder(path);
+						row.getElementsByTagName("td")[1].getElementsByTagName("button")[1].onclick = showFeedWithFilters(path);
+						row.getElementsByTagName("td")[1].getElementsByTagName("button")[2].onclick = deleteElementOrSubFolder(path);
 					}
 					
 					table.appendChild(row);
@@ -296,6 +298,17 @@
 		
 		function showFeed(path){
 
+			return function(){
+			
+				showFeedReq = new XMLHttpRequest();
+				showFeedReq.onreadystatechange = showFeedCallback;
+				showFeedReq.open("GET", serverUrl + username + path + "?feeds=true", true);
+				showFeedReq.send();
+			}
+		}
+		
+		function showFeedWithFilters(path){
+		
 			return function(){
 			
 				showFeedReq = new XMLHttpRequest();
@@ -508,8 +521,10 @@
 	<table style="visibility: collapse">
 		<tr id="subFolderProto" style="visibility: collapse">
 			<td><a></a></td>
-			<td class="span6 offset4">
+			<td class="span8 offset2">
 				<button class="btn success" onClick="#">Show</button>
+				&nbsp;
+				<button class="btn info" onClick="#">Show With Filters</button>
 				&nbsp;
 				<button class="btn danger" onClick="#">Delete</button>
 			</td>
@@ -517,8 +532,10 @@
 		
 		<tr id="elementProto" style="visibility: collapse">
 			<td></td>
-			<td class="span6 offset4">
+			<td class="span8 offset2">
 				<button class="btn success" onClick="#">Show</button>
+				&nbsp;
+				<button class="btn info" onClick="#">Show With Filters</button>
 				&nbsp;
 				<button class="btn danger" onClick="#">Delete</button>
 			</td>
