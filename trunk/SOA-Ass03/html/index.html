@@ -15,6 +15,7 @@
 		var putReq;
 		var postReq;
 		var folderContentReq;
+		var deleteReq;
 		
 		function bodyLoad(){
 
@@ -186,6 +187,17 @@
 			folderContentReq.send(feedUrl);
 		}
 		
+		function updateFolderContentAfterDelete(){
+
+			if (deleteReq.readyState == 4 && deleteReq.status == 200) {
+			
+				folderContentReq = new XMLHttpRequest();
+				folderContentReq.onreadystatechange = updateFolderContentCallback;
+				folderContentReq.open("GET", serverUrl + username + currPath + "?list=true", true);
+				folderContentReq.send(feedUrl);
+			}
+		}
+		
 		function updateFolderContentCallback() {
 			
 			if (folderContentReq.readyState == 4 && folderContentReq.status == 200) {
@@ -207,25 +219,29 @@
 					
 					x = folderContent[fc];
 					
-					path = path + x.name + "/";
+					path = path + x.name;
 					
 					var row;
 					
 					if (x.type == "element"){
 						row = element.cloneNode(true);
 						row.getElementsByTagName("td")[0].innerHTML = x.name;
+						row.getElementsByTagName("td")[1].getElementsByTagName("button")[0].onclick = showFeed(path);
+						row.getElementsByTagName("td")[1].getElementsByTagName("button")[1].onclick = deleteElementOrSubFolder(path);
 					}
 					else if (x.type == "subfolder"){
 						row = subfolder.cloneNode(true);
 						row.getElementsByTagName("td")[0].getElementsByTagName("a")[0].innerHTML = x.name;
 						row.getElementsByTagName("td")[0].getElementsByTagName("a")[0].href = '#';
-						row.getElementsByTagName("td")[0].getElementsByTagName("a")[0].onclick = treeNavigation(path);
+						row.getElementsByTagName("td")[0].getElementsByTagName("a")[0].onclick = treeNavigation(path + "/");
+						row.getElementsByTagName("td")[1].getElementsByTagName("button")[0].onclick = showFeed(path + "/");
+						row.getElementsByTagName("td")[1].getElementsByTagName("button")[1].onclick = deleteElementOrSubFolder(path + "/");
 					}
 					
-					// row.childNodes[1].childNodes[0].onclick = showFeed(currPath + x.name);
-					// row.childNodes[1].childNodes[2].onclick = deleteElementOrSubFolder(currPath + x.name);
 					table.appendChild(row);
 					row.style.visibility = "visible";
+					
+					path = path + "/";
 				  }
 			}
 		}
@@ -282,11 +298,24 @@
 		}
 		
 		function showFeed(x){
-			alert("showFeed: " + x);
+
+			return function(){
+				
+				alert("showFeed: " + x);
+			}
 		}
 		
-		function deleteElementOrSubFolder(x){
-			alert("deleteElementOrSubFolder: " + x);
+		function deleteElementOrSubFolder(path){
+			
+			return function(){
+				
+				alert("deleteElementOrSubFolder: " + serverUrl + username + path);
+				
+				deleteReq = new XMLHttpRequest();
+				deleteReq.onreadystatechange = updateFolderContent;
+				deleteReq.open("DELETE", serverUrl + username + path, true);
+				deleteReq.send(feedUrl);
+			}
 		}
 		
 	</script>
