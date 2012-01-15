@@ -238,7 +238,7 @@ public class MainServlet extends HttpServlet {
 
 	private void responseWithTheMainHtmlFile(PrintWriter printWriter) {
 
-		File file = new File("html/template.html");
+		File file = new File("html/index.html");
 
 		FileInputStream fis = null;
 		BufferedInputStream bis = null;
