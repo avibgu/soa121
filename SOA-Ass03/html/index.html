@@ -217,10 +217,9 @@
 					}
 					else if (x.type == "subfolder"){
 						row = subfolder.cloneNode(true);
-						row.getElementsByTagName("td")[0].innerHTML = x.name;
-						row.getElementsByTagName("td")[0].href = '#';
-						row.getElementsByTagName("td")[0].onclick = treeNavigation(path);
-						//row.getElementsByTagName("td")[0].setAttribute('ocClick', treeNavigation(currPath + x.name));
+						row.getElementsByTagName("td")[0].getElementsByTagName("a")[0].innerHTML = x.name;
+						row.getElementsByTagName("td")[0].getElementsByTagName("a")[0].href = '#';
+						row.getElementsByTagName("td")[0].getElementsByTagName("a")[0].onclick = treeNavigation(path);
 					}
 					
 					// row.childNodes[1].childNodes[0].onclick = showFeed(currPath + x.name);
@@ -469,7 +468,7 @@
 	<!--  PROTOTYPES -->
 	<table style="visibility: collapse">
 		<tr id="subFolderProto" style="visibility: collapse">
-			<td></td>
+			<td><a></a></td>
 			<td class="span6 offset4">
 				<button class="btn success" onClick="#">Show</button>
 				&nbsp;
