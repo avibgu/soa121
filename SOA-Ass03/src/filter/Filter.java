@@ -15,9 +15,7 @@ public class Filter {
 	 */
 	public static Node filterItems(Node node, String itemPropertyToFilter,
 			String[] filterValues){
-		
-		System.out.println("FILTER: " + itemPropertyToFilter);
-		
+
 		RSSAtomFilter itemFilter = new RSSAtomFilter("item");
 		
 		NodeIterator iter;
