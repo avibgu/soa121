@@ -12,6 +12,8 @@
 		var feedName;
 		var feedUrl;
 		
+		var filterPath;
+		
 		var putReq;
 		var postReq;
 		var folderContentReq;
@@ -223,8 +225,7 @@
 						row = element.cloneNode(true);
 						row.getElementsByTagName("td")[0].innerHTML = x.name;
 						row.getElementsByTagName("td")[1].getElementsByTagName("button")[0].onclick = showFeed(path);
-						row.getElementsByTagName("td")[1].getElementsByTagName("button")[1].onclick = showFeedWithFilters(path);
-						row.getElementsByTagName("td")[1].getElementsByTagName("button")[2].onclick = deleteElementOrSubFolder(path);
+						row.getElementsByTagName("td")[1].getElementsByTagName("button")[1].onclick = deleteElementOrSubFolder(path);
 					}
 					else if (x.type == "subfolder"){
 						
@@ -235,8 +236,7 @@
 						row.getElementsByTagName("td")[0].getElementsByTagName("a")[0].href = '#';
 						row.getElementsByTagName("td")[0].getElementsByTagName("a")[0].onclick = treeNavigation(path);
 						row.getElementsByTagName("td")[1].getElementsByTagName("button")[0].onclick = showFeed(path);
-						row.getElementsByTagName("td")[1].getElementsByTagName("button")[1].onclick = showFeedWithFilters(path);
-						row.getElementsByTagName("td")[1].getElementsByTagName("button")[2].onclick = deleteElementOrSubFolder(path);
+						row.getElementsByTagName("td")[1].getElementsByTagName("button")[1].onclick = deleteElementOrSubFolder(path);
 					}
 					
 					table.appendChild(row);
@@ -299,17 +299,8 @@
 		function showFeed(path){
 
 			return function(){
-			
-				showFeedReq = new XMLHttpRequest();
-				showFeedReq.onreadystatechange = showFeedCallback;
-				showFeedReq.open("GET", serverUrl + username + path + "?feeds=true", true);
-				showFeedReq.send();
-			}
-		}
-		
-		function showFeedWithFilters(path){
-		
-			return function(){
+
+				filterPath = path;
 			
 				showFeedReq = new XMLHttpRequest();
 				showFeedReq.onreadystatechange = showFeedCallback;
@@ -349,6 +340,31 @@
 				}
 				
 				document.getElementById("feedContentTable").style.visibility = "visible";
+				
+				document.getElementById("filterButton").onclick = filter(currPath);
+			}
+		}
+		
+		function filter(path){
+		
+			return function(){
+			
+				var titleFilter = document.getElementById("titleFilter").value;
+				var autorFilter = document.getElementById("autorFilter").value;
+				var categoryFilter = document.getElementById("categoryFilter").value;
+
+				var reqString = serverUrl + username + filterPath + "?feeds=true";
+				
+				if (titleFilter) reqString = reqString + "?title=" + titleFilter;
+				if (autorFilter) reqString = reqString + "?author=" + autorFilter;
+				if (categoryFilter) reqString = reqString + "?category=" + categoryFilter;
+				
+				alert(reqString);
+				
+				showFeedReq = new XMLHttpRequest();
+				showFeedReq.onreadystatechange = showFeedCallback;
+				showFeedReq.open("GET", reqString, true);
+				showFeedReq.send();
 			}
 		}
 		
@@ -493,7 +509,15 @@
 			<div class="span14">
 				<div class="well" style="padding: 14px 19px;">
 
-				  <table id="feedContentTable" class="condensed-table" style="visibility: collapse">
+				<div class="inline-inputs">
+					<input class="small" type="text" placeholder="Title" id="titleFilter"/>
+					<input class="small" type="text" placeholder="Autor" id="autorFilter"/>
+					<input class="small" type="text" placeholder="Category" id="categoryFilter"/>
+					&nbsp;
+					<button class="btn info" onclick="#" id="filterButton">Filter</button>
+				</div>
+				<div>&nbsp;</div>
+				<table id="feedContentTable" class="condensed-table" style="visibility: collapse">
 					<thead>
 					  <tr>
 						<th>Title</th>
@@ -524,8 +548,6 @@
 			<td class="span8 offset2">
 				<button class="btn success" onClick="#">Show</button>
 				&nbsp;
-				<button class="btn info" onClick="#">Show With Filters</button>
-				&nbsp;
 				<button class="btn danger" onClick="#">Delete</button>
 			</td>
 		</tr>
@@ -534,8 +556,6 @@
 			<td></td>
 			<td class="span8 offset2">
 				<button class="btn success" onClick="#">Show</button>
-				&nbsp;
-				<button class="btn info" onClick="#">Show With Filters</button>
 				&nbsp;
 				<button class="btn danger" onClick="#">Delete</button>
 			</td>
