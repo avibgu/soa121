@@ -131,14 +131,14 @@
 			// get the feedName
 			// absFeedName = path + feedName
 			feedName = getFeedName();
-			if(feedName == ""){
+			if(!feedName){
 				alert("You did not enter feed name!");
 				return;
 			}
 
 			// get the feedURL
 			feedUrl = getFeedUrl();
-			if(feedUrl == ""){
+			if(!feedUrl){
 				alert("You did not enter feed url!");
 				return;
 			}
@@ -159,7 +159,7 @@
 			// get the feedName
 			// absFeedName = path + feedName
 			feedName = getFeedName();
-			if(feedName == ""){
+			if(!feedName){
 				alert("You did not enter feed name!");
 				return;
 			}
@@ -167,7 +167,7 @@
 
 			// get the feedURL
 			feedUrl = getFeedUrl();
-			if(feedUrl == ""){
+			if(!feedUrl){
 				alert("You did not enter feed url!");
 				return;
 			}
@@ -313,16 +313,15 @@
 		function showFeedCallback(){
 		
 			if (showFeedReq.readyState == 4 && showFeedReq.status == 200)	
-				showFeedCallbackBody();
+				showFeedCallbackBody(showFeedReq.responseXML);
 		}
 		
-		function showFeedCallbackBody(){
+		function showFeedCallbackBody(feedContent){
 		
 			treeUpdateCallback();
 				
 			var table = document.getElementById("feedContentTableBody");
 			var itemProto = document.getElementById("itemProto");
-			var feedContent = showFeedReq.responseXML;
 			
 			if ( table.hasChildNodes() )
 				while ( table.childNodes.length > 0 )
@@ -331,6 +330,7 @@
 			var y = feedContent.getElementsByTagName("item");
 		
 			for (var i = 0; i < y.length; i++) {
+			
 			
 				var x = y[i];
 
@@ -362,9 +362,7 @@
 				if (titleFilter) reqString = reqString + "&title=" + titleFilter;
 				if (autorFilter) reqString = reqString + "&author=" + autorFilter;
 				if (categoryFilter) reqString = reqString + "&category=" + categoryFilter;
-				
-				alert(reqString);
-				
+
 				FilterReq = new XMLHttpRequest();
 				FilterReq.onreadystatechange = showFilteredFeedCallback;
 				FilterReq.open("GET", reqString, true);
@@ -375,7 +373,7 @@
 		function showFilteredFeedCallback(){
 		
 			if (FilterReq.readyState == 4 && FilterReq.status == 200)	
-				showFeedCallbackBody();
+				showFeedCallbackBody(FilterReq.responseXML);
 		}
 		
 		function deleteElementOrSubFolder(path){
