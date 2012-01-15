@@ -103,13 +103,15 @@ public class Feed {
 			
 			Vector<String> pair = new Vector<String>(2);
 			
-			if (_namedFeeds.get(key).getUnnamedFeedsUrls().isEmpty()){
+			Feed feed = _namedFeeds.get(key);
+			
+			if (feed.getUnnamedFeedsUrls().isEmpty() && feed.getUrl() != null){
 
 				pair.add("ELEMENT");
 				pair.add(key);
 				content.add(pair);
 			}
-			else{
+			else if (!feed.getUnnamedFeedsUrls().isEmpty()){
 
 				pair.add("SUBFOLDER");
 				pair.add(key);
