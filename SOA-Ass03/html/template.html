@@ -32,12 +32,19 @@
 			}
 			else var expires = "";
 
-			document.cookie = "currPath=/" + value + "/" + expires+"; path=/";
+			document.cookie = "username=" + value + "; currPath=/" + value + "/" + expires+"; path=/";
 		}
 
 		function readCookie() {
+			return getFromCookie("currPath" + "=");
+		}
+		
+		function getUsername(){
+			return getFromCookie("username" + "=");
+		}
+		
+		function getFromCookie(nameEQ) {
 			
-			var nameEQ = "currPath" + "=";
 			var ca = document.cookie.split(';');
 			
 			for(var i=0;i < ca.length;i++) {
@@ -201,7 +208,7 @@
 		}
 		
 		function updateFolderContent(path){
-			
+
 			folderContentReq = new XMLHttpRequest();
 			folderContentReq.onreadystatechange = updateFolderContentCallback;
 			folderContentReq.open("GET", serverUrl + path + "?list=true", true);
@@ -234,6 +241,8 @@
 					else if (x.type == "subfolder"){
 						row = subfolder.cloneNode(true);
 						row.getElementsByTagName("td")[0].innerHTML = x.name;
+						row.getElementsByTagName("td")[0].href = '#';
+						row.getElementsByTagName("td")[0].onclick = treeNavigation(x.name);
 						//row.getElementsByTagName("td")[0].setAttribute('ocClick', treeNavigation(currPath + x.name));
 					}
 					
@@ -242,8 +251,8 @@
 					table.appendChild(row);
 					row.style.visibility = "visible";
 				  }
-				}
 			}
+		}
 		
 		function showFeed(x){
 			alert("showFeed: " + x);
@@ -253,8 +262,13 @@
 			alert("deleteElementOrSubFolder: " + x);
 		}
 		
-		function treeNavigation(x){
-			alert("treeNavigartion: " + x);
+		function treeNavigation(path){
+			alert("treeNavigation " + path);
+			return function(){
+				eraseCookie();
+				createCookie(path,1);
+				updateFolderContent("/" + getUsername() + "/" + path);
+			}
 		}
 		
 		function treeUpdateCallback(){
@@ -266,7 +280,6 @@
 		    var localCurrPath = readCookie();
 		    var splitted = localCurrPath.split('/');
 		
-
 			if ( list.hasChildNodes() )
 			    while ( list.childNodes.length > 0 )
 			    	list.removeChild( list.firstChild );
@@ -281,9 +294,9 @@
 				if (e.length != 0){
 					
 					li = entry.cloneNode(true);
-					
 					li.getElementsByTagName("a")[0].innerHTML = e;
-					
+					li.getElementsByTagName("a")[0].href = '#';
+					li.getElementsByTagName("a")[0].onclick = treeNavigation(e);
 					list.appendChild(li);
 				}
 			}			    
@@ -466,7 +479,7 @@
 
 	<div id="DebugDiv" style="visibility: collapse"> my div</div>
 	<!--  PROTOTYPES -->
-	<table>
+	<table style="visibility: collapse">
 		<tr id="subFolderProto" style="visibility: collapse">
 			<td></td>
 			<td class="span6 offset4">
@@ -486,7 +499,7 @@
 		</tr>
 	</table>
 	
-	<ul>
+	<ul style="visibility: collapse">
 		<li id="treeEntry"><a href="#" onClick="#"></a> <span class="divider">/</span></li>
 		<li id="youAreHere" class="active">You are here</li>
 	</ul>
