@@ -189,13 +189,11 @@
 		
 		function updateFolderContentAfterDelete(){
 
-			if (deleteReq.readyState == 4 && deleteReq.status == 200) {
+			if (deleteReq.readyState == 4 && deleteReq.status == 200){
 			
-				folderContentReq = new XMLHttpRequest();
-				folderContentReq.onreadystatechange = updateFolderContentCallback;
-				folderContentReq.open("GET", serverUrl + username + currPath + "?list=true", true);
-				folderContentReq.send(feedUrl);
-			}
+				alert("updateFolderContentAfterDelete OK");
+				updateFolderContent(currPath);
+			}	
 		}
 		
 		function updateFolderContentCallback() {
@@ -213,35 +211,37 @@
 				    while ( table.childNodes.length > 0 )
 				    	table.removeChild( table.firstChild );
 			
-				var path = currPath;
-			
 				for (fc in folderContent) {
 					
 					x = folderContent[fc];
-					
-					path = path + x.name;
-					
+
 					var row;
 					
+					var path;
+					
 					if (x.type == "element"){
+						
+						path = currPath + x.name;
+						
 						row = element.cloneNode(true);
 						row.getElementsByTagName("td")[0].innerHTML = x.name;
 						row.getElementsByTagName("td")[1].getElementsByTagName("button")[0].onclick = showFeed(path);
 						row.getElementsByTagName("td")[1].getElementsByTagName("button")[1].onclick = deleteElementOrSubFolder(path);
 					}
 					else if (x.type == "subfolder"){
+						
+						path = currPath + x.name + "/";
+						
 						row = subfolder.cloneNode(true);
 						row.getElementsByTagName("td")[0].getElementsByTagName("a")[0].innerHTML = x.name;
 						row.getElementsByTagName("td")[0].getElementsByTagName("a")[0].href = '#';
-						row.getElementsByTagName("td")[0].getElementsByTagName("a")[0].onclick = treeNavigation(path + "/");
-						row.getElementsByTagName("td")[1].getElementsByTagName("button")[0].onclick = showFeed(path + "/");
-						row.getElementsByTagName("td")[1].getElementsByTagName("button")[1].onclick = deleteElementOrSubFolder(path + "/");
+						row.getElementsByTagName("td")[0].getElementsByTagName("a")[0].onclick = treeNavigation(path);
+						row.getElementsByTagName("td")[1].getElementsByTagName("button")[0].onclick = showFeed(path);
+						row.getElementsByTagName("td")[1].getElementsByTagName("button")[1].onclick = deleteElementOrSubFolder(path);
 					}
 					
 					table.appendChild(row);
 					row.style.visibility = "visible";
-					
-					path = path + "/";
 				  }
 			}
 		}
@@ -312,7 +312,7 @@
 				alert("deleteElementOrSubFolder: " + serverUrl + username + path);
 				
 				deleteReq = new XMLHttpRequest();
-				deleteReq.onreadystatechange = updateFolderContent;
+				deleteReq.onreadystatechange = updateFolderContentAfterDelete;
 				deleteReq.open("DELETE", serverUrl + username + path, true);
 				deleteReq.send(feedUrl);
 			}
