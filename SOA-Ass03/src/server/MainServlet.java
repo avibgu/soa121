@@ -75,7 +75,6 @@ public class MainServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 		
-		System.out.println("do get");
 		response.setCharacterEncoding("UTF-8");
 
 		Map<String, String[]> params = request.getParameterMap();
@@ -88,6 +87,8 @@ public class MainServlet extends HttpServlet {
 
 				paramValues = params.get("list");
 
+				System.out.println("do get: getFolderContent (list=true)");
+				
 				for (String value : paramValues)
 					if (value.equals("true"))
 						getFolderContent(request, response);
@@ -101,12 +102,16 @@ public class MainServlet extends HttpServlet {
 					if (value.equals("true")){
 						
 						params.remove("feeds");
+						System.out.println("do get: readAndSendFeeds (feeds=true)");
 						readAndSendFeeds(request, response);
 					}
 				}
 			}
 		}
-		else responseWithTheMainHtmlFile(response.getWriter());
+		else{
+			System.out.println("do get: responseWithTheMainHtmlFile");
+			responseWithTheMainHtmlFile(response.getWriter());
+		}
 	}
 
 	private void getFolderContent(HttpServletRequest request,

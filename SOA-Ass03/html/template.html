@@ -12,36 +12,18 @@
 		// enter the server address here
 		//var serverUrl = "http://132.72.44.36:8994/ex3";
 		var serverUrl = "http://127.0.0.1:8994/ex3";
-
-
-		function update() {
-		  if (req.readyState == 4 && req.status == 200) {
-		    table = document.getElementById("tbl");
-		    proto = document.getElementById("proto");
-		    people = eval('(' + req.responseText + ')');
-		    for (k in people) {
-		      person = people[k];
-		      row = proto.cloneNode(true);
-		      row.childNodes[0].innerHTML = person.firstName;
-		      row.childNodes[1].innerHTML = person.lastName;
-		      row.childNodes[2].innerHTML = person.age;
-		      row.childNodes[3].innerHTML = person.sex;
-		      row.style.visibility = "visible";
-		      table.appendChild(row);
-		    }
-		  }
-		}
+		var localCurrPath;
+		var listContentReq;
 		
 		function login(){
 			
 			username = document.getElementById("username").value;
+			eraseCookie();
 			createCookie(username, 1);
-			updateFolderContent("/" + username);
 		}
 
 		// create coockie, value = the new path
 		function createCookie(value,days) {
-			alert("createCookie");
 
 			if (days) {
 				var date = new Date();
@@ -54,30 +36,27 @@
 		}
 
 		function readCookie() {
-			alert("readCookie");
+			
 			var nameEQ = "currPath" + "=";
 			var ca = document.cookie.split(';');
+			
 			for(var i=0;i < ca.length;i++) {
+				
 				var c = ca[i];
-				while (c.charAt(0)==' ') c = c.substring(1,c.length);
-				if (c.indexOf(nameEQ) == 0){
-						alert("return in readCookie " + c.substring(nameEQ.length,c.length));
-						return c.substring(nameEQ.length,c.length);
-				}
+				
+				while (c.charAt(0)==' ')
+					c = c.substring(1,c.length);
+				
+				if (c.indexOf(nameEQ) == 0)
+					return c.substring(nameEQ.length,c.length);
 			}
-			alert("readCookie null");
+			
 			return null;
 		}
-
+		
 		function eraseCookie() {
-			alert("eraseCookie");
 			createCookie("",-100);
 		}
-
-		function debugFunc() {
-			createCookie("nir",100);
-		}
-
 
 		// get the absolute feedName
 		// absFeedName = path + feedName
@@ -97,9 +76,7 @@
 
 		function handlePutReply(){
 			if (putReq.readyState == 4){
-				alert("handlePutReply");
 				if(putReq.status == 200) {
-					alert("result status = 200");
 					updateFolderContent(currPath);
 				}
 				else{
@@ -111,9 +88,7 @@
 
 		function handlePostReply(){
 			if (postReq.readyState == 4){
-				alert("handlePostReply");
 				if(postReq.status == 200) {
-					alert("result status = 200");
 					updateFolderContent(currPath);
 				}
 				else{
@@ -138,7 +113,7 @@
 
 		//TODO - NOT WORKING!!
 		function doPut(){
-			alert("doPut");
+
 			// first check if cookie exist, if so read it
 			// else , alert the user to login (the cookie should have been created on login)
 			// now we have the current path - stored in the cookie - should be initilized on login to /username/
@@ -147,7 +122,6 @@
 				alert("You are not loggen in,\n please log in to continue.");
 				return;
 			}
-			alert("currPath =" + currPath);
 
 			// get the feedName
 			// absFeedName = path + feedName
@@ -156,8 +130,6 @@
 				alert("You did not enter feed name!");
 				return;
 			}
-			alert("absFeedName = " + absFeedName);
-
 
 			// get the feedURL
 			feedUrl = getFeedUrl();
@@ -170,19 +142,14 @@
 			
 			if (urlProtocol != 'http://')
 				feedUrl = 'http://' + feedUrl;
-			
-			alert("feedUrl = " + feedUrl);
 
 			// make put request with the name and url
 			// need TODO function that gets the response and update the display
-			alert("send to " + serverUrl + absFeedName);
+
 			putReq = new XMLHttpRequest();
 			putReq.onreadystatechange = handlePutReply;
 			putReq.open("PUT", serverUrl + absFeedName, true);
 			putReq.send(feedUrl);
-
-			//alert("before");
-			//alert("after");
 		}
 
 		function doPost(){
@@ -197,7 +164,6 @@
 				//TODO -redirect to login
 				return;
 			}
-			alert("currPath =" + currPath);
 
 			// get the feedName
 			// absFeedName = path + feedName
@@ -207,8 +173,6 @@
 				return;
 			}
 			absFeedName = absFeedName + "/";
-			alert("absFeedName = " + absFeedName);
-
 
 			// get the feedURL
 			feedUrl = getFeedUrl();
@@ -222,28 +186,21 @@
 			if (urlProtocol != 'http://')
 				feedUrl = 'http://' + feedUrl;			
 
-			alert("feedUrl = " + feedUrl);
-
 			// make put request with the name and url
 			// need TODO function that gets the response and update the display
-			alert("send to " + serverUrl + absFeedName);
 			postReq = new XMLHttpRequest();
 			postReq.onreadystatechange = handlePostReply;
 			postReq.open("POST", serverUrl + absFeedName, true);
 			postReq.send(feedUrl);
-
-			//alert("before");
-			//alert("after");
 		}
+		
+		function bodyLoad(){
 
-
-		function load(){
-			alert("nir");
+			localCurrPath = readCookie();
+			updateFolderContent(localCurrPath);
 		}
 		
 		function updateFolderContent(path){
-			
-			alert("updateFolderContent: " + path)
 			
 			folderContentReq = new XMLHttpRequest();
 			folderContentReq.onreadystatechange = updateFolderContentCallback;
@@ -253,41 +210,14 @@
 		
 		function updateFolderContentCallback() {
 			
-			alert("updateFolderContentCallback");
-			
 			if (folderContentReq.readyState == 4 && folderContentReq.status == 200) {
 				
-			    table = document.getElementById("folderContentTable");
-			    subfolder = document.getElementById("subFolderProto");
-			    element = document.getElementById("elementProto");
-			    folderContent = eval('(' + folderContentReq.responseText + ')');
-			    
-			    /*
-			    
-				[
-					{ type: "subfolder", name: "a" },
-					{ type: "element", name: "b" }
-				]
-			    
-			    <tr id="subFolderProto" style="visibility: collapse;">
-					<td><a href="#" onClick="#">container1</a></td>
-					<td class="span6 offset4">
-						<button class="btn success" onClick="#">Show</button>
-						&nbsp;
-						<button class="btn danger" onClick="#">Delete</button>
-					</td>
-				</tr>
+				treeUpdateCallback();
 				
-				<tr id="elementProto" style="visibility: collapse;">
-					<td>element3</td>
-					<td class="span6 offset4">
-						<button class="btn success" onClick="#">Show</button>
-						&nbsp;
-						<button class="btn danger" onClick="#">Delete</button>
-					</td>
-				</tr>
-				
-				*/
+			    var table = document.getElementById("folderContentTable");
+			    var subfolder = document.getElementById("subFolderProto");
+			    var element = document.getElementById("elementProto");
+			    var folderContent = eval('(' + folderContentReq.responseText + ')');
 				
 				if ( table.hasChildNodes() )
 				    while ( table.childNodes.length > 0 )
@@ -298,17 +228,12 @@
 					x = folderContent[fc];
 					
 					if (x.type == "element"){
-	
-						alert("element: " + x.name);
 						row = element.cloneNode(true);
-						row.childNodes[0].nodeValue = x.name;
+						row.getElementsByTagName("td")[0].innerHTML = x.name;
 					}
 					else if (x.type == "subfolder"){
-	
-						alert("subfolder: " + x.name);
 						row = subfolder.cloneNode(true);
-						
-						row.getElementsByTagName("td")[0].childNodes[0].nodeValue = x.name;
+						row.getElementsByTagName("td")[0].innerHTML = x.name;
 						//row.getElementsByTagName("td")[0].setAttribute('ocClick', treeNavigation(currPath + x.name));
 					}
 					
@@ -316,7 +241,6 @@
 					// row.childNodes[1].childNodes[2].onclick = deleteElementOrSubFolder(currPath + x.name);
 					table.appendChild(row);
 					row.style.visibility = "visible";
-	
 				  }
 				}
 			}
@@ -331,6 +255,40 @@
 		
 		function treeNavigation(x){
 			alert("treeNavigartion: " + x);
+		}
+		
+		function treeUpdateCallback(){
+		
+			var list = document.getElementById("treeItems");
+		    var entry = document.getElementById("treeEntry");
+		    var youAreHere = document.getElementById("youAreHere");
+		    
+		    var localCurrPath = readCookie();
+		    var splitted = localCurrPath.split('/');
+		
+
+			if ( list.hasChildNodes() )
+			    while ( list.childNodes.length > 0 )
+			    	list.removeChild( list.firstChild );
+			
+			for(var i=0; i < splitted.length; i++) {
+			
+				var e = splitted[i];
+			
+				while (e.charAt(0)==' ')
+					e = e.substring(1,e.length);
+			
+				if (e.length != 0){
+					
+					li = entry.cloneNode(true);
+					
+					li.getElementsByTagName("a")[0].innerHTML = e;
+					
+					list.appendChild(li);
+				}
+			}			    
+			
+			list.appendChild(youAreHere.cloneNode(true));
 		}
 		
 	</script>
@@ -404,7 +362,7 @@
 
   </head>
 
-  <body>
+  <body onload="bodyLoad()">
 
     <div class="topbar">
       <div class="fill">
@@ -436,20 +394,14 @@
 
 			<div id="treeDiv" class="row">
 			  <div class="span14" id="tree">
-				<ul class="breadcrumb">
-					<li><a href="#" onClick="#">Home</a> <span class="divider">/</span></li>
-					<li><a href="#" onClick="#">Middle page</a> <span class="divider">/</span></li>
-					<li><a href="#" onClick="#">Another one</a> <span class="divider">/</span></li>
-					<li class="active">You are here</li>
+				<ul class="breadcrumb" id="treeItems">
 				</ul>
 			  </div>
 			</div>
 
 			<div class="span14">
 				<div class="well" style="padding: 14px 19px;">
-					<table id="folderContentTable" class="condensed-table">
-						
-						
+					<table id="folderContentTable" class="condensed-table">			
 					</table>
 				</div>
 			</div>
@@ -505,10 +457,6 @@
 		</div>
       </div>
 
-	 <table id="tbl">
-	   <tr id="proto" style="visibility: collapse"><td/><td/><td/><td/></tr>
-	 </table>
-
       <footer>
         <p>Avi, Chezi & Nir</p>
       </footer>
@@ -520,7 +468,7 @@
 	<!--  PROTOTYPES -->
 	<table>
 		<tr id="subFolderProto" style="visibility: collapse">
-			<td>xx</td>
+			<td></td>
 			<td class="span6 offset4">
 				<button class="btn success" onClick="#">Show</button>
 				&nbsp;
@@ -537,6 +485,12 @@
 			</td>
 		</tr>
 	</table>
+	
+	<ul>
+		<li id="treeEntry"><a href="#" onClick="#"></a> <span class="divider">/</span></li>
+		<li id="youAreHere" class="active">You are here</li>
+	</ul>
+	
   </body>
 
 </html>
