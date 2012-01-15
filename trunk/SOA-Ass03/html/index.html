@@ -21,7 +21,7 @@
 
 			username = getCookie("username");
 			
-			if (username != ""){
+			if (username){
 				var inputFeedDiv = document.getElementById("inputFeedDiv");
 				inputFeedDiv.style.visibility = "visible";
 				currPath = "/";
@@ -59,7 +59,7 @@
 
 			username = document.getElementById("username").value;
 
-			if (username != "")
+			if (username)
 				setCookie("username", username, 10);
 
 			else alert("enter username");
