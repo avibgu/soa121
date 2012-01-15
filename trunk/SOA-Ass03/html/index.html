@@ -14,6 +14,7 @@
 		
 		var filterPath;
 		
+		var FilterReq;
 		var putReq;
 		var postReq;
 		var folderContentReq;
@@ -311,38 +312,41 @@
 		
 		function showFeedCallback(){
 		
-			if (showFeedReq.readyState == 4 && showFeedReq.status == 200) {
+			if (showFeedReq.readyState == 4 && showFeedReq.status == 200)	
+				showFeedCallbackBody();
+		}
+		
+		function showFeedCallbackBody(){
+		
+			treeUpdateCallback();
 				
-				treeUpdateCallback();
-				
-			    var table = document.getElementById("feedContentTableBody");
-			    var itemProto = document.getElementById("itemProto");
-			    var feedContent = showFeedReq.responseXML;
-				
-				if ( table.hasChildNodes() )
-				    while ( table.childNodes.length > 0 )
-				    	table.removeChild( table.firstChild );
+			var table = document.getElementById("feedContentTableBody");
+			var itemProto = document.getElementById("itemProto");
+			var feedContent = showFeedReq.responseXML;
 			
-				var y = feedContent.getElementsByTagName("item");
+			if ( table.hasChildNodes() )
+				while ( table.childNodes.length > 0 )
+					table.removeChild( table.firstChild );
+		
+			var y = feedContent.getElementsByTagName("item");
+		
+			for (var i = 0; i < y.length; i++) {
 			
-				for (var i = 0; i < y.length; i++) {
-				
-					var x = y[i];
+				var x = y[i];
 
-					var row = itemProto.cloneNode(true);
-					
-					row.getElementsByTagName("td")[0].innerHTML = x.getElementsByTagName("title")[0].firstChild.nodeValue;
-					row.getElementsByTagName("td")[1].innerHTML = x.getElementsByTagName("author")[0].firstChild.nodeValue;
-					row.getElementsByTagName("td")[2].innerHTML = x.getElementsByTagName("category")[0].firstChild.nodeValue;
-					row.getElementsByTagName("td")[3].innerHTML = x.getElementsByTagName("description")[0].firstChild.nodeValue;
-					
-					table.appendChild(row);
-				}
+				var row = itemProto.cloneNode(true);
 				
-				document.getElementById("feedContentTable").style.visibility = "visible";
+				row.getElementsByTagName("td")[0].innerHTML = x.getElementsByTagName("title")[0].firstChild.nodeValue;
+				row.getElementsByTagName("td")[1].innerHTML = x.getElementsByTagName("author")[0].firstChild.nodeValue;
+				row.getElementsByTagName("td")[2].innerHTML = x.getElementsByTagName("category")[0].firstChild.nodeValue;
+				row.getElementsByTagName("td")[3].innerHTML = x.getElementsByTagName("description")[0].firstChild.nodeValue;
 				
-				document.getElementById("filterButton").onclick = filter(currPath);
+				table.appendChild(row);
 			}
+			
+			document.getElementById("feedContentTable").style.visibility = "visible";
+			
+			document.getElementById("filterButton").onclick = filter(currPath);
 		}
 		
 		function filter(path){
@@ -355,17 +359,23 @@
 
 				var reqString = serverUrl + username + filterPath + "?feeds=true";
 				
-				if (titleFilter) reqString = reqString + "?title=" + titleFilter;
-				if (autorFilter) reqString = reqString + "?author=" + autorFilter;
-				if (categoryFilter) reqString = reqString + "?category=" + categoryFilter;
+				if (titleFilter) reqString = reqString + "&title=" + titleFilter;
+				if (autorFilter) reqString = reqString + "&author=" + autorFilter;
+				if (categoryFilter) reqString = reqString + "&category=" + categoryFilter;
 				
 				alert(reqString);
 				
-				showFeedReq = new XMLHttpRequest();
-				showFeedReq.onreadystatechange = showFeedCallback;
-				showFeedReq.open("GET", reqString, true);
-				showFeedReq.send();
+				FilterReq = new XMLHttpRequest();
+				FilterReq.onreadystatechange = showFilteredFeedCallback;
+				FilterReq.open("GET", reqString, true);
+				FilterReq.send();
 			}
+		}
+		
+		function showFilteredFeedCallback(){
+		
+			if (FilterReq.readyState == 4 && FilterReq.status == 200)	
+				showFeedCallbackBody();
 		}
 		
 		function deleteElementOrSubFolder(path){
