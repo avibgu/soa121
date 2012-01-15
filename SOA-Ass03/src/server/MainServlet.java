@@ -101,7 +101,7 @@ public class MainServlet extends HttpServlet {
 					
 					if (value.equals("true")){
 						
-						params.remove("feeds");
+						//params.remove("feeds");
 						System.out.println("do get: readAndSendFeeds (feeds=true)");
 						readAndSendFeeds(request, response);
 					}
