@@ -104,7 +104,8 @@
 					updateFolderContent(currPath);
 				}
 				else{
-					alert("You have entered a bad request!");
+					alert("result status != 200");
+					alert(putReq.responseText);
 				}
 			}
 		}
@@ -117,7 +118,11 @@
 					updateFolderContent(currPath);
 				}
 				else{
-					alert("You have entered a bad request!");
+					alert("result status != 200");
+					alert("postReq.responseText = " + postReq.responseText);
+					alert("postReq.status = " + postReq.status);
+					document.getElementById("DebugDiv").innerHTML=postReq.responseText;
+					alert("done");
 					postReq = 0;
 				}
 			}
