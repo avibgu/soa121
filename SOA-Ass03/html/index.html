@@ -6,7 +6,7 @@
 
    <script type="text/javascript">
 
-		var serverUrl = "http://127.0.0.1:8994/ex3/";
+		var serverUrl = "http://soa2.cs.bgu.ac.il:8994/ex3/";
 		var username;
 		var currPath;
 		var feedName;
@@ -25,7 +25,7 @@
 			username = getCookie("username");
 			
 			if (username){
-				var inputFeedDiv = document.getElementById("inputFeedDiv");
+				var inputFeedDiv = document.getElementById("mainDiv");
 				inputFeedDiv.style.visibility = "visible";
 				currPath = "/";
 				updateFolderContent(currPath);
@@ -62,8 +62,10 @@
 
 			username = document.getElementById("username").value;
 
-			if (username)
+			if (username){
 				setCookie("username", username, 10);
+				bodyLoad();
+			}
 
 			else alert("enter username");
 		}
@@ -102,8 +104,7 @@
 					updateFolderContent(currPath);
 				}
 				else{
-					alert("result status != 200");
-					alert(putReq.responseText);
+					alert("You have entered a bad request!");
 				}
 			}
 		}
@@ -116,11 +117,7 @@
 					updateFolderContent(currPath);
 				}
 				else{
-					alert("result status != 200");
-					alert("postReq.responseText = " + postReq.responseText);
-					alert("postReq.status = " + postReq.status);
-					document.getElementById("DebugDiv").innerHTML=postReq.responseText;
-					alert("done");
+					alert("You have entered a bad request!");
 					postReq = 0;
 				}
 			}
@@ -392,6 +389,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta charset="utf-8">
     <meta name="description" content="">
+
     <meta name="author" content="">
 
     <title>News Feeds Reader</title>
@@ -402,6 +400,7 @@
     <link rel="apple-touch-icon" sizes="114x114" href="http://twitter.github.com/bootstrap/examples/images/apple-touch-icon-114x114.png">
 
 	<link rel="stylesheet" href="http://twitter.github.com/bootstrap/1.4.0/bootstrap.css">
+
     <style type="text/css">
 
       /* Override some defaults */
@@ -464,6 +463,7 @@
       <div class="fill">
         <div class="container">
           <a class="brand" href="#">
+
 			DWSS - 2012/Fall - Assignment 3
 		  </a>
           <ul class="nav">
@@ -472,6 +472,7 @@
           </ul>
           <form action="" class="pull-right">
             <input id="username" class="input-small" type="text" placeholder="Username">
+
             <button class="btn" type="submit" onClick="login()">Sign in</button>
           </form>
         </div>
@@ -486,11 +487,12 @@
           <h1>News Feeds Reader</h1>
         </div>
 
-		<div id="mainDiv">
+		<div id="mainDiv" style="visibility: collapse">
 
 			<div id="treeDiv" class="row">
 			  <div class="span14" id="tree">
 				<ul class="breadcrumb" id="treeItems">
+
 				</ul>
 			  </div>
 			</div>
@@ -510,6 +512,7 @@
 						<button class="btn primary" onclick="doPost()">Add Collection</button>
 						&nbsp;
 						<button class="btn info" onclick="doPut()">Add Element</button>
+
 					</div>
 				</div>
 			</div>
@@ -520,6 +523,7 @@
 				<div class="inline-inputs">
 					<input class="small" type="text" placeholder="Title" id="titleFilter"/>
 					<input class="small" type="text" placeholder="Autor" id="autorFilter"/>
+
 					<input class="small" type="text" placeholder="Category" id="categoryFilter"/>
 					&nbsp;
 					<button class="btn info" onclick="#" id="filterButton">Filter</button>
@@ -528,6 +532,7 @@
 				<table id="feedContentTable" class="condensed-table" style="visibility: collapse">
 					<thead>
 					  <tr>
+
 						<th>Title</th>
 						<th>Author</th>
 						<th>Category</th>
@@ -535,6 +540,7 @@
 					  </tr>
 					</thead>
 					<tbody id="feedContentTableBody">
+
 					</tbody>
 				  </table>
 
@@ -545,6 +551,7 @@
 
       <footer>
         <p>Avi, Chezi & Nir</p>
+
       </footer>
 
     </div> <!-- /container -->
@@ -554,6 +561,7 @@
 		<tr id="subFolderProto" style="visibility: collapse">
 			<td><a></a></td>
 			<td class="span8 offset2">
+
 				<button class="btn success" onClick="#">Show</button>
 				&nbsp;
 				<button class="btn danger" onClick="#">Delete</button>
@@ -563,6 +571,7 @@
 		<tr id="elementProto" style="visibility: collapse">
 			<td></td>
 			<td class="span8 offset2">
+
 				<button class="btn success" onClick="#">Show</button>
 				&nbsp;
 				<button class="btn danger" onClick="#">Delete</button>
@@ -572,6 +581,7 @@
 		<tr id="itemProto">
 			<td></td>
 			<td></td>
+
 			<td></td>
 			<td></td>
 		</tr>
@@ -580,6 +590,7 @@
 	<ul style="visibility: collapse">
 		<li id="treeEntry"><a href="#" onClick="#"></a> <span class="divider">/</span></li>
 		<li id="youAreHere" class="active">You are here</li>
+
 	</ul>
 	
   </body>
