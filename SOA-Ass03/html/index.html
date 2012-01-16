@@ -6,390 +6,388 @@
 
    <script type="text/javascript">
 
-		var serverUrl = "http://soa2.cs.bgu.ac.il:8994/ex3/";
-		var username;
-		var currPath;
-		var feedName;
-		var feedUrl;
-		
-		var filterPath;
-		
-		var FilterReq;
-		var putReq;
-		var postReq;
-		var folderContentReq;
-		var deleteReq;
-		
-		function bodyLoad(){
+                var serverUrl = "http://soa2.cs.bgu.ac.il:8994/ex3/";
+   				//var serverUrl = "http://127.0.0.1:8994/ex3/";
+                var username;
+                var currPath;
+                var feedName;
+                var feedUrl;
+                
+                var filterPath;
+                
+                var FilterReq;
+                var putReq;
+                var postReq;
+                var folderContentReq;
+                var deleteReq;
+                
+                function bodyLoad(){
 
-			username = getCookie("username");
-			
-			if (username){
-				var inputFeedDiv = document.getElementById("mainDiv");
-				inputFeedDiv.style.visibility = "visible";
-				currPath = "/";
-				updateFolderContent(currPath);
-			}
-		}
-		
-		function getCookie(c_name) {
-		
-			var i,x,y,ARRcookies=document.cookie.split(";");
-			
-			for (i=0;i<ARRcookies.length;i++){
-				
-				x=ARRcookies[i].substr(0,ARRcookies[i].indexOf("="));
-				y=ARRcookies[i].substr(ARRcookies[i].indexOf("=")+1);
-				x = x.replace(/^\s+|\s+$/g,"");
-			  
-				if (x==c_name)
-					return unescape(y);
-			}
-		}
+                        username = getCookie("username");
+                        
+                        if (username){
+                        	var inputFeedDiv = document.getElementById("mainDiv");
+                            inputFeedDiv.style.visibility = "visible";
+                            var inputFeedDivReal = document.getElementById("inputFeedDiv");
+                            inputFeedDivReal.style.visibility = "visible";
+                            currPath = "/";
+                            updateFolderContent(currPath);
+                        }
+                }
+                
+                function getCookie(c_name) {
+                
+                        var i,x,y,ARRcookies=document.cookie.split(";");
+                        
+                        for (i=0;i<ARRcookies.length;i++){
+                                
+                                x=ARRcookies[i].substr(0,ARRcookies[i].indexOf("="));
+                                y=ARRcookies[i].substr(ARRcookies[i].indexOf("=")+1);
+                                x = x.replace(/^\s+|\s+$/g,"");
+                          
+                                if (x==c_name)
+                                        return unescape(y);
+                        }
+                }
 
-		function setCookie(c_name,value,exdays){
-		
-			var exdate=new Date();
-			
-			exdate.setDate(exdate.getDate() + exdays);
-			
-			var c_value=escape(value) + ((exdays==null) ? "" : "; expires="+exdate.toUTCString());
-			
-			document.cookie=c_name + "=" + c_value;
-		}
-		
-		function login(){
+                function setCookie(c_name,value,exdays){
+                
+                        var exdate=new Date();
+                        
+                        exdate.setDate(exdate.getDate() + exdays);
+                        
+                        var c_value=escape(value) + ((exdays==null) ? "" : "; expires="+exdate.toUTCString());
+                        
+                        document.cookie=c_name + "=" + c_value;
+                }
+                
+                function login(){
 
-			username = document.getElementById("username").value;
+                        username = document.getElementById("username").value;
 
-			if (username){
-				setCookie("username", username, 10);
-				bodyLoad();
-			}
+                        if (username){
+                                setCookie("username", username, 10);
+                                bodyLoad();
+                        }
 
-			else alert("enter username");
-		}
+                        else alert("enter username");
+                }
 
-		// get the absolute feedName
-		// absFeedName = path + feedName
-		function getFeedName(){
-		
-			feedNameElement = document.getElementById("feedName");
-			
-			if(feedNameElement.value == "")
-				return null;
-				
-			return feedNameElement.value;
-		}
+                // get the absolute feedName
+                // absFeedName = path + feedName
+                function getFeedName(){
+                
+                        feedNameElement = document.getElementById("feedName");
+                        
+                        if(feedNameElement.value == "")
+                                return null;
+                                
+                        return feedNameElement.value;
+                }
 
-		// get the feedURL
-		function getFeedUrl(){
-		
-			feedUrlElement = document.getElementById("feedUrl");
-			
-			var feedUrl = feedUrlElement.value;
-			var urlProtocol = feedUrl.substr(0,7);
-			
-			if (urlProtocol != 'http://')
-				feedUrl = 'http://' + feedUrl;
-				
-			return feedUrl;
-		}
+                // get the feedURL
+                function getFeedUrl(){
+                
+                        feedUrlElement = document.getElementById("feedUrl");
+                        
+                        var feedUrl = feedUrlElement.value;
+                        var urlProtocol = feedUrl.substr(0,7);
+                        
+                        if (urlProtocol != 'http://')
+                                feedUrl = 'http://' + feedUrl;
+                                
+                        return feedUrl;
+                }
 
-		function handlePutReply(){
-		
-			if (putReq.readyState == 4){
-			
-				if(putReq.status == 200) {
-					updateFolderContent(currPath);
-				}
-				else{
-					alert("result status != 200");
-					alert(putReq.responseText);
-				}
-			}
-		}
+                function handlePutReply(){
+                
+                        if (putReq.readyState == 4){
+                        
+                                if(putReq.status == 200) {
+                                        updateFolderContent(currPath);
+                                }
+                                else{
+                                        alert("You have entered a bad request!");
+                                }
+                        }
+                }
 
-		function handlePostReply(){
-		
-			if (postReq.readyState == 4){
-			
-				if(postReq.status == 200) {
-					updateFolderContent(currPath);
-				}
-				else{
-					alert("result status != 200");
-					alert("postReq.responseText = " + postReq.responseText);
-					alert("postReq.status = " + postReq.status);
-					document.getElementById("DebugDiv").innerHTML=postReq.responseText;
-					alert("done");
-					postReq = 0;
-				}
-			}
-		}
+                function handlePostReply(){
+                
+                        if (postReq.readyState == 4){
+                        
+                                if(postReq.status == 200) {
+                                        updateFolderContent(currPath);
+                                }
+                                else{
+                                        alert("You have entered a bad request!");
+                                        postReq = 0;
+                                }
+                        }
+                }
 
-		function doPut(){
+                function doPut(){
 
-			// get the feedName
-			// absFeedName = path + feedName
-			feedName = getFeedName();
-			if(!feedName){
-				alert("You did not enter feed name!");
-				return;
-			}
+                        // get the feedName
+                        // absFeedName = path + feedName
+                        feedName = getFeedName();
+                        if(!feedName){
+                                alert("You did not enter feed name!");
+                                return;
+                        }
 
-			// get the feedURL
-			feedUrl = getFeedUrl();
-			if(!feedUrl){
-				alert("You did not enter feed url!");
-				return;
-			}
+                        // get the feedURL
+                        feedUrl = getFeedUrl();
+                        if(!feedUrl){
+                                alert("You did not enter feed url!");
+                                return;
+                        }
 
-			// make put request with the name and url
-			// need TODO function that gets the response and update the display
+                        // make put request with the name and url
+                        // need TODO function that gets the response and update the display
 
-			var fullPath = serverUrl + username + currPath + feedName;
-			
-			putReq = new XMLHttpRequest();
-			putReq.onreadystatechange = handlePutReply;
-			putReq.open("PUT", fullPath, true);
-			putReq.send(feedUrl);
-		}
+                        var fullPath = serverUrl + username + currPath + feedName;
+                        
+                        putReq = new XMLHttpRequest();
+                        putReq.onreadystatechange = handlePutReply;
+                        putReq.open("PUT", fullPath, true);
+                        putReq.send(feedUrl);
+                }
 
-		function doPost(){
+                function doPost(){
 
-			// get the feedName
-			// absFeedName = path + feedName
-			feedName = getFeedName();
-			if(!feedName){
-				alert("You did not enter feed name!");
-				return;
-			}
-			localFeedName = feedName + "/";
+                        // get the feedName
+                        // absFeedName = path + feedName
+                        feedName = getFeedName();
+                        if(!feedName){
+                                alert("You did not enter feed name!");
+                                return;
+                        }
+                        localFeedName = feedName + "/";
 
-			// get the feedURL
-			feedUrl = getFeedUrl();
-			if(!feedUrl){
-				alert("You did not enter feed url!");
-				return;
-			}
+                        // get the feedURL
+                        feedUrl = getFeedUrl();
+                        if(!feedUrl){
+                                alert("You did not enter feed url!");
+                                return;
+                        }
 
-			var fullPath = serverUrl + username + currPath + localFeedName;
-			
-			// make put request with the name and url
-			// need TODO function that gets the response and update the display
-			postReq = new XMLHttpRequest();
-			postReq.onreadystatechange = handlePostReply;
-			postReq.open("POST", fullPath, true);
-			postReq.send(feedUrl);
-		}
+                        var fullPath = serverUrl + username + currPath + localFeedName;
+                        
+                        // make put request with the name and url
+                        // need TODO function that gets the response and update the display
+                        postReq = new XMLHttpRequest();
+                        postReq.onreadystatechange = handlePostReply;
+                        postReq.open("POST", fullPath, true);
+                        postReq.send(feedUrl);
+                }
 
-		function updateFolderContent(path){
+                function updateFolderContent(path){
 
-			folderContentReq = new XMLHttpRequest();
-			folderContentReq.onreadystatechange = updateFolderContentCallback;
-			folderContentReq.open("GET", serverUrl + username + path + "?list=true", true);
-			folderContentReq.send();
-		}
-		
-		function updateFolderContentAfterDelete(){
+                        folderContentReq = new XMLHttpRequest();
+                        folderContentReq.onreadystatechange = updateFolderContentCallback;
+                        folderContentReq.open("GET", serverUrl + username + path + "?list=true", true);
+                        folderContentReq.send();
+                }
+                
+                function updateFolderContentAfterDelete(){
 
-			if (deleteReq.readyState == 4 && deleteReq.status == 200)
-				updateFolderContent(currPath);
-		}
-		
-		function updateFolderContentCallback() {
-			
-			if (folderContentReq.readyState == 4 && folderContentReq.status == 200) {
-				
-				treeUpdateCallback();
-				
-			    var table = document.getElementById("folderContentTable");
-			    var subfolder = document.getElementById("subFolderProto");
-			    var element = document.getElementById("elementProto");
-			    var folderContent = eval('(' + folderContentReq.responseText + ')');
-				
-				if ( table.hasChildNodes() )
-				    while ( table.childNodes.length > 0 )
-				    	table.removeChild( table.firstChild );
-			
-				for (fc in folderContent) {
-					
-					x = folderContent[fc];
+                        if (deleteReq.readyState == 4 && deleteReq.status == 200)
+                                updateFolderContent(currPath);
+                }
+                
+                function updateFolderContentCallback() {
+                        
+                        if (folderContentReq.readyState == 4 && folderContentReq.status == 200) {
+                                
+                                treeUpdateCallback();
+                                
+                            var table = document.getElementById("folderContentTable");
+                            var subfolder = document.getElementById("subFolderProto");
+                            var element = document.getElementById("elementProto");
+                            var folderContent = eval('(' + folderContentReq.responseText + ')');
+                                
+                                if ( table.hasChildNodes() )
+                                    while ( table.childNodes.length > 0 )
+                                        table.removeChild( table.firstChild );
+                        
+                                for (fc in folderContent) {
+                                        
+                                        x = folderContent[fc];
 
-					var row;
-					
-					var path;
-					
-					if (x.type == "element"){
-						
-						path = currPath + x.name;
-						
-						row = element.cloneNode(true);
-						row.getElementsByTagName("td")[0].innerHTML = x.name;
-						row.getElementsByTagName("td")[1].getElementsByTagName("button")[0].onclick = showFeed(path);
-						row.getElementsByTagName("td")[1].getElementsByTagName("button")[1].onclick = deleteElementOrSubFolder(path);
-					}
-					else if (x.type == "subfolder"){
-						
-						path = currPath + x.name + "/";
-						
-						row = subfolder.cloneNode(true);
-						row.getElementsByTagName("td")[0].getElementsByTagName("a")[0].innerHTML = x.name;
-						row.getElementsByTagName("td")[0].getElementsByTagName("a")[0].href = '#';
-						row.getElementsByTagName("td")[0].getElementsByTagName("a")[0].onclick = treeNavigation(path);
-						row.getElementsByTagName("td")[1].getElementsByTagName("button")[0].onclick = showFeed(path);
-						row.getElementsByTagName("td")[1].getElementsByTagName("button")[1].onclick = deleteElementOrSubFolder(path);
-					}
-					
-					table.appendChild(row);
-					row.style.visibility = "visible";
-				  }
-			}
-		}
-		
-		function treeUpdateCallback(){
-		
-			var list = document.getElementById("treeItems");
-		    var entry = document.getElementById("treeEntry");
-		    var youAreHere = document.getElementById("youAreHere");
-			
-		    var splitted = currPath.split('/');
-		
-			if ( list.hasChildNodes() )
-			    while ( list.childNodes.length > 0 )
-			    	list.removeChild( list.firstChild );
-			
-			var path = "/";
-			
-			var li = entry.cloneNode(true);
-			li.getElementsByTagName("a")[0].innerHTML = username;
-			li.getElementsByTagName("a")[0].href = '#';
-			li.getElementsByTagName("a")[0].onclick = treeNavigation("/");
-			list.appendChild(li);
-					
-			for(var i=0; i < splitted.length; i++) {
-			
-				var e = splitted[i];
-				
-				while (e.charAt(0)==' ')
-					e = e.substring(1,e.length);
+                                        var row;
+                                        
+                                        var path;
+                                        
+                                        if (x.type == "element"){
+                                                
+                                                path = currPath + x.name;
+                                                
+                                                row = element.cloneNode(true);
+                                                row.getElementsByTagName("td")[0].innerHTML = x.name;
+                                                row.getElementsByTagName("td")[1].getElementsByTagName("button")[0].onclick = showFeed(path);
+                                                row.getElementsByTagName("td")[1].getElementsByTagName("button")[1].onclick = deleteElementOrSubFolder(path);
+                                        }
+                                        else if (x.type == "subfolder"){
+                                                
+                                                path = currPath + x.name + "/";
+                                                
+                                                row = subfolder.cloneNode(true);
+                                                row.getElementsByTagName("td")[0].getElementsByTagName("a")[0].innerHTML = x.name;
+                                                row.getElementsByTagName("td")[0].getElementsByTagName("a")[0].href = '#';
+                                                row.getElementsByTagName("td")[0].getElementsByTagName("a")[0].onclick = treeNavigation(path);
+                                                row.getElementsByTagName("td")[1].getElementsByTagName("button")[0].onclick = showFeed(path);
+                                                row.getElementsByTagName("td")[1].getElementsByTagName("button")[1].onclick = deleteElementOrSubFolder(path);
+                                        }
+                                        
+                                        table.appendChild(row);
+                                        row.style.visibility = "visible";
+                                  }
+                        }
+                }
+                
+                function treeUpdateCallback(){
+                
+                        var list = document.getElementById("treeItems");
+                    var entry = document.getElementById("treeEntry");
+                    var youAreHere = document.getElementById("youAreHere");
+                        
+                    var splitted = currPath.split('/');
+                
+                        if ( list.hasChildNodes() )
+                            while ( list.childNodes.length > 0 )
+                                list.removeChild( list.firstChild );
+                        
+                        var path = "/";
+                        
+                        var li = entry.cloneNode(true);
+                        li.getElementsByTagName("a")[0].innerHTML = username;
+                        li.getElementsByTagName("a")[0].href = '#';
+                        li.getElementsByTagName("a")[0].onclick = treeNavigation("/");
+                        list.appendChild(li);
+                                        
+                        for(var i=0; i < splitted.length; i++) {
+                        
+                                var e = splitted[i];
+                                
+                                while (e.charAt(0)==' ')
+                                        e = e.substring(1,e.length);
 
-				if (e.length != 0){
-				
-					path = path + e + "/";
-				
-					li = entry.cloneNode(true);
-					li.getElementsByTagName("a")[0].innerHTML = e;
-					li.getElementsByTagName("a")[0].href = '#';
-					li.getElementsByTagName("a")[0].onclick = treeNavigation(path);
-					list.appendChild(li);
-				}
-			}			    
-			
-			list.appendChild(youAreHere.cloneNode(true));
-		}
-		
-		function treeNavigation(path){
-			
-			return function(){
-				
-				currPath = path;
-				updateFolderContent(path);
-			}
-		}
-		
-		function showFeed(path){
+                                if (e.length != 0){
+                                
+                                        path = path + e + "/";
+                                
+                                        li = entry.cloneNode(true);
+                                        li.getElementsByTagName("a")[0].innerHTML = e;
+                                        li.getElementsByTagName("a")[0].href = '#';
+                                        li.getElementsByTagName("a")[0].onclick = treeNavigation(path);
+                                        list.appendChild(li);
+                                }
+                        }                           
+                        
+                        list.appendChild(youAreHere.cloneNode(true));
+                }
+                
+                function treeNavigation(path){
+                        
+                        return function(){
+                                
+                                currPath = path;
+                                updateFolderContent(path);
+                        }
+                }
+                
+                function showFeed(path){
 
-			return function(){
+                        return function(){
 
-				filterPath = path;
-			
-				showFeedReq = new XMLHttpRequest();
-				showFeedReq.onreadystatechange = showFeedCallback;
-				showFeedReq.open("GET", serverUrl + username + path + "?feeds=true", true);
-				showFeedReq.send();
-			}
-		}
-		
-		function showFeedCallback(){
-		
-			if (showFeedReq.readyState == 4 && showFeedReq.status == 200)	
-				showFeedCallbackBody(showFeedReq.responseXML);
-		}
-		
-		function showFeedCallbackBody(feedContent){
-		
-			treeUpdateCallback();
-				
-			var table = document.getElementById("feedContentTableBody");
-			var itemProto = document.getElementById("itemProto");
-			
-			if ( table.hasChildNodes() )
-				while ( table.childNodes.length > 0 )
-					table.removeChild( table.firstChild );
-		
-			var y = feedContent.getElementsByTagName("item");
-		
-			for (var i = 0; i < y.length; i++) {
-			
-			
-				var x = y[i];
+                                filterPath = path;
+                        
+                                showFeedReq = new XMLHttpRequest();
+                                showFeedReq.onreadystatechange = showFeedCallback;
+                                showFeedReq.open("GET", serverUrl + username + path + "?feeds=true", true);
+                                showFeedReq.send();
+                        }
+                }
+                
+                function showFeedCallback(){
+                
+                        if (showFeedReq.readyState == 4 && showFeedReq.status == 200)   
+                                showFeedCallbackBody(showFeedReq.responseXML);
+                }
+                
+                function showFeedCallbackBody(feedContent){
+                
+                        treeUpdateCallback();
+                                
+                        var table = document.getElementById("feedContentTableBody");
+                        var itemProto = document.getElementById("itemProto");
+                        
+                        if ( table.hasChildNodes() )
+                                while ( table.childNodes.length > 0 )
+                                        table.removeChild( table.firstChild );
+                
+                        var y = feedContent.getElementsByTagName("item");
+                
+                        for (var i = 0; i < y.length; i++) {
+                        
+                        
+                                var x = y[i];
 
-				var row = itemProto.cloneNode(true);
-				
-				row.getElementsByTagName("td")[0].innerHTML = x.getElementsByTagName("title")[0].firstChild.nodeValue;
-				row.getElementsByTagName("td")[1].innerHTML = x.getElementsByTagName("author")[0].firstChild.nodeValue;
-				row.getElementsByTagName("td")[2].innerHTML = x.getElementsByTagName("category")[0].firstChild.nodeValue;
-				row.getElementsByTagName("td")[3].innerHTML = x.getElementsByTagName("description")[0].firstChild.nodeValue;
-				
-				table.appendChild(row);
-			}
-			
-			document.getElementById("feedContentTable").style.visibility = "visible";
-			
-			document.getElementById("filterButton").onclick = filter(currPath);
-		}
-		
-		function filter(path){
-		
-			return function(){
-			
-				var titleFilter = document.getElementById("titleFilter").value;
-				var autorFilter = document.getElementById("autorFilter").value;
-				var categoryFilter = document.getElementById("categoryFilter").value;
+                                var row = itemProto.cloneNode(true);
+                                
+                                row.getElementsByTagName("td")[0].innerHTML = x.getElementsByTagName("title")[0].firstChild.nodeValue;
+                                row.getElementsByTagName("td")[1].innerHTML = x.getElementsByTagName("author")[0].firstChild.nodeValue;
+                                row.getElementsByTagName("td")[2].innerHTML = x.getElementsByTagName("category")[0].firstChild.nodeValue;
+                                row.getElementsByTagName("td")[3].innerHTML = x.getElementsByTagName("description")[0].firstChild.nodeValue;
+                                
+                                table.appendChild(row);
+                        }
+                        
+                        document.getElementById("feedContentTable").style.visibility = "visible";
+                        
+                        document.getElementById("filterButton").onclick = filter(currPath);
+                }
+                
+                function filter(path){
+                
+                        return function(){
+                        
+                                var titleFilter = document.getElementById("titleFilter").value;
+                                var autorFilter = document.getElementById("autorFilter").value;
+                                var categoryFilter = document.getElementById("categoryFilter").value;
 
-				var reqString = serverUrl + username + filterPath + "?feeds=true";
-				
-				if (titleFilter) reqString = reqString + "&title=" + titleFilter;
-				if (autorFilter) reqString = reqString + "&author=" + autorFilter;
-				if (categoryFilter) reqString = reqString + "&category=" + categoryFilter;
+                                var reqString = serverUrl + username + filterPath + "?feeds=true";
+                                
+                                if (titleFilter) reqString = reqString + "&title=" + titleFilter;
+                                if (autorFilter) reqString = reqString + "&author=" + autorFilter;
+                                if (categoryFilter) reqString = reqString + "&category=" + categoryFilter;
 
-				FilterReq = new XMLHttpRequest();
-				FilterReq.onreadystatechange = showFilteredFeedCallback;
-				FilterReq.open("GET", reqString, true);
-				FilterReq.send();
-			}
-		}
-		
-		function showFilteredFeedCallback(){
-		
-			if (FilterReq.readyState == 4 && FilterReq.status == 200)	
-				showFeedCallbackBody(FilterReq.responseXML);
-		}
-		
-		function deleteElementOrSubFolder(path){
-			
-			return function(){
+                                FilterReq = new XMLHttpRequest();
+                                FilterReq.onreadystatechange = showFilteredFeedCallback;
+                                FilterReq.open("GET", reqString, true);
+                                FilterReq.send();
+                        }
+                }
+                
+                function showFilteredFeedCallback(){
+                
+                        if (FilterReq.readyState == 4 && FilterReq.status == 200)       
+                                showFeedCallbackBody(FilterReq.responseXML);
+                }
+                
+                function deleteElementOrSubFolder(path){
+                        
+                        return function(){
 
-				deleteReq = new XMLHttpRequest();
-				deleteReq.onreadystatechange = updateFolderContentAfterDelete;
-				deleteReq.open("DELETE", serverUrl + username + path, true);
-				deleteReq.send(feedUrl);
-			}
-		}
-		
-	</script>
+                                deleteReq = new XMLHttpRequest();
+                                deleteReq.onreadystatechange = updateFolderContentAfterDelete;
+                                deleteReq.open("DELETE", serverUrl + username + path, true);
+                                deleteReq.send(feedUrl);
+                        }
+                }
+                
+        </script>
 
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta charset="utf-8">
@@ -399,12 +397,12 @@
 
     <title>News Feeds Reader</title>
 
-	<link rel="shortcut icon" href="http://twitter.github.com/bootstrap/examples/images/favicon.ico">
+        <link rel="shortcut icon" href="http://twitter.github.com/bootstrap/examples/images/favicon.ico">
     <link rel="apple-touch-icon" href="http://twitter.github.com/bootstrap/examples/images/apple-touch-icon.png">
     <link rel="apple-touch-icon" sizes="72x72" href="http://twitter.github.com/bootstrap/examples/images/apple-touch-icon-72x72.png">
     <link rel="apple-touch-icon" sizes="114x114" href="http://twitter.github.com/bootstrap/examples/images/apple-touch-icon-114x114.png">
 
-	<link rel="stylesheet" href="http://twitter.github.com/bootstrap/1.4.0/bootstrap.css">
+        <link rel="stylesheet" href="http://twitter.github.com/bootstrap/1.4.0/bootstrap.css">
 
     <style type="text/css">
 
@@ -469,8 +467,8 @@
         <div class="container">
           <a class="brand" href="#">
 
-			DWSS - 2012/Fall - Assignment 3
-		  </a>
+                        DWSS - 2012/Fall - Assignment 3
+                  </a>
           <ul class="nav">
             <li class="active"><a href="#">Home</a></li>
             <li><a href="http://www.cs.bgu.ac.il/~dwss121/Programming/Ex3">About</a></li>
@@ -492,66 +490,66 @@
           <h1>News Feeds Reader</h1>
         </div>
 
-		<div id="mainDiv" style="visibility: collapse">
+                <div id="mainDiv" style="visibility: collapse">
 
-			<div id="treeDiv" class="row">
-			  <div class="span14" id="tree">
-				<ul class="breadcrumb" id="treeItems">
+                        <div id="treeDiv" class="row">
+                          <div class="span14" id="tree">
+                                <ul class="breadcrumb" id="treeItems">
 
-				</ul>
-			  </div>
-			</div>
+                                </ul>
+                          </div>
+                        </div>
 
-			<div class="span14">
-				<div class="well" style="padding: 14px 19px;">
-					<table id="folderContentTable" class="condensed-table">			
-					</table>
-				</div>
-			</div>
+                        <div class="span14">
+                                <div class="well" style="padding: 14px 19px;">
+                                        <table id="folderContentTable" class="condensed-table">                 
+                                        </table>
+                                </div>
+                        </div>
 
-			<div id="inputFeedDiv" class="span14"  style="visibility: collapse">
-				<div class="well" style="padding: 14px 19px;">
-					<div class="inline-inputs">
-						<input class="small" type="text" placeholder="Name" id="feedName"/>
-						<input class="xlarge" type="text" placeholder="URL" id="feedUrl"/>
-						<button class="btn primary" onclick="doPost()">Add Collection</button>
-						&nbsp;
-						<button class="btn info" onclick="doPut()">Add Element</button>
+                        <div id="inputFeedDiv" class="span14"  style="visibility: collapse">
+                                <div class="well" style="padding: 14px 19px;">
+                                        <div class="inline-inputs">
+                                                <input class="small" type="text" placeholder="Name" id="feedName"/>
+                                                <input class="xlarge" type="text" placeholder="URL" id="feedUrl"/>
+                                                <button class="btn primary" onclick="doPost()">Add Collection</button>
+                                                &nbsp;
+                                                <button class="btn info" onclick="doPut()">Add Element</button>
 
-					</div>
-				</div>
-			</div>
+                                        </div>
+                                </div>
+                        </div>
 
-			<div class="span14">
-				<div class="well" style="padding: 14px 19px;">
+                        <div class="span14">
+                                <div class="well" style="padding: 14px 19px;">
 
-				<div class="inline-inputs">
-					<input class="small" type="text" placeholder="Title" id="titleFilter"/>
-					<input class="small" type="text" placeholder="Autor" id="autorFilter"/>
+                                <div class="inline-inputs">
+                                        <input class="small" type="text" placeholder="Title" id="titleFilter"/>
+                                        <input class="small" type="text" placeholder="Autor" id="autorFilter"/>
 
-					<input class="small" type="text" placeholder="Category" id="categoryFilter"/>
-					&nbsp;
-					<button class="btn info" onclick="#" id="filterButton">Filter</button>
-				</div>
-				<div>&nbsp;</div>
-				<table id="feedContentTable" class="condensed-table" style="visibility: collapse">
-					<thead>
-					  <tr>
+                                        <input class="small" type="text" placeholder="Category" id="categoryFilter"/>
+                                        &nbsp;
+                                        <button class="btn info" onclick="#" id="filterButton">Filter</button>
+                                </div>
+                                <div>&nbsp;</div>
+                                <table id="feedContentTable" class="condensed-table" style="visibility: collapse">
+                                        <thead>
+                                          <tr>
 
-						<th>Title</th>
-						<th>Author</th>
-						<th>Category</th>
-						<th>Description</th>
-					  </tr>
-					</thead>
-					<tbody id="feedContentTableBody">
+                                                <th>Title</th>
+                                                <th>Author</th>
+                                                <th>Category</th>
+                                                <th>Description</th>
+                                          </tr>
+                                        </thead>
+                                        <tbody id="feedContentTableBody">
 
-					</tbody>
-				  </table>
+                                        </tbody>
+                                  </table>
 
-				</div>
-			</div>
-		</div>
+                                </div>
+                        </div>
+                </div>
       </div>
 
       <footer>
@@ -561,43 +559,43 @@
 
     </div> <!-- /container -->
 
-	<!--  PROTOTYPES -->
-	<table style="visibility: collapse">
-		<tr id="subFolderProto" style="visibility: collapse">
-			<td><a></a></td>
-			<td class="span8 offset2">
+        <!--  PROTOTYPES -->
+        <table style="visibility: collapse">
+                <tr id="subFolderProto" style="visibility: collapse">
+                        <td><a></a></td>
+                        <td class="span8 offset2">
 
-				<button class="btn success" onClick="#">Show</button>
-				&nbsp;
-				<button class="btn danger" onClick="#">Delete</button>
-			</td>
-		</tr>
-		
-		<tr id="elementProto" style="visibility: collapse">
-			<td></td>
-			<td class="span8 offset2">
+                                <button class="btn success" onClick="#">Show</button>
+                                &nbsp;
+                                <button class="btn danger" onClick="#">Delete</button>
+                        </td>
+                </tr>
+                
+                <tr id="elementProto" style="visibility: collapse">
+                        <td></td>
+                        <td class="span8 offset2">
 
-				<button class="btn success" onClick="#">Show</button>
-				&nbsp;
-				<button class="btn danger" onClick="#">Delete</button>
-			</td>
-		</tr>
-		
-		<tr id="itemProto">
-			<td></td>
-			<td></td>
+                                <button class="btn success" onClick="#">Show</button>
+                                &nbsp;
+                                <button class="btn danger" onClick="#">Delete</button>
+                        </td>
+                </tr>
+                
+                <tr id="itemProto">
+                        <td></td>
+                        <td></td>
 
-			<td></td>
-			<td></td>
-		</tr>
-	</table>
+                        <td></td>
+                        <td></td>
+                </tr>
+        </table>
 
-	<ul style="visibility: collapse">
-		<li id="treeEntry"><a href="#" onClick="#"></a> <span class="divider">/</span></li>
-		<li id="youAreHere" class="active">You are here</li>
+        <ul style="visibility: collapse">
+                <li id="treeEntry"><a href="#" onClick="#"></a> <span class="divider">/</span></li>
+                <li id="youAreHere" class="active">You are here</li>
 
-	</ul>
-	
+        </ul>
+        
   </body>
 
 </html>
