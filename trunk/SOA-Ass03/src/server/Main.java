@@ -10,21 +10,22 @@ import feeds.FeedHandler;
 public class Main {
 
 	public static final int SERVER_PORT = 8994;
-	public static final String SERVER_NAME = "soa2";
+	// public static final String SERVER_NAME = "soa2";
+	public static final String SERVER_NAME = "127.0.0.1";
 	public static final String FULL_SERVER_NAME = "http://127.0.0.1:8994/ex3";
 
-	public static void main(String[] args) {
+	public static void main(final String[] args) {
 
-		Server server = new Server(SERVER_PORT);
+		final Server server = new Server(SERVER_PORT);
 
-		ServletContextHandler ctx = new ServletContextHandler(
+		final ServletContextHandler ctx = new ServletContextHandler(
 				ServletContextHandler.SESSIONS);
 
 		ctx.setContextPath("/ex3");
 		ctx.addServlet(new ServletHolder(new MainServlet(new FeedHandler())),
 				"/*");
 
-		HandlerList list = new HandlerList();
+		final HandlerList list = new HandlerList();
 
 		list.addHandler(ctx);
 
@@ -37,7 +38,7 @@ public class Main {
 				server.start();
 				server.join();
 				break;
-			} catch (Throwable e) {
+			} catch (final Throwable e) {
 				e.printStackTrace();
 			}
 		}
