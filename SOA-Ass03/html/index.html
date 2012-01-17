@@ -336,10 +336,22 @@
 
                                 var row = itemProto.cloneNode(true);
                                 
-                                row.getElementsByTagName("td")[0].innerHTML = x.getElementsByTagName("title")[0].firstChild.nodeValue;
-                                row.getElementsByTagName("td")[1].innerHTML = x.getElementsByTagName("author")[0].firstChild.nodeValue;
-                                row.getElementsByTagName("td")[2].innerHTML = x.getElementsByTagName("category")[0].firstChild.nodeValue;
-                                row.getElementsByTagName("td")[3].innerHTML = x.getElementsByTagName("description")[0].firstChild.nodeValue;
+                                var titles = x.getElementsByTagName("title");
+                                var authors = x.getElementsByTagName("author");
+                                var categories = x.getElementsByTagName("category");
+                                var descriptions = x.getElementsByTagName("description");
+                                
+                                if (titles.length > 0)                                
+                                	row.getElementsByTagName("td")[0].innerHTML = titles[0].firstChild.nodeValue;
+                                	
+                                if (authors.length > 0) 
+                                	row.getElementsByTagName("td")[1].innerHTML = authors[0].firstChild.nodeValue;
+                                	
+                                if (categories.length > 0) 
+                                	row.getElementsByTagName("td")[2].innerHTML = categories[0].firstChild.nodeValue;
+                                	
+                                if (descriptions.length > 0) 
+                                	row.getElementsByTagName("td")[3].innerHTML = descriptions[0].firstChild.nodeValue;
                                 
                                 table.appendChild(row);
                         }
