@@ -63,7 +63,9 @@ public class DOMStreamReader implements Runnable {
 		if (getFilters() != null && !getFilters().isEmpty())
 			node = filter(node);
 		
-		getNodesArray().add(node);
+		synchronized (_nodesArray) {
+			getNodesArray().add(node);
+		}
 	}
 
 	protected Node readFeedContent() {
@@ -92,7 +94,7 @@ public class DOMStreamReader implements Runnable {
 				getTransformer().transform(s, r);
 				break;
 			}
-			catch (TransformerException e) {
+			catch (Exception e) {
 				e.printStackTrace();
 			}
 			finally{
