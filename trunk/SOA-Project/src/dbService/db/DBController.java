@@ -7,6 +7,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 import common.Post;
 
@@ -106,10 +108,8 @@ public class DBController {
 	}
 
 	public ArrayList<Post> getPostsOfSpecificUser(final String pAuthor) throws Exception {
-		final ArrayList<Post> result = new ArrayList<Post>();
 
 		final String sqlSelectFromPosts = "SELECT * FROM posts WHERE author = ?";
-		final String sqlSelectFromTags = "SELECT * FROM tags WHERE id = ?";
 
 		PreparedStatement pst = null;
 
@@ -121,6 +121,20 @@ public class DBController {
 
 		pst.close();
 
+		final ArrayList<Post> result = postsFromResultSet(rs);
+
+		return result;
+
+	}
+
+	/**
+	 * @param rs
+	 * @return the posts matching to the id's in the result set
+	 * @throws SQLException
+	 */
+	private ArrayList<Post> postsFromResultSet(final ResultSet rs) throws SQLException {
+		PreparedStatement pst;
+		final ArrayList<Post> result = new ArrayList<Post>();
 		while (rs.next()) {
 
 			final int id = rs.getInt(1);
@@ -131,13 +145,13 @@ public class DBController {
 
 			final ArrayList<String> tags = new ArrayList<String>();
 
+			final String sqlSelectFromTags = "SELECT tag FROM tags WHERE id = ?";
 			pst = mConn.prepareStatement(sqlSelectFromTags);
 			pst.setInt(1, id);
-
 			final ResultSet rsFromTags = pst.executeQuery();
 
 			while (rsFromTags.next()) {
-				tags.add(rsFromTags.getString(2));
+				tags.add(rsFromTags.getString(1));
 			}
 
 			pst.close();
@@ -145,21 +159,76 @@ public class DBController {
 			final Post post = new Post(title, date, content, author, tags);
 			result.add(post);
 		}
+		return result;
+	}
+
+	/**
+	 * 
+	 * @param pStartDate
+	 * @param pEndDate
+	 * @return the posts who's publishing date is between pStartDate and
+	 *         pEndDate
+	 * @throws SQLException
+	 */
+	public ArrayList<Post> getPostsBetweenSpecificDates(final Date pStartDate, final Date pEndDate)
+			throws SQLException {
+		final String sqlSelectFromPosts = "SELECT * FROM posts WHERE date <= ? AND date => ?";
+
+		PreparedStatement pst = null;
+
+		pst = mConn.prepareStatement(sqlSelectFromPosts);
+
+		pst.setDate(1, pStartDate);
+		pst.setDate(2, pEndDate);
+
+		final ResultSet rs = pst.executeQuery();
+
+		pst.close();
+
+		final ArrayList<Post> result = postsFromResultSet(rs);
 
 		return result;
 
 	}
 
-	public ArrayList<Post> getPostsBetweenSpecificDates(final Date pStartDate, final Date pEndDate) {
-		// TODO Auto-generated method stub
+	/**
+	 * 
+	 * @param pTags
+	 * @return the posts who have at least on tag from pTags
+	 * @throws SQLException
+	 */
+	public ArrayList<Post> getPostsOfTheseTags(final ArrayList<String> pTags) throws SQLException {
+		final Set<Post> resultSet = new HashSet<Post>();
 
-		return null;
+		// get the posts' ids who have at least on tag from pTags
+		final String sqlSelectIdFromTags = "SELECT id FROM tags WHERE tag = ?";
+		// the posts' ids who have at least on tag from pTags
+		final Set<Integer> ids = new HashSet<Integer>();
+		for (final String tag : pTags) {
+			final PreparedStatement pst = mConn.prepareStatement(sqlSelectIdFromTags);
 
-	}
+			pst.setString(1, tag);
+			final ResultSet resultIds = pst.executeQuery();
+			pst.close();
 
-	public ArrayList<Post> getPostsOfTheseTags(final ArrayList<String> arrayList) {
-		final ArrayList<Post> result = new ArrayList<Post>();
+			while (resultIds.next()) {
+				ids.add(resultIds.getInt(1));
+			}
+		}
 
+		// get the posts according to the ids
+		final String sqlSelectIdFromPosts = "SELECT * FROM posts WHERE id = ?";
+		for (final Integer id : ids) {
+			final PreparedStatement pst = mConn.prepareStatement(sqlSelectIdFromPosts);
+
+			pst.setInt(1, id);
+			final ResultSet resultPosts = pst.executeQuery();
+			pst.close();
+			resultSet.addAll(postsFromResultSet(resultPosts));
+
+		}
+
+		final ArrayList<Post> result = new ArrayList<Post>(resultSet);
 		return result;
 	}
 }
