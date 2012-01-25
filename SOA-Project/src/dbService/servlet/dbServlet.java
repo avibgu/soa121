@@ -19,9 +19,9 @@ public class dbServlet extends HttpServlet {
 
 	protected DBController mDBController;
 
-	public dbServlet() {
+	public dbServlet() throws Exception {
 
-		mDBController = new DBController();
+		this.mDBController = new DBController();
 	}
 
 	@Override
@@ -31,10 +31,11 @@ public class dbServlet extends HttpServlet {
 		final long endDate = 0;
 
 		try {
-			final ArrayList<Post> postsOfSpecificUser1 = mDBController.getPostsOfSpecificUser("username");
-			final ArrayList<Post> postsOfSpecificUser2 = mDBController.getPostsBetweenSpecificDates(new Date(
-					startDate), new Date(endDate));
-			final ArrayList<Post> postsOfSpecificUser3 = mDBController
+			final ArrayList<Post> postsOfSpecificUser1 = this.mDBController
+					.getPostsOfSpecificUser("username");
+			final ArrayList<Post> postsOfSpecificUser2 = this.mDBController.getPostsBetweenSpecificDates(
+					new Date(startDate), new Date(endDate));
+			final ArrayList<Post> postsOfSpecificUser3 = this.mDBController
 					.getPostsOfTheseTags(new ArrayList<String>());
 		} catch (final Exception e) {
 			// TODO Auto-generated catch block
@@ -60,6 +61,6 @@ public class dbServlet extends HttpServlet {
 
 		final Post post = new Post(req);
 
-		mDBController.createNewPost(post);
+		this.mDBController.createNewPost(post);
 	}
 }

@@ -11,31 +11,29 @@ public class Main {
 
 	private static final int SERVER_PORT = 17171;
 
-	public static void main(String[] args) {
+	public static void main(final String[] args) throws Exception {
 
-		Server server = new Server(SERVER_PORT);
+		final Server server = new Server(SERVER_PORT);
 
-		ServletContextHandler ctx =
-			new ServletContextHandler(ServletContextHandler.SESSIONS);
+		final ServletContextHandler ctx = new ServletContextHandler(ServletContextHandler.SESSIONS);
 
 		ctx.setContextPath("");
 		ctx.addServlet(new ServletHolder(new dbServlet()), "/*");
 
-		HandlerList list = new HandlerList();
+		final HandlerList list = new HandlerList();
 
 		list.addHandler(ctx);
 
 		server.setHandler(list);
 
-		while (true){
+		while (true) {
 
 			try {
 
 				server.start();
 				server.join();
 				break;
-			}
-			catch (Throwable e) {
+			} catch (final Throwable e) {
 				e.printStackTrace();
 			}
 		}
