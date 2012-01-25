@@ -1,24 +1,13 @@
 package dbService.servlet;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.sql.Date;
+import java.util.ArrayList;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import javax.xml.transform.Result;
-import javax.xml.transform.Source;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerConfigurationException;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMResult;
-import javax.xml.transform.stream.StreamSource;
-
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 
 import common.Post;
 
@@ -36,12 +25,19 @@ public class dbServlet extends HttpServlet {
 	}
 
 	@Override
-	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
-			throws ServletException, IOException {
+	protected void doGet(final HttpServletRequest req, final HttpServletResponse resp) {
 
-		mDBController.getPostsOfSpecificUser();
-		mDBController.getPostsBetweenSpecificDates();
-		mDBController.getPostsOfTheseTags();
+		final long startDate = 0;
+		final long endDate = 0;
+
+		try {
+			final ArrayList<Post> postsOfSpecificUser = mDBController.getPostsOfSpecificUser("username");
+		} catch (final Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		mDBController.getPostsBetweenSpecificDates(new Date(startDate), new Date(endDate));
+		mDBController.getPostsOfTheseTags(new ArrayList<String>());
 	}
 
 	// <post>
@@ -57,65 +53,11 @@ public class dbServlet extends HttpServlet {
 	// <content></content>
 	// </post>
 	@Override
-	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
+	protected void doPost(final HttpServletRequest req, final HttpServletResponse resp)
 			throws ServletException, IOException {
 
-		Post post = null;
-
-		try {
-			post = parseXMLToPost(req);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		final Post post = new Post(req);
 
 		mDBController.createNewPost(post);
-	}
-
-	private Post parseXMLToPost(HttpServletRequest req) throws Exception {
-
-		TransformerFactory f = TransformerFactory.newInstance();
-		Transformer t = f.newTransformer();
-
-		Source s = new StreamSource(req.getInputStream());
-		Result r = new DOMResult();
-
-		t.transform(s, r);
-
-		Node n = ((DOMResult) r).getNode();
-
-		String title = "";
-		String author = "";
-		ArrayList<String> tagsList = new ArrayList<String>();
-		String content = "";
-
-		NodeList childs = n.getChildNodes();
-
-		for (int i = 0; i < childs.getLength(); i++) {
-
-			Node child = childs.item(i);
-
-			if (child.getNodeName().equals("title"))
-				title = child.getNodeValue();
-
-			else if (child.getNodeName().equals("author"))
-				author = child.getNodeValue();
-
-			else if (child.getNodeName().equals("content"))
-				content = child.getNodeValue();
-
-			else if (child.getNodeName().equals("tags")) {
-
-				NodeList tags = child.getChildNodes();
-
-				for (int j = 0; j < tags.getLength(); j++)
-					tagsList.add(tags.item(j).getNodeValue());
-			}
-		}
-
-		Post post = new Post(title, new Date(new java.util.Date().getTime()),
-				content, author, tagsList);
-
-		return post;
 	}
 }

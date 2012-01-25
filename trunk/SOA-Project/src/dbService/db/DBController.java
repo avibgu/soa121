@@ -1,9 +1,12 @@
 package dbService.db;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 import common.Post;
 
@@ -11,22 +14,22 @@ public class DBController {
 
 	private Connection mConn;
 
-	private String mUsername;
-	private String mPassword;
+	private final String mUsername;
+	private final String mPassword;
 
-	private String mDBAddrres;
+	private final String mDBAddrres;
 
 	private int mLastPostID;
 
 	public DBController() {
-		this("","");
+		this("", "");
 	}
 
-	public DBController(String pUsername, String pPassword) {
+	public DBController(final String pUsername, final String pPassword) {
 		this(pUsername, pPassword, "jdbc:mysql://127.0.0.1");
 	}
 
-	public DBController(String pUsername, String pPassword, String pDBAddrres) {
+	public DBController(final String pUsername, final String pPassword, final String pDBAddrres) {
 
 		mConn = null;
 
@@ -48,8 +51,7 @@ public class DBController {
 
 			// Do something with the Connection
 
-
-		} catch (SQLException ex) {
+		} catch (final SQLException ex) {
 
 			// handle any errors
 			System.out.println("SQLException: " + ex.getMessage());
@@ -58,10 +60,10 @@ public class DBController {
 		}
 	}
 
-	public void createNewPost(Post pPost) {
+	public void createNewPost(final Post pPost) {
 
-		String sqlForPostTable = "insert into posts values (?,?,?,?,?)";
-		String sqlForTagsTable = "insert into tags values (?,?)";
+		final String sqlForPostTable = "insert into posts values (?,?,?,?,?)";
+		final String sqlForTagsTable = "insert into tags values (?,?)";
 
 		PreparedStatement pst = null;
 
@@ -81,7 +83,7 @@ public class DBController {
 
 			pst.close();
 
-			for (String tag : pPost.getTags()) {
+			for (final String tag : pPost.getTags()) {
 
 				pst = mConn.prepareStatement(sqlForTagsTable);
 
@@ -95,11 +97,69 @@ public class DBController {
 				pst.close();
 			}
 
-		} catch (SQLException e) {
+		} catch (final SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
 		mLastPostID++;
+	}
+
+	public ArrayList<Post> getPostsOfSpecificUser(final String pAuthor) throws Exception {
+		final ArrayList<Post> result = new ArrayList<Post>();
+
+		final String sqlSelectFromPosts = "SELECT * FROM posts WHERE author = ?";
+		final String sqlSelectFromTags = "SELECT * FROM tags WHERE id = ?";
+
+		PreparedStatement pst = null;
+
+		pst = mConn.prepareStatement(sqlSelectFromPosts);
+
+		pst.setString(1, pAuthor);
+
+		final ResultSet rs = pst.executeQuery();
+
+		pst.close();
+
+		while (rs.next()) {
+
+			final int id = rs.getInt(1);
+			final String title = rs.getString(2);
+			final Date date = rs.getDate(3);
+			final String content = rs.getString(4);
+			final String author = rs.getString(5);
+
+			final ArrayList<String> tags = new ArrayList<String>();
+
+			pst = mConn.prepareStatement(sqlSelectFromTags);
+			pst.setInt(1, id);
+
+			final ResultSet rsFromTags = pst.executeQuery();
+
+			while (rsFromTags.next()) {
+				tags.add(rsFromTags.getString(2));
+			}
+
+			pst.close();
+
+			final Post post = new Post(title, date, content, author, tags);
+			result.add(post);
+		}
+
+		return result;
+
+	}
+
+	public ArrayList<Post> getPostsBetweenSpecificDates(final Date pStartDate, final Date pEndDate) {
+		// TODO Auto-generated method stub
+
+		return null;
+
+	}
+
+	public ArrayList<Post> getPostsOfTheseTags(final ArrayList<String> arrayList) {
+		final ArrayList<Post> result = new ArrayList<Post>();
+
+		return result;
 	}
 }
