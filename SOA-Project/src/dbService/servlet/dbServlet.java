@@ -39,6 +39,9 @@ public class dbServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 
+		mDBController.getPostsOfSpecificUser();
+		mDBController.getPostsBetweenSpecificDates();
+		mDBController.getPostsOfTheseTags();
 	}
 
 	// <post>
