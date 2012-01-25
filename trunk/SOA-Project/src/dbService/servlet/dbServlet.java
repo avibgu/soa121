@@ -43,11 +43,17 @@ public class dbServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 
+		Post post = parseXMLToPost(req);
+
+		mDBController.createNewPost(post);
+	}
+
+	private Post parseXMLToPost(HttpServletRequest req) {
+
 		ArrayList<String> tagsList = new ArrayList<String>();
 
 		Post post = new Post("title", new Date(new java.util.Date().getTime()),
 				"content", "author", tagsList);
-
-		mDBController.createNewPost(post);
+		return post;
 	}
 }
