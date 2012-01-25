@@ -31,13 +31,15 @@ public class dbServlet extends HttpServlet {
 		final long endDate = 0;
 
 		try {
-			final ArrayList<Post> postsOfSpecificUser = mDBController.getPostsOfSpecificUser("username");
+			final ArrayList<Post> postsOfSpecificUser1 = mDBController.getPostsOfSpecificUser("username");
+			final ArrayList<Post> postsOfSpecificUser2 = mDBController.getPostsBetweenSpecificDates(new Date(
+					startDate), new Date(endDate));
+			final ArrayList<Post> postsOfSpecificUser3 = mDBController
+					.getPostsOfTheseTags(new ArrayList<String>());
 		} catch (final Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		mDBController.getPostsBetweenSpecificDates(new Date(startDate), new Date(endDate));
-		mDBController.getPostsOfTheseTags(new ArrayList<String>());
 	}
 
 	// <post>
