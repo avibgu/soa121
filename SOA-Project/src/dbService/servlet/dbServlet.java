@@ -9,9 +9,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import common.DBController;
 import common.Post;
 
-import dbService.db.DBController;
 
 public class dbServlet extends HttpServlet {
 
@@ -24,37 +24,6 @@ public class dbServlet extends HttpServlet {
 		this.mDBController = new DBController();
 	}
 
-	@Override
-	protected void doGet(final HttpServletRequest req, final HttpServletResponse resp) {
-
-		final long startDate = 0;
-		final long endDate = 0;
-
-		try {
-			final ArrayList<Post> postsOfSpecificUser1 = this.mDBController
-					.getPostsOfSpecificUser("username");
-			final ArrayList<Post> postsOfSpecificUser2 = this.mDBController.getPostsBetweenSpecificDates(
-					new Date(startDate), new Date(endDate));
-			final ArrayList<Post> postsOfSpecificUser3 = this.mDBController
-					.getPostsOfTheseTags(new ArrayList<String>());
-		} catch (final Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-
-	// <post>
-	// <title></title>
-	// <author></author>
-	// <tags>
-	// <tag></tag>
-	// <tag></tag>
-	// <tag></tag>
-	// <tag></tag>
-	// <tag></tag>
-	// </tags>
-	// <content></content>
-	// </post>
 	@Override
 	protected void doPost(final HttpServletRequest req, final HttpServletResponse resp)
 			throws ServletException, IOException {

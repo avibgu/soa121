@@ -1,4 +1,4 @@
-package dbService.db;
+package common;
 
 import java.sql.Connection;
 import java.sql.Date;
@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
-import common.Post;
 
 public class DBController {
 
@@ -24,16 +23,16 @@ public class DBController {
 
 	private int mLastPostID;
 
-	public DBController() throws SQLException {
+	public DBController() {
 		this("", "");
 	}
 
-	public DBController(final String pUsername, final String pPassword) throws SQLException {
+	public DBController(final String pUsername, final String pPassword) {
 		this(pUsername, pPassword, "jdbc:mysql://127.0.0.1:3306");
 	}
 
-	public DBController(final String pUsername, final String pPassword, final String pDBAddrres)
-			throws SQLException {
+	public DBController(final String pUsername, final String pPassword,
+			final String pDBAddrres) {
 
 		this.mConn = null;
 
@@ -44,7 +43,12 @@ public class DBController {
 
 		this.mLastPostID = 0;
 
-		this.createConnection();
+		try {
+			this.createConnection();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	protected void createConnection() throws SQLException {
@@ -52,25 +56,28 @@ public class DBController {
 		try {
 
 			// create the DB is not exist
-			this.mConn = DriverManager.getConnection(this.mDBAddrres, "niram", "a");
+			this.mConn = DriverManager.getConnection(this.mDBAddrres, "niram",
+					"a");
 			final Statement stmt0 = this.mConn.createStatement();
 			stmt0.executeUpdate("CREATE DATABASE IF NOT EXISTS testdb");
 			this.mConn.close();
 
 			// update connection to automatically connect to that db
-			this.mConn = DriverManager.getConnection(this.mDBAddrres + "/testdb", "niram", "a");
+			this.mConn = DriverManager.getConnection(this.mDBAddrres
+					+ "/testdb", "niram", "a");
 
 			// create the Posts table
 			final Statement stmt1 = this.mConn.createStatement();
-			final String creationPostsSql = "CREATE TABLE IF NOT EXISTS Posts(" + "id INT  PRIMARY KEY, "
-					+ "title VARCHAR(100), " + "date DATE, " + "content VARCHAR(256), "
+			final String creationPostsSql = "CREATE TABLE IF NOT EXISTS Posts("
+					+ "id INT  PRIMARY KEY, " + "title VARCHAR(100), "
+					+ "date DATE, " + "content VARCHAR(256), "
 					+ "author VARCHAR(100))";
 			stmt1.executeUpdate(creationPostsSql);
 
 			// create the Tags table
 			final Statement stmt2 = this.mConn.createStatement();
-			final String creationTagsSql = "CREATE TABLE IF NOT EXISTS Tags(" + "id INT, "
-					+ "tag VARCHAR(100),primary key (id, tag),"
+			final String creationTagsSql = "CREATE TABLE IF NOT EXISTS Tags("
+					+ "id INT, " + "tag VARCHAR(100),primary key (id, tag),"
 					+ "FOREIGN KEY(id) REFERENCES Posts(Id) ON DELETE CASCADE)";
 			stmt2.executeUpdate(creationTagsSql);
 
@@ -103,7 +110,8 @@ public class DBController {
 
 			int numOfLinesChanged = pst.executeUpdate();
 
-			System.err.println("inserted to posts: " + numOfLinesChanged + " lines");
+			System.err.println("inserted to posts: " + numOfLinesChanged
+					+ " lines");
 
 			pst.close();
 
@@ -116,7 +124,8 @@ public class DBController {
 
 				numOfLinesChanged = pst.executeUpdate();
 
-				System.err.println("inserted to tags: " + numOfLinesChanged + " lines");
+				System.err.println("inserted to tags: " + numOfLinesChanged
+						+ " lines");
 
 				pst.close();
 			}
@@ -129,7 +138,8 @@ public class DBController {
 		this.mLastPostID++;
 	}
 
-	public ArrayList<Post> getPostsOfSpecificUser(final String pAuthor) throws Exception {
+	public ArrayList<Post> getPostsOfSpecificUser(final String pAuthor)
+			throws Exception {
 
 		final String sqlSelectFromPosts = "SELECT * FROM Posts WHERE author = ?";
 
@@ -154,7 +164,8 @@ public class DBController {
 	 * @return the posts matching to the id's in the result set
 	 * @throws SQLException
 	 */
-	private ArrayList<Post> postsFromResultSet(final ResultSet rs) throws SQLException {
+	private ArrayList<Post> postsFromResultSet(final ResultSet rs)
+			throws SQLException {
 		PreparedStatement pst;
 		final ArrayList<Post> result = new ArrayList<Post>();
 		while (rs.next()) {
@@ -192,8 +203,8 @@ public class DBController {
 	 *         pEndDate
 	 * @throws SQLException
 	 */
-	public ArrayList<Post> getPostsBetweenSpecificDates(final Date pStartDate, final Date pEndDate)
-			throws SQLException {
+	public ArrayList<Post> getPostsBetweenSpecificDates(final Date pStartDate,
+			final Date pEndDate) throws SQLException {
 		final String sqlSelectFromPosts = "SELECT * FROM Posts WHERE date <= ? AND date => ?";
 
 		PreparedStatement pst = null;
@@ -219,7 +230,8 @@ public class DBController {
 	 * @return the posts who have at least on tag from pTags
 	 * @throws SQLException
 	 */
-	public ArrayList<Post> getPostsOfTheseTags(final ArrayList<String> pTags) throws SQLException {
+	public ArrayList<Post> getPostsOfTheseTags(final ArrayList<String> pTags)
+			throws SQLException {
 		final Set<Post> resultSet = new HashSet<Post>();
 
 		// get the posts' ids who have at least on tag from pTags
@@ -227,7 +239,8 @@ public class DBController {
 		// the posts' ids who have at least on tag from pTags
 		final Set<Integer> ids = new HashSet<Integer>();
 		for (final String tag : pTags) {
-			final PreparedStatement pst = this.mConn.prepareStatement(sqlSelectIdFromTags);
+			final PreparedStatement pst = this.mConn
+					.prepareStatement(sqlSelectIdFromTags);
 
 			pst.setString(1, tag);
 			final ResultSet resultIds = pst.executeQuery();
@@ -241,7 +254,8 @@ public class DBController {
 		// get the posts according to the ids
 		final String sqlSelectIdFromPosts = "SELECT * FROM Posts WHERE id = ?";
 		for (final Integer id : ids) {
-			final PreparedStatement pst = this.mConn.prepareStatement(sqlSelectIdFromPosts);
+			final PreparedStatement pst = this.mConn
+					.prepareStatement(sqlSelectIdFromPosts);
 
 			pst.setInt(1, id);
 			final ResultSet resultPosts = pst.executeQuery();

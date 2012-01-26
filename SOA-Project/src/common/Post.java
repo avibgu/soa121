@@ -42,6 +42,18 @@ public class Post {
 		}
 	}
 
+	// <post>
+	// <title></title>
+	// <author></author>
+	// <tags>
+	// <tag></tag>
+	// <tag></tag>
+	// <tag></tag>
+	// <tag></tag>
+	// <tag></tag>
+	// </tags>
+	// <content></content>
+	// </post>
 	private void parseXMLToPost(final HttpServletRequest req) throws Exception {
 
 		mTags = new ArrayList<String>();
