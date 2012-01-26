@@ -6,6 +6,7 @@ import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 
 import aggrService.servlet.AggrServlet;
+import aggrService.servlet.HttpPageServlet;
 
 public class Main {
 
@@ -19,7 +20,8 @@ public class Main {
 			new ServletContextHandler(ServletContextHandler.SESSIONS);
 
 		ctx.setContextPath("");
-		ctx.addServlet(new ServletHolder(new AggrServlet()), "/*");
+		ctx.addServlet(new ServletHolder(new AggrServlet()), "/aggr/*");
+		ctx.addServlet(new ServletHolder(new HttpPageServlet()), "/");		//TODO in case there is a problem to get index.html, change it to "/*"
 
 		HandlerList list = new HandlerList();
 

@@ -34,8 +34,6 @@ public class AggrServlet extends HttpServlet {
 		ArrayList<String> tags = new ArrayList<String>();	//TODO
 		
 		ArrayList<Post> posts = null;
-		
-		// TODO: if the user wants to get the BASIC HTML we will give him that..
 
 		try {
 			
