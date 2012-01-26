@@ -28,10 +28,10 @@ public class AggrServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 
-		final long startDate = 0;							//TODO
-		final long endDate = 0;								//TODO
-		final String author = "";							//TODO
-		ArrayList<String> tags = new ArrayList<String>();	//TODO
+		final long startDate = 0;							//TODO get it from req
+		final long endDate = 0;								//TODO get it from req
+		final String author = "";							//TODO get it from req
+		ArrayList<String> tags = new ArrayList<String>();	//TODO get it from req
 		
 		ArrayList<Post> posts = null;
 
