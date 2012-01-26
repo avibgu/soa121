@@ -20,7 +20,11 @@ public class HtmlServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 
-		File file = new File("html/index.html");
+		sendFileResponse(resp, new File("html/index.html"));
+	}
+
+	protected void sendFileResponse(HttpServletResponse resp, File file)
+			throws IOException {
 		PrintWriter printWriter = resp.getWriter();
 		
 		FileInputStream fis = null;

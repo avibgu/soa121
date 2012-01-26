@@ -2,6 +2,7 @@ package aggrService.main;
 
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.HandlerList;
+import org.eclipse.jetty.server.handler.ResourceHandler;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 
@@ -20,11 +21,16 @@ public class Main {
 
 		ctx.setContextPath("");
 		ctx.addServlet(new ServletHolder(new AggrServlet()), "/aggr/*");
-		ctx.addServlet(new ServletHolder(new HtmlServlet()), "/");		//TODO in case there is a problem to get index.html, change it to "/*"
 
+		ResourceHandler rh = new ResourceHandler();
+		
+		rh.setResourceBase("./html/");
+		rh.setWelcomeFiles(new String[]{"index.html"});
+		
 		HandlerList list = new HandlerList();
 
 		list.addHandler(ctx);
+		list.addHandler(rh);
 
 		server.setHandler(list);
 
