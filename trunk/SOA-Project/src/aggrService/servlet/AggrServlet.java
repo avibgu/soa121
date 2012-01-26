@@ -34,12 +34,13 @@ public class AggrServlet extends HttpServlet {
 		ArrayList<String> tags = new ArrayList<String>();	//TODO
 		
 		ArrayList<Post> posts = null;
-
-		// TODO: decide which posts to user requested..
 		
 		// TODO: if the user wants to get the BASIC HTML we will give him that..
 
 		try {
+			
+			// TODO: decide which posts to user requested..
+			
 			posts = this.mDBController.getPostsOfSpecificAuthor(author);
 			posts = this.mDBController.getPostsBetweenSpecificDates(new Date(
 					startDate), new Date(endDate));
