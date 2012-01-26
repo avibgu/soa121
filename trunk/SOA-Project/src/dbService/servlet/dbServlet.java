@@ -1,8 +1,7 @@
 package dbService.servlet;
 
 import java.io.IOException;
-import java.sql.Date;
-import java.util.ArrayList;
+import java.io.PrintWriter;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -31,5 +30,16 @@ public class dbServlet extends HttpServlet {
 		final Post post = new Post(req);
 
 		this.mDBController.createNewPost(post);
+		
+		sendTextResponse(resp, "POSTED");
+	}
+	
+	protected void sendTextResponse(HttpServletResponse resp,
+			String answer) throws IOException {
+
+		resp.setCharacterEncoding("UTF-8");
+		PrintWriter out = resp.getWriter();
+		out.println(answer);
+		out.close();
 	}
 }

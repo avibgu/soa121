@@ -1,6 +1,7 @@
 package aggrService.servlet;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.sql.Date;
 import java.util.ArrayList;
 
@@ -12,36 +13,65 @@ import javax.servlet.http.HttpServletResponse;
 import common.DBController;
 import common.Post;
 
-public class AggrServlet extends HttpServlet{
+public class AggrServlet extends HttpServlet {
 
 	private static final long serialVersionUID = -8677500568357771288L;
 
 	protected DBController mDBController;
 
-	public AggrServlet(){
+	public AggrServlet() {
 
 		this.mDBController = new DBController();
 	}
-	
+
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 
-		final long startDate = 0;
-		final long endDate = 0;
-
-		//TODO: if the user wants to get the BASIC HTML we will give him that..
+		final long startDate = 0;							//TODO
+		final long endDate = 0;								//TODO
+		final String author = "";							//TODO
+		ArrayList<String> tags = new ArrayList<String>();	//TODO
 		
+		ArrayList<Post> posts = null;
+
+		// TODO: decide which posts to user requested..
+		
+		// TODO: if the user wants to get the BASIC HTML we will give him that..
+
 		try {
-			final ArrayList<Post> postsOfSpecificUser = this.mDBController
-					.getPostsOfSpecificUser("username");
-			final ArrayList<Post> postsBetweenSpecificDates = this.mDBController.getPostsBetweenSpecificDates(
-					new Date(startDate), new Date(endDate));
-			final ArrayList<Post> postsOfSomeTags = this.mDBController
-					.getPostsOfTheseTags(new ArrayList<String>());
-		} catch (final Exception e) {
+			posts = this.mDBController.getPostsOfSpecificAuthor(author);
+			posts = this.mDBController.getPostsBetweenSpecificDates(new Date(
+					startDate), new Date(endDate));
+			posts = this.mDBController.getPostsOfTheseTags(tags);
+		}
+		catch (final Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+
+		sendListOfPostsAsResponse(resp, posts);
+	}
+
+	//	<posts>
+	//		<post></post>
+	//		<post></post>
+	//		...
+	//		<post></post>
+	//	</posts>
+	protected void sendListOfPostsAsResponse(HttpServletResponse resp,
+			ArrayList<Post> posts) throws IOException {
+
+		resp.setCharacterEncoding("UTF-8");
+		PrintWriter out = resp.getWriter();
+		
+		out.println("<posts>");
+		
+		for (Post post : posts)
+			out.print(post.toXML());
+		
+		out.println("</posts>");
+		
+		out.close();
 	}
 }

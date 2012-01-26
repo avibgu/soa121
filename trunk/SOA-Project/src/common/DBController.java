@@ -138,7 +138,7 @@ public class DBController {
 		this.mLastPostID++;
 	}
 
-	public ArrayList<Post> getPostsOfSpecificUser(final String pAuthor)
+	public ArrayList<Post> getPostsOfSpecificAuthor(final String pAuthor)
 			throws Exception {
 
 		final String sqlSelectFromPosts = "SELECT * FROM Posts WHERE author = ?";
