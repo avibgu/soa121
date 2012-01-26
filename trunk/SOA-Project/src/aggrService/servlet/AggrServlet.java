@@ -30,6 +30,8 @@ public class AggrServlet extends HttpServlet{
 		final long startDate = 0;
 		final long endDate = 0;
 
+		//TODO: if the user wants to get the BASIC HTML we will give him that..
+		
 		try {
 			final ArrayList<Post> postsOfSpecificUser = this.mDBController
 					.getPostsOfSpecificUser("username");
