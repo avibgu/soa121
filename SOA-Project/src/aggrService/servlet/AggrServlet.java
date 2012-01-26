@@ -37,7 +37,7 @@ public class AggrServlet extends HttpServlet {
 
 		try {
 			
-			// TODO: decide which posts to user requested..
+			// TODO: decide which posts the user has requested..
 			
 			posts = this.mDBController.getPostsOfSpecificAuthor(author);
 			posts = this.mDBController.getPostsBetweenSpecificDates(new Date(
