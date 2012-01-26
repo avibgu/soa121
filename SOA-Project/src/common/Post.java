@@ -98,7 +98,7 @@ public class Post {
 	// <post>
 	// <title></title>
 	// <author></author>
-	// <date></date>		TODO
+	// <date></date>		TODO should we add it also to the req from the user?
 	// <tags>
 	// <tag></tag>
 	// <tag></tag>			TODO: why just 5?...
