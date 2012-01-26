@@ -1,6 +1,7 @@
 package common;
 
 import java.sql.Date;
+import java.text.DateFormat;
 import java.util.ArrayList;
 
 import javax.servlet.http.HttpServletRequest;
@@ -75,25 +76,58 @@ public class Post {
 
 			final Node child = childs.item(i);
 
-			if (child.getNodeName().equals("title")) {
+			if (child.getNodeName().equals("title"))
 				mTitle = child.getNodeValue();
-			} else if (child.getNodeName().equals("author")) {
+			
+			else if (child.getNodeName().equals("author"))
 				mAuthor = child.getNodeValue();
-			} else if (child.getNodeName().equals("content")) {
+			
+			else if (child.getNodeName().equals("content"))
 				mContent = child.getNodeValue();
-			} else if (child.getNodeName().equals("tags")) {
+			
+			else if (child.getNodeName().equals("tags")) {
 
 				final NodeList tags = child.getChildNodes();
 
-				for (int j = 0; j < tags.getLength(); j++) {
+				for (int j = 0; j < tags.getLength(); j++)
 					mTags.add(tags.item(j).getNodeValue());
-				}
 			}
 		}
 	}
 
+	// <post>
+	// <title></title>
+	// <author></author>
+	// <date></date>		TODO
+	// <tags>
+	// <tag></tag>
+	// <tag></tag>			TODO: why just 5?...
+	// <tag></tag>
+	// <tag></tag>
+	// <tag></tag>
+	// </tags>
+	// <content></content>
+	// </post>
 	public String toXML() {
-		return ""; // TODO
+		
+		DateFormat df = DateFormat.getDateInstance(DateFormat.FULL);
+		
+		StringBuilder sb = new StringBuilder();
+		
+		sb.append("<post>\n");
+		sb.append("	<title>" + mTitle +"</title>\n");
+		sb.append("	<author>" + mAuthor +"</author>\n");
+		sb.append("	<date>" + df.format(mDate) +"</date>\n");
+		sb.append("	<tags>\n");
+		
+		for (String tag : mTags)
+			sb.append("		<tag>" + tag +"</tag>\n");
+		
+		sb.append("	</tags>\n");
+		sb.append("	<content>" + mContent +"</content>\n");
+		sb.append("<post>\n");
+
+		return sb.toString();
 	}
 
 	public String getTitle() {
