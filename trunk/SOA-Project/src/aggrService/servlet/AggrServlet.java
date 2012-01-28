@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Date;
 import java.util.ArrayList;
+import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -25,24 +26,34 @@ public class AggrServlet extends HttpServlet {
 	}
 
 	@Override
+	@SuppressWarnings("unchecked")
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 
-		final long startDate = 0;							//TODO get it from req
-		final long endDate = 0;								//TODO get it from req
-		final String author = "";							//TODO get it from req
-		ArrayList<String> tags = new ArrayList<String>();	//TODO get it from req
-		
 		ArrayList<Post> posts = null;
-
+		
+		Map<String,String[]> parameters = req.getParameterMap();
+		
 		try {
 			
-			// TODO: decide which posts the user has requested..
-			
-			posts = this.mDBController.getPostsOfSpecificAuthor(author);
-			posts = this.mDBController.getPostsBetweenSpecificDates(new Date(
-					startDate), new Date(endDate));
-			posts = this.mDBController.getPostsOfTheseTags(tags);
+			if (parameters.containsKey("author")){
+				
+				String author = parameters.get("author")[0];
+				posts = this.mDBController.getPostsOfSpecificAuthor(author);
+			}
+			else if (parameters.containsKey("startDate") && parameters.containsKey("endDate")){
+				
+				long startDate = Long.parseLong(parameters.get("startDate")[0]);
+				long endDate = Long.parseLong(parameters.get("endDate")[0]);
+				
+				posts = this.mDBController.getPostsBetweenSpecificDates(new Date(
+						startDate), new Date(endDate));
+			}
+			else if (parameters.containsKey("tag")){
+				
+				String[] tags = parameters.get("tag");	//TODO how to send multiple tags...
+				posts = this.mDBController.getPostsOfTheseTags(tags);
+			}
 		}
 		catch (final Exception e) {
 			// TODO Auto-generated catch block
@@ -61,6 +72,8 @@ public class AggrServlet extends HttpServlet {
 	protected void sendListOfPostsAsResponse(HttpServletResponse resp,
 			ArrayList<Post> posts) throws IOException {
 
+		if (null == posts) return;
+		
 		resp.setCharacterEncoding("UTF-8");
 		PrintWriter out = resp.getWriter();
 		

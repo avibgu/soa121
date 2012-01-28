@@ -230,8 +230,9 @@ public class DBController {
 	 * @return the posts who have at least on tag from pTags
 	 * @throws SQLException
 	 */
-	public ArrayList<Post> getPostsOfTheseTags(final ArrayList<String> pTags)
+	public ArrayList<Post> getPostsOfTheseTags(final String[] pTags)
 			throws SQLException {
+		
 		final Set<Post> resultSet = new HashSet<Post>();
 
 		// get the posts' ids who have at least on tag from pTags
