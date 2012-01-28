@@ -16,6 +16,10 @@ public class HtmlServlet extends HttpServlet {
 
 	private static final long serialVersionUID = -4207940531535920744L;
 
+	private HtmlServlet() {
+		// DO NOT USE THIS SERVLET.. IT JUST FOR BACKUP..
+	}
+	
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
