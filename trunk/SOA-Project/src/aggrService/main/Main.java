@@ -6,27 +6,30 @@ import org.eclipse.jetty.server.handler.ResourceHandler;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 
-import aggrService.servlet.*;
+import aggrService.servlet.AggrServlet;
 
 public class Main {
 
-	private static final int SERVER_PORT = 17172;
+	private static final int Aggr_SERVER_PORT = 17172;
 
-	public static void main(String[] args) {
+	public static void main(final String[] args) {
 
-		Server server = new Server(SERVER_PORT);
+		Server server = new Server(Aggr_SERVER_PORT);
 
-		ServletContextHandler ctx =
-			new ServletContextHandler(ServletContextHandler.SESSIONS);
+		ServletContextHandler ctx = new ServletContextHandler(ServletContextHandler.SESSIONS);
 
 		ctx.setContextPath("");
 		ctx.addServlet(new ServletHolder(new AggrServlet()), "/aggr/*");
+		// ctx.addServlet(new ServletHolder(new HtmlAServlet()), "/aggr/*");
 
 		ResourceHandler rh = new ResourceHandler();
-		
+
 		rh.setResourceBase("./html/");
-		rh.setWelcomeFiles(new String[]{"index.html"});
-		
+
+		// TODO change back
+		// rh.setWelcomeFiles(new String[] { "index.html" });
+		rh.setWelcomeFiles(new String[] { "tests.html" });
+
 		HandlerList list = new HandlerList();
 
 		list.addHandler(ctx);
@@ -34,15 +37,14 @@ public class Main {
 
 		server.setHandler(list);
 
-		while (true){
+		while (true) {
 
 			try {
 
 				server.start();
 				server.join();
 				break;
-			}
-			catch (Throwable e) {
+			} catch (Throwable e) {
 				e.printStackTrace();
 			}
 		}

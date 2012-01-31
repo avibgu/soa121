@@ -1,8 +1,8 @@
 package common;
 
-import java.sql.Date;
-import java.text.DateFormat;
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.xml.transform.Result;
@@ -18,12 +18,12 @@ import org.w3c.dom.NodeList;
 public class Post {
 
 	private String mTitle;
-	private Date mDate;
+	private Timestamp mDate;
 	private String mContent;
 	private String mAuthor;
 	private ArrayList<String> mTags;
 
-	public Post(final String pTitle, final Date pDate, final String pContent, final String pAuthor,
+	public Post(final String pTitle, final Timestamp pDate, final String pContent, final String pAuthor,
 			final ArrayList<String> pTags) {
 
 		this.mTitle = pTitle;
@@ -36,7 +36,7 @@ public class Post {
 	public Post(final HttpServletRequest req) {
 
 		try {
-			parseXMLToPost(req);
+			this.parseXMLToPost(req);
 		} catch (final Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -57,8 +57,8 @@ public class Post {
 	// </post>
 	private void parseXMLToPost(final HttpServletRequest req) throws Exception {
 
-		mTags = new ArrayList<String>();
-		mDate = new Date(new java.util.Date().getTime());
+		this.mTags = new ArrayList<String>();
+		this.mDate = new java.sql.Timestamp(Calendar.getInstance().getTimeInMillis());
 
 		final TransformerFactory f = TransformerFactory.newInstance();
 		final Transformer t = f.newTransformer();
@@ -76,21 +76,19 @@ public class Post {
 
 			final Node child = childs.item(i);
 
-			if (child.getNodeName().equals("title"))
-				mTitle = child.getNodeValue();
-			
-			else if (child.getNodeName().equals("author"))
-				mAuthor = child.getNodeValue();
-			
-			else if (child.getNodeName().equals("content"))
-				mContent = child.getNodeValue();
-			
-			else if (child.getNodeName().equals("tags")) {
+			if (child.getNodeName().equals("title")) {
+				this.mTitle = child.getNodeValue();
+			} else if (child.getNodeName().equals("author")) {
+				this.mAuthor = child.getNodeValue();
+			} else if (child.getNodeName().equals("content")) {
+				this.mContent = child.getNodeValue();
+			} else if (child.getNodeName().equals("tags")) {
 
 				final NodeList tags = child.getChildNodes();
 
-				for (int j = 0; j < tags.getLength(); j++)
-					mTags.add(tags.item(j).getNodeValue());
+				for (int j = 0; j < tags.getLength(); j++) {
+					this.mTags.add(tags.item(j).getNodeValue());
+				}
 			}
 		}
 	}
@@ -98,10 +96,10 @@ public class Post {
 	// <post>
 	// <title></title>
 	// <author></author>
-	// <date></date>		TODO should we add it also to the req from the user?
+	// <date></date> TODO should we add it also to the req from the user?
 	// <tags>
 	// <tag></tag>
-	// <tag></tag>			TODO: why just 5?...
+	// <tag></tag> TODO: why just 5?...
 	// <tag></tag>
 	// <tag></tag>
 	// <tag></tag>
@@ -109,45 +107,51 @@ public class Post {
 	// <content></content>
 	// </post>
 	public String toXML() {
-		
-		DateFormat df = DateFormat.getDateInstance(DateFormat.FULL);
-		
+
+		// DateFormat df = DateFormat.getDateInstance(DateFormat.FULL);
+
 		StringBuilder sb = new StringBuilder();
-		
+
 		sb.append("<post>\n");
-		sb.append("	<title>" + mTitle +"</title>\n");
-		sb.append("	<author>" + mAuthor +"</author>\n");
-		sb.append("	<date>" + df.format(mDate) +"</date>\n");
+		sb.append("	<title>" + this.mTitle + "</title>\n");
+		sb.append("	<author>" + this.mAuthor + "</author>\n");
+		sb.append("	<date>" + this.mDate + "</date>\n");
 		sb.append("	<tags>\n");
-		
-		for (String tag : mTags)
-			sb.append("		<tag>" + tag +"</tag>\n");
-		
+
+		for (String tag : this.mTags) {
+			sb.append("		<tag>" + tag + "</tag>\n");
+		}
+
 		sb.append("	</tags>\n");
-		sb.append("	<content>" + mContent +"</content>\n");
+		sb.append("	<content>" + this.mContent + "</content>\n");
 		sb.append("<post>\n");
 
 		return sb.toString();
 	}
 
+	@Override
+	public String toString() {
+		return this.toXML();
+	}
+
 	public String getTitle() {
-		return mTitle;
+		return this.mTitle;
 	}
 
 	public void setTitle(final String mTitle) {
 		this.mTitle = mTitle;
 	}
 
-	public Date getDate() {
-		return mDate;
+	public Timestamp getDate() {
+		return this.mDate;
 	}
 
-	public void setDate(final Date mDate) {
+	public void setDate(final Timestamp mDate) {
 		this.mDate = mDate;
 	}
 
 	public String getContent() {
-		return mContent;
+		return this.mContent;
 	}
 
 	public void setContent(final String mContent) {
@@ -155,7 +159,7 @@ public class Post {
 	}
 
 	public String getAuthor() {
-		return mAuthor;
+		return this.mAuthor;
 	}
 
 	public void setAuthor(final String mAuthor) {
@@ -163,7 +167,7 @@ public class Post {
 	}
 
 	public ArrayList<String> getTags() {
-		return mTags;
+		return this.mTags;
 	}
 
 	public void setTags(final ArrayList<String> mTags) {

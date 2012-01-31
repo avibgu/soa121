@@ -9,11 +9,11 @@ import dbService.servlet.dbServlet;
 
 public class Main {
 
-	private static final int SERVER_PORT = 17171;
+	private static final int SUBS_SERVER_PORT = 17171;
 
 	public static void main(final String[] args) throws Exception {
 
-		final Server server = new Server(SERVER_PORT);
+		final Server server = new Server(SUBS_SERVER_PORT);
 
 		final ServletContextHandler ctx = new ServletContextHandler(ServletContextHandler.SESSIONS);
 
@@ -38,5 +38,4 @@ public class Main {
 			}
 		}
 	}
-
 }

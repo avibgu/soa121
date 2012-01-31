@@ -1,0 +1,102 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=windows-1255">
+	<title>Blogging Platform</title>
+
+	<script type="text/javascript" src="scripts.js"></script>
+	<script type="text/javascript" src="jquery-1.7.1.js"></script>
+	<script type="text/javascript"> 
+
+					var postServerUrl = "http://127.0.0.1:17172/aggr/";
+					var getServerUrl = "http://127.0.0.1:17171/";
+					var postReq;
+					var showFeedReq;
+					var req;
+
+					
+					function bodyLoad(){
+							//alert("load");
+					}
+					
+					function update() {
+					  if (req.readyState == 4 && req.status == 200) {
+						alert("update");
+						table = document.getElementById("tbl");
+						proto = document.getElementById("proto");
+						people = eval('(' + req.responseText + ')');
+						row = proto.cloneNode(true);
+						row.childNodes[0].innerHTML = people;
+						row.style.visibility = "visible";
+						table.appendChild(row);
+					  }
+					}
+
+					function doPost(){
+
+					//alert("do post");
+                        //var fullPath = serverUrl + currPath + localFeedName;
+							// <post>
+							// <title></title>
+							// <author></author>
+							// <tags>
+							// <tag></tag>
+							// <tag></tag>
+							// <tag></tag>
+							// <tag></tag>
+							// <tag></tag>
+							// </tags>
+							// <content></content>
+							// </post>
+						content = "<post><title>title1</title><author>nir</author><tags><tag></tag><tag></tag><tag></tag><tag></tag><tag></tag></tags><content>content1</content></post>";
+						
+						alert(content);
+						//alert(content);
+                        // make put request with the name and url
+                        // need TODO function that gets the response and update the display
+						/*
+						postReq = new XMLHttpRequest();
+						postReq.onreadystatechange = update;
+						postReq.open("POST", "http://localhost:17171/nir/post1/", true);
+						postReq.send(content);
+						alert("done sending post");
+						*/
+						
+						
+						alert("before sending post");
+						$.post("http://localhost:17171/post1/",update);
+						alert("done sending post");
+
+					}
+
+					function doGet() {
+						
+						req = new XMLHttpRequest();
+						req.onreadystatechange = update;
+						req.open("GET", "http://localhost:17172/aggr/post1", true);
+						req.send();
+						
+						/*	
+						alert("before doGet");
+						$.ajax("GET", "http://localhost:17172/aggr/post1", update);
+						*/
+						alert("done doGet");
+					}
+						
+					
+	</script>
+</head>
+<body onload="bodyLoad()">
+
+	<h1>My First Web nir</h1>
+
+	<p id="demo">This is a paragraph.</p>
+
+	<button type="button" onclick="doPost()">doPost</button>
+	<button type="button" onclick="doGet()">doGet</button>
+	<table id="tbl">
+		<tr id="proto" style="visibility: collapse"><td/><td/><td/><td/></tr>
+	</table>
+
+</body>
+</html>

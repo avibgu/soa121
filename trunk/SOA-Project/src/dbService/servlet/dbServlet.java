@@ -11,7 +11,6 @@ import javax.servlet.http.HttpServletResponse;
 import common.DBController;
 import common.Post;
 
-
 public class dbServlet extends HttpServlet {
 
 	private static final long serialVersionUID = 6461646473709706660L;
@@ -27,15 +26,14 @@ public class dbServlet extends HttpServlet {
 	protected void doPost(final HttpServletRequest req, final HttpServletResponse resp)
 			throws ServletException, IOException {
 
-		final Post post = new Post(req);
+		System.out.println("posting " + req.getRequestURL());
 
+		final Post post = new Post(req);
 		this.mDBController.createNewPost(post);
-		
-		sendTextResponse(resp, "POSTED");
+		this.sendTextResponse(resp, "POSTED");
 	}
-	
-	protected void sendTextResponse(HttpServletResponse resp,
-			String answer) throws IOException {
+
+	protected void sendTextResponse(final HttpServletResponse resp, final String answer) throws IOException {
 
 		resp.setCharacterEncoding("UTF-8");
 		PrintWriter out = resp.getWriter();
