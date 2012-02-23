@@ -1,19 +1,13 @@
 package common;
 
+import java.io.BufferedInputStream;
+import java.io.ByteArrayOutputStream;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Calendar;
-
 import javax.servlet.http.HttpServletRequest;
-import javax.xml.transform.Result;
-import javax.xml.transform.Source;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMResult;
-import javax.xml.transform.stream.StreamSource;
-
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
 
 public class Post {
 
@@ -36,102 +30,230 @@ public class Post {
 	public Post(final HttpServletRequest req) {
 
 		try {
-			this.parseXMLToPost(req);
+			this.parseJSONToPost(req);
 		} catch (final Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
 
-	// <post>
 	// <title></title>
 	// <author></author>
 	// <tags>
-	// <tag></tag>
-	// <tag></tag>
-	// <tag></tag>
-	// <tag></tag>
-	// <tag></tag>
+	// <tag1></tag>
+	// <tag2></tag>
+	// <tag3></tag>
+	// ...
 	// </tags>
 	// <content></content>
-	// </post>
-	private void parseXMLToPost(final HttpServletRequest req) throws Exception {
+	private void parseJSONToPost(final HttpServletRequest req) throws Exception {
 
 		this.mTags = new ArrayList<String>();
 		this.mDate = new java.sql.Timestamp(Calendar.getInstance().getTimeInMillis());
 
-		final TransformerFactory f = TransformerFactory.newInstance();
-		final Transformer t = f.newTransformer();
+		// read the input
+		final BufferedInputStream bis = new BufferedInputStream(req.getInputStream());
+		final ByteArrayOutputStream buf = new ByteArrayOutputStream();
+		int result = bis.read();
+		while (result != -1) {
+			final byte b = (byte) result;
+			buf.write(b);
+			result = bis.read();
+		}
+		String postJsonString = buf.toString();
 
-		final Source s = new StreamSource(req.getInputStream());
-		final Result r = new DOMResult();
+		// decode to json
+		postJsonString = decodeURIComponent2(postJsonString);
+		// System.out.println("the decoded json = " + postJson);
 
-		t.transform(s, r);
+		// before =
+		// data=[{"title":"title1","author":"author1","tags":{"tag1":"tag11","tag2":"tag21","tag3":"tag31","tag4":"tag41","tag5":"tag51"}}]
+		postJsonString = postJsonString.substring(postJsonString.indexOf("[") + 1, postJsonString
+				.lastIndexOf("]"));
+		// System.out.println("the decoded json 2 = " + postJson);
 
-		final Node n = ((DOMResult) r).getNode();
+		// convert the string to json
+		// after =
+		// {"title":"title1","author":"author1","tags":{"tag1":"tag11","tag2":"tag21","tag3":"tag31","tag4":"tag41","tag5":"tag51"}}
+		final JSONObject postJson = JSONObject.fromObject(postJsonString);
+		// System.out.println("title = " + postJson.get("title"));
 
-		final NodeList childs = n.getChildNodes();
-
-		for (int i = 0; i < childs.getLength(); i++) {
-
-			final Node child = childs.item(i);
-
-			if (child.getNodeName().equals("title")) {
-				this.mTitle = child.getNodeValue();
-			} else if (child.getNodeName().equals("author")) {
-				this.mAuthor = child.getNodeValue();
-			} else if (child.getNodeName().equals("content")) {
-				this.mContent = child.getNodeValue();
-			} else if (child.getNodeName().equals("tags")) {
-
-				final NodeList tags = child.getChildNodes();
-
-				for (int j = 0; j < tags.getLength(); j++) {
-					this.mTags.add(tags.item(j).getNodeValue());
+		// get the titles
+		try {
+			this.mTitle = postJson.getString("title");
+		} catch (final Exception e) {
+			this.mTitle = "";
+		}
+		try {
+			this.mAuthor = postJson.getString("author");
+		} catch (final Exception e) {
+			this.mAuthor = "";
+		}
+		try {
+			this.mContent = postJson.getString("content");
+		} catch (final Exception e) {
+			this.mContent = "";
+		}
+		try {
+			final JSONObject tags = postJson.getJSONObject("tags");
+			final JSONArray tagNames = tags.names();
+			if (tagNames != null) {
+				for (int j = 0; j < tagNames.size(); j++) {
+					this.mTags.add(postJson.getString(tagNames.getString(j)));
 				}
 			}
+		} catch (final Exception e) {
 		}
+
 	}
 
-	// <post>
+	//
+	//
+	// private void parseJSONToPost(final HttpServletRequest req) throws
+	// Exception {
+	//
+	// this.mTags = new ArrayList<String>();
+	// this.mDate = new
+	// java.sql.Timestamp(Calendar.getInstance().getTimeInMillis());
+	//
+	// final TransformerFactory f = TransformerFactory.newInstance();
+	// final Transformer t = f.newTransformer();
+	//
+	// final Source s = new StreamSource(req.getInputStream());
+	// final Result r = new DOMResult();
+	//
+	// t.transform(s, r);
+	//
+	// final Node n = ((DOMResult) r).getNode();
+	//
+	// final NodeList childs = n.getChildNodes();
+	//
+	// for (int i = 0; i < childs.getLength(); i++) {
+	//
+	// final Node child = childs.item(i);
+	//
+	// if (child.getNodeName().equals("title")) {
+	// this.mTitle = child.getNodeValue();
+	// } else if (child.getNodeName().equals("author")) {
+	// this.mAuthor = child.getNodeValue();
+	// } else if (child.getNodeName().equals("content")) {
+	// this.mContent = child.getNodeValue();
+	// } else if (child.getNodeName().equals("tags")) {
+	//
+	// final NodeList tags = child.getChildNodes();
+	//
+	// for (int j = 0; j < tags.getLength(); j++) {
+	// this.mTags.add(tags.item(j).getNodeValue());
+	// }
+	// }
+	// }
+	// }
+
 	// <title></title>
 	// <author></author>
-	// <date></date> TODO should we add it also to the req from the user?
+	// <date></date>
 	// <tags>
 	// <tag></tag>
-	// <tag></tag> TODO: why just 5?...
+	// <tag></tag>
 	// <tag></tag>
 	// <tag></tag>
 	// <tag></tag>
 	// </tags>
 	// <content></content>
-	// </post>
-	public String toXML() {
+	public String toJSON() {
 
 		// DateFormat df = DateFormat.getDateInstance(DateFormat.FULL);
 
-		StringBuilder sb = new StringBuilder();
+		final StringBuilder sb = new StringBuilder();
 
-		sb.append("<post>\n");
-		sb.append("	<title>" + this.mTitle + "</title>\n");
-		sb.append("	<author>" + this.mAuthor + "</author>\n");
-		sb.append("	<date>" + this.mDate + "</date>\n");
-		sb.append("	<tags>\n");
+		sb.append("{");
+		sb.append("title:" + this.mTitle + ", ");
+		sb.append("author:" + this.mAuthor + ", ");
+		sb.append("date:" + this.mDate + ", ");
+		sb.append("tags: {");
 
-		for (String tag : this.mTags) {
-			sb.append("		<tag>" + tag + "</tag>\n");
+		int i = 0;
+		for (final String tag : this.mTags) {
+			sb.append("tag" + i + ": " + tag + ", ");
+			i++;
 		}
-
-		sb.append("	</tags>\n");
-		sb.append("	<content>" + this.mContent + "</content>\n");
-		sb.append("<post>\n");
+		sb.deleteCharAt(sb.length() - 1);
+		sb.append("}, ");
+		sb.append("content:" + this.mContent);
+		sb.append("}");
 
 		return sb.toString();
 	}
 
+	/**
+	 * Decodes the passed UTF-8 String using an algorithm that's compatible with
+	 * JavaScript's <code>decodeURIComponent</code> function. Returns
+	 * <code>null</code> if the String is <code>null</code>.
+	 * 
+	 * @param s
+	 *            The UTF-8 encoded String to be decoded
+	 * @return the decoded String
+	 */
+	private String decodeURIComponent2(final String encodedURI) {
+		char actualChar;
+
+		final StringBuffer buffer = new StringBuffer();
+
+		int bytePattern, sumb = 0;
+
+		for (int i = 0, more = -1; i < encodedURI.length(); i++) {
+			actualChar = encodedURI.charAt(i);
+
+			switch (actualChar) {
+			case '%': {
+				actualChar = encodedURI.charAt(++i);
+				final int hb = (Character.isDigit(actualChar) ? actualChar - '0' : 10 + Character
+						.toLowerCase(actualChar) - 'a') & 0xF;
+				actualChar = encodedURI.charAt(++i);
+				final int lb = (Character.isDigit(actualChar) ? actualChar - '0' : 10 + Character
+						.toLowerCase(actualChar) - 'a') & 0xF;
+				bytePattern = (hb << 4) | lb;
+				break;
+			}
+			case '+': {
+				bytePattern = ' ';
+				break;
+			}
+			default: {
+				bytePattern = actualChar;
+			}
+			}
+
+			if ((bytePattern & 0xc0) == 0x80) { // 10xxxxxx
+				sumb = (sumb << 6) | (bytePattern & 0x3f);
+				if (--more == 0) {
+					buffer.append((char) sumb);
+				}
+			} else if ((bytePattern & 0x80) == 0x00) { // 0xxxxxxx
+				buffer.append((char) bytePattern);
+			} else if ((bytePattern & 0xe0) == 0xc0) { // 110xxxxx
+				sumb = bytePattern & 0x1f;
+				more = 1;
+			} else if ((bytePattern & 0xf0) == 0xe0) { // 1110xxxx
+				sumb = bytePattern & 0x0f;
+				more = 2;
+			} else if ((bytePattern & 0xf8) == 0xf0) { // 11110xxx
+				sumb = bytePattern & 0x07;
+				more = 3;
+			} else if ((bytePattern & 0xfc) == 0xf8) { // 111110xx
+				sumb = bytePattern & 0x03;
+				more = 4;
+			} else { // 1111110x
+				sumb = bytePattern & 0x01;
+				more = 5;
+			}
+		}
+		return buffer.toString();
+	}
+
 	@Override
 	public String toString() {
-		return this.toXML();
+		return this.toJSON();
 	}
 
 	public String getTitle() {

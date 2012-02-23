@@ -133,14 +133,16 @@ public class AggrServlet extends HttpServlet {
 		resp.setCharacterEncoding("UTF-8");
 		final PrintWriter out = resp.getWriter();
 
-		out.println("<posts>");
+		final StringBuilder sb = new StringBuilder();
+		sb.append("{posts: [");
 
 		for (final Post post : posts) {
-			out.print(post.toXML());
+			out.print(post.toJSON() + ", ");
 		}
+		sb.deleteCharAt(sb.length() - 1);
+		sb.append("]}");
 
-		out.println("</posts>");
-
+		out.print(sb.toString());
 		out.close();
 	}
 }

@@ -1,13 +1,21 @@
 package dbService.servlet;
 
+import java.io.BufferedInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 
 import java.io.PrintWriter;
+import java.net.URLDecoder;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import org.eclipse.jetty.util.ajax.JSON;
 
 import common.DBController;
 import common.Post;
@@ -31,18 +39,10 @@ public class dbServlet extends HttpServlet {
 			throws ServletException, IOException {
 
 		System.out.println("posting " + req.getRequestURL());
-		String postJson = "";
-		try {
-			postJson = new java.util.Scanner(req.getInputStream()).useDelimiter("\\A").next();
-		} catch (final java.util.NoSuchElementException e) {
-		}
+		final Post post = new Post(req);
 
-		System.out.println(postJson);
-		// final JSONObject postJsonObject = new JSONObject(postJson);
-		//
-		// final Post post = new Post(req);
-		// System.out.println("The post:");
-		// System.out.println(post);
+		System.out.println("The post:");
+		System.out.println(post);
 		// this.mDBController.createNewPost(post);
 		this.sendTextResponse(resp, "POSTED");
 	}
