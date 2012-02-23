@@ -34,7 +34,8 @@ public class DBController {
 	}
 
 	public DBController(final String pUsername, final String pPassword) {
-		this(pUsername, pPassword, "jdbc:mysql://127.0.0.1:3306");
+		// this(pUsername, pPassword, "jdbc:mysql://127.0.0.1:3306");
+		this(pUsername, pPassword, "jdbc:mysql://db4free.net:3306");
 	}
 
 	public DBController(final String pUsername, final String pPassword, final String pDBAddrres) {
@@ -51,7 +52,7 @@ public class DBController {
 		try {
 			this.createConnection();
 			new TestDBController(this).testPost();
-		} catch (SQLException e) {
+		} catch (final SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -60,15 +61,21 @@ public class DBController {
 	protected void createConnection() throws SQLException {
 
 		try {
+			// final String schema = "testdb";
+			final String schema = "soa121db";
 
 			// create the DB is not exist
-			this.mConn = DriverManager.getConnection(this.mDBAddrres, "niram", "a");
+			// this.mConn = DriverManager.getConnection(this.mDBAddrres,
+			// "niram", "a");
+			this.mConn = DriverManager.getConnection(this.mDBAddrres, schema, schema);
 			final Statement stmt0 = this.mConn.createStatement();
-			stmt0.executeUpdate("CREATE DATABASE IF NOT EXISTS testdb");
+			stmt0.executeUpdate("CREATE DATABASE IF NOT EXISTS " + schema);
 			this.mConn.close();
 
 			// update connection to automatically connect to that db
-			this.mConn = DriverManager.getConnection(this.mDBAddrres + "/testdb", "niram", "a");
+			// this.mConn = DriverManager.getConnection(this.mDBAddrres + "/" +
+			// schema, "niram", "a");
+			this.mConn = DriverManager.getConnection(this.mDBAddrres + "/" + schema, schema, schema);
 
 			// create the Posts table
 			final Statement stmt1 = this.mConn.createStatement();
@@ -85,8 +92,8 @@ public class DBController {
 			stmt2.executeUpdate(creationTagsSql);
 
 			// update the last post id - to be persistence
-			Statement st = this.mConn.createStatement();
-			ResultSet res = st.executeQuery("SELECT MAX(postId) FROM Posts");
+			final Statement st = this.mConn.createStatement();
+			final ResultSet res = st.executeQuery("SELECT MAX(postId) FROM Posts");
 			while (res.next()) {
 				this.mLastPostID = res.getInt(1);
 			}

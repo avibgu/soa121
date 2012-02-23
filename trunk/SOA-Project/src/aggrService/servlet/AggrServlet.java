@@ -25,8 +25,8 @@ public class AggrServlet extends HttpServlet {
 	protected DBController mDBController;
 
 	public AggrServlet() {
-
-		this.mDBController = new DBController();
+		this.mDBController = null;
+		// this.mDBController = new DBController();
 	}
 
 	/**
@@ -38,7 +38,7 @@ public class AggrServlet extends HttpServlet {
 	 */
 	protected void sendFileResponse(final HttpServletResponse resp, final File file) throws IOException {
 		// System.out.println("got request");
-		PrintWriter printWriter = resp.getWriter();
+		final PrintWriter printWriter = resp.getWriter();
 
 		FileInputStream fis = null;
 		InputStreamReader isr = null;
@@ -59,7 +59,7 @@ public class AggrServlet extends HttpServlet {
 			fis.close();
 			isr.close();
 			br.close();
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			e.printStackTrace();
 		}
 	}
@@ -75,33 +75,36 @@ public class AggrServlet extends HttpServlet {
 			// System.out.println("scripts.js request");
 			return;
 		}
-
 		if (req.getRequestURI().equals("/aggr/")) {
 			this.sendFileResponse(resp, new File("html/tests.html"));
 			// System.out.println("get main page");
 			return;
 		}
+		if (req.getRequestURI().equals("/aggr/jquery-1.7.1.js")) {
+			return;
+		}
 
+		System.out.println("get 2");
 		ArrayList<Post> posts = null;
 
-		Map<String, String[]> parameters = req.getParameterMap();
+		final Map<String, String[]> parameters = req.getParameterMap();
 
 		try {
 
 			if (parameters.containsKey("author")) {
-
-				String author = parameters.get("author")[0];
+				System.out.println("filtering by author");
+				final String author = parameters.get("author")[0];
 				posts = this.mDBController.getPostsOfSpecificAuthor(author);
 			} else if (parameters.containsKey("startDate") && parameters.containsKey("endDate")) {
-
-				long startDate = Long.parseLong(parameters.get("startDate")[0]);
-				long endDate = Long.parseLong(parameters.get("endDate")[0]);
+				System.out.println("filtering by dates");
+				final long startDate = Long.parseLong(parameters.get("startDate")[0]);
+				final long endDate = Long.parseLong(parameters.get("endDate")[0]);
 
 				posts = this.mDBController.getPostsBetweenSpecificDates(new Timestamp(startDate),
 						new Timestamp(endDate));
 			} else if (parameters.containsKey("tag")) {
-
-				String[] tags = parameters.get("tag"); // TODO how to send
+				System.out.println("filtering by tags");
+				final String[] tags = parameters.get("tag"); // TODO how to send
 				// multiple tags...
 
 				posts = this.mDBController.getPostsOfTheseTags(tags);
@@ -128,11 +131,11 @@ public class AggrServlet extends HttpServlet {
 		}
 
 		resp.setCharacterEncoding("UTF-8");
-		PrintWriter out = resp.getWriter();
+		final PrintWriter out = resp.getWriter();
 
 		out.println("<posts>");
 
-		for (Post post : posts) {
+		for (final Post post : posts) {
 			out.print(post.toXML());
 		}
 
