@@ -1,27 +1,15 @@
 package dbService.servlet;
 
-import java.io.BufferedInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
-
 import java.io.PrintWriter;
-import java.net.URLDecoder;
-import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.eclipse.jetty.util.ajax.JSON;
-
 import common.DBController;
 import common.Post;
-
-import net.sf.json.JSONObject;
-import net.sf.json.JSONSerializer;
 
 public class dbServlet extends HttpServlet {
 
@@ -31,6 +19,7 @@ public class dbServlet extends HttpServlet {
 
 	public dbServlet() throws Exception {
 		this.mDBController = null;
+		// TODO : return this when having DB
 		// this.mDBController = new DBController();
 	}
 
