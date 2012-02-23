@@ -64,22 +64,23 @@
 						
 						
 						alert("before sending post");
-						$.post("http://localhost:17171/post1/",update);
+						$.post("http://localhost:17171/post1/", { "post": content }, update);
+						//$.post("http://localhost:17171/post1/",update);
 						alert("done sending post");
 
 					}
 
 					function doGet() {
-						
+						/*	
 						req = new XMLHttpRequest();
 						req.onreadystatechange = update;
 						req.open("GET", "http://localhost:17172/aggr/post1", true);
 						req.send();
+						*/
 						
-						/*	
 						alert("before doGet");
 						$.ajax("GET", "http://localhost:17172/aggr/post1", update);
-						*/
+						
 						alert("done doGet");
 					}
 						

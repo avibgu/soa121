@@ -14,15 +14,15 @@ public class Main {
 
 	public static void main(final String[] args) {
 
-		Server server = new Server(AGGR_SERVER_PORT);
+		final Server server = new Server(AGGR_SERVER_PORT);
 
-		ServletContextHandler ctx = new ServletContextHandler(ServletContextHandler.SESSIONS);
+		final ServletContextHandler ctx = new ServletContextHandler(ServletContextHandler.SESSIONS);
 
 		ctx.setContextPath("");
 		ctx.addServlet(new ServletHolder(new AggrServlet()), "/aggr/*");
-		// ctx.addServlet(new ServletHolder(new HtmlAServlet()), "/aggr/*");
+		// ctx.addServlet(new ServletHolder(new HtmlServlet()), "/aggr/*");
 
-		ResourceHandler rh = new ResourceHandler();
+		final ResourceHandler rh = new ResourceHandler();
 
 		rh.setResourceBase("./html/");
 
@@ -30,7 +30,7 @@ public class Main {
 		// rh.setWelcomeFiles(new String[] { "index.html" });
 		rh.setWelcomeFiles(new String[] { "tests.html" });
 
-		HandlerList list = new HandlerList();
+		final HandlerList list = new HandlerList();
 
 		list.addHandler(ctx);
 		list.addHandler(rh);
@@ -44,7 +44,7 @@ public class Main {
 				server.start();
 				server.join();
 				break;
-			} catch (Throwable e) {
+			} catch (final Throwable e) {
 				e.printStackTrace();
 			}
 		}
