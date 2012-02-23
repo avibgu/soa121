@@ -18,7 +18,7 @@ public class TestDBController {
 	 */
 	public void testPost() {
 		// test for adding new posts
-		this.createPostsForTest();
+		// this.createPostsForTest();
 		// this.createPost("title2", "contnet1", "author", new
 		// ArrayList<String>());
 

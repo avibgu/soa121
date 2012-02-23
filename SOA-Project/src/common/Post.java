@@ -5,7 +5,9 @@ import java.io.ByteArrayOutputStream;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Calendar;
+
 import javax.servlet.http.HttpServletRequest;
+
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
@@ -63,13 +65,13 @@ public class Post {
 		String postJsonString = buf.toString();
 
 		// decode to json
-		postJsonString = decodeURIComponent2(postJsonString);
+		postJsonString = this.decodeURIComponent2(postJsonString);
 		// System.out.println("the decoded json = " + postJson);
 
 		// before =
 		// data=[{"title":"title1","author":"author1","tags":{"tag1":"tag11","tag2":"tag21","tag3":"tag31","tag4":"tag41","tag5":"tag51"}}]
-		postJsonString = postJsonString.substring(postJsonString.indexOf("[") + 1, postJsonString
-				.lastIndexOf("]"));
+		postJsonString = postJsonString.substring(postJsonString.indexOf("[") + 1,
+				postJsonString.lastIndexOf("]"));
 		// System.out.println("the decoded json 2 = " + postJson);
 
 		// convert the string to json
@@ -178,6 +180,7 @@ public class Post {
 			i++;
 		}
 		sb.deleteCharAt(sb.length() - 1);
+		sb.deleteCharAt(sb.length() - 1);
 		sb.append("}, ");
 		sb.append("content:" + this.mContent);
 		sb.append("}");
@@ -212,7 +215,7 @@ public class Post {
 				actualChar = encodedURI.charAt(++i);
 				final int lb = (Character.isDigit(actualChar) ? actualChar - '0' : 10 + Character
 						.toLowerCase(actualChar) - 'a') & 0xF;
-				bytePattern = (hb << 4) | lb;
+				bytePattern = hb << 4 | lb;
 				break;
 			}
 			case '+': {
@@ -225,7 +228,7 @@ public class Post {
 			}
 
 			if ((bytePattern & 0xc0) == 0x80) { // 10xxxxxx
-				sumb = (sumb << 6) | (bytePattern & 0x3f);
+				sumb = sumb << 6 | bytePattern & 0x3f;
 				if (--more == 0) {
 					buffer.append((char) sumb);
 				}

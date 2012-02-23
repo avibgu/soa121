@@ -26,6 +26,7 @@ public class AggrServlet extends HttpServlet {
 
 	public AggrServlet() {
 		this.mDBController = null;
+		// TODO : return this when having DB
 		// this.mDBController = new DBController();
 	}
 
