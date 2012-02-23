@@ -20,13 +20,14 @@ import java.util.Set;
 public class DBController {
 
 	private Connection mConn;
-
 	private final String mUsername;
 	private final String mPassword;
-
 	private final String mDBAddrres;
-
 	private int mLastPostID;
+
+	// the number of tires until reaching a threshold failure
+	private int numOfTriesTillFailures = 0;
+	private final int failureThreshold = 10000;
 
 	public DBController() {
 		this("", "");
@@ -38,21 +39,18 @@ public class DBController {
 
 	public DBController(final String pUsername, final String pPassword, final String pDBAddrres) {
 
-		this.mConn = null;
+		this.numOfTriesTillFailures = 0;
 
+		this.mConn = null;
 		this.mUsername = pUsername;
 		this.mPassword = pPassword;
-
 		this.mDBAddrres = pDBAddrres;
 
-		/**
-		 * TODO : Bug, the system is not persistent, need to read the last id
-		 */
 		this.mLastPostID = 0;
 
 		try {
 			this.createConnection();
-			// new TestDBController(this).testPost();
+			new TestDBController(this).testPost();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -88,10 +86,12 @@ public class DBController {
 
 			// update the last post id - to be persistence
 			Statement st = this.mConn.createStatement();
-			ResultSet res = st.executeQuery("SELECT COUNT(*) FROM Posts");
+			ResultSet res = st.executeQuery("SELECT MAX(postId) FROM Posts");
 			while (res.next()) {
 				this.mLastPostID = res.getInt(1);
 			}
+			this.mLastPostID++;
+			System.out.println(this.mLastPostID + " after max");
 			// System.out.println("Number of column: " + this.mLastPostID);
 
 		} catch (final SQLException ex) {
@@ -105,7 +105,6 @@ public class DBController {
 	}
 
 	public void createNewPost(final Post pPost) {
-
 		final String sqlForPostTable = "insert into Posts values (?,?,?,?,?)";
 		final String sqlForTagsTable = "insert into Tags values (?,?)";
 
@@ -123,7 +122,7 @@ public class DBController {
 
 			int numOfLinesChanged = pst.executeUpdate();
 
-			System.err.println("inserted to posts: " + numOfLinesChanged + " lines");
+			System.out.println("inserted to posts: " + numOfLinesChanged + " lines");
 
 			pst.close();
 
@@ -135,21 +134,24 @@ public class DBController {
 				pst.setString(2, tag);
 
 				numOfLinesChanged = pst.executeUpdate();
-				System.err.println("inserted to tags: " + numOfLinesChanged + " lines");
+				System.out.println("inserted to tags: " + numOfLinesChanged + " lines");
 
 				pst.close();
 			}
 
 		} catch (final SQLException e) {
-			if (this.mLastPostID < 100) {
+			System.out.println("Exception in createNewPost, trying with new id (maybe because of delete)");
+			e.printStackTrace();
+			if (this.numOfTriesTillFailures < this.failureThreshold) {
+				this.numOfTriesTillFailures++;
 				this.mLastPostID++;
 				this.createNewPost(pPost);
+				return;
 			}
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
 
 		this.mLastPostID++;
+		this.numOfTriesTillFailures = 0;
 	}
 
 	public ArrayList<Post> getPostsOfSpecificAuthor(final String pAuthor) throws Exception {

@@ -123,7 +123,7 @@ public class AggrServlet extends HttpServlet {
 	protected void sendListOfPostsAsResponse(final HttpServletResponse resp, final ArrayList<Post> posts)
 			throws IOException {
 
-		if (null == posts) {
+		if (posts == null) {
 			return;
 		}
 
