@@ -48,9 +48,9 @@
 							// </tags>
 							// <content></content>
 							// </post>
-						content = "<post><title>title1</title><author>nir</author><tags><tag></tag><tag></tag><tag></tag><tag></tag><tag></tag></tags><content>content1</content></post>";
-						
-						alert(content);
+						//content = "<post><title>title1</title><author>nir</author><tags><tag></tag><tag></tag><tag></tag><tag></tag><tag></tag></tags><content>content1</content></post>";
+						content = {"title": "title1", "author": "author1", "tags":{"tag1": "tag11", "tag2": "tag21", "tag3": "tag31", "tag4": "tag41", "tag5": "tag51"}, "content": "content1" };
+						//alert(content);
 						//alert(content);
                         // make put request with the name and url
                         // need TODO function that gets the response and update the display
@@ -64,7 +64,9 @@
 						
 						
 						alert("before sending post");
-						$.post("http://localhost:17171/post1/", { "post": content }, update);
+						var params = {data: JSON.stringify([content])};
+						
+						$.post("http://localhost:17171/post1/", params, update);
 						//$.post("http://localhost:17171/post1/",update);
 						alert("done sending post");
 
