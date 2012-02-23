@@ -10,11 +10,11 @@ import aggrService.servlet.AggrServlet;
 
 public class Main {
 
-	private static final int Aggr_SERVER_PORT = 17172;
+	private static final int AGGR_SERVER_PORT = 17172;
 
 	public static void main(final String[] args) {
 
-		Server server = new Server(Aggr_SERVER_PORT);
+		Server server = new Server(AGGR_SERVER_PORT);
 
 		ServletContextHandler ctx = new ServletContextHandler(ServletContextHandler.SESSIONS);
 
