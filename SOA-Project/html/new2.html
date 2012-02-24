@@ -3,70 +3,146 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>jQuery Mobile: Demos and Documentation</title>
+	
+	<title>SOA Final Project - CMS</title>
+	
 	<link rel="stylesheet"  href="http://code.jquery.com/mobile/1.0.1/jquery.mobile-1.0.1.min.css" />
-	<link rel="stylesheet" href="http://jquerymobile.com/docs/_assets/css/jqm-docs.css" />
+	<link rel="stylesheet" href="http://jquerymobile.com/demos/1.0.1/docs/_assets/css/jqm-docs.css" />
 	<script src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
 
 	<script src="http://code.jquery.com/experiments/themeswitcher/jquery.mobile.themeswitcher.js"></script>
-	<script src="http://jquerymobile.com/docs/_assets/js/jqm-docs.js"></script>
+	<script src="http://jquerymobile.com/demos/1.0.1/docs/_assets/js/jqm-docs.js"></script>
 	<script src="http://code.jquery.com/mobile/1.0.1/jquery.mobile-1.0.1.min.js"></script>
 	
 </head> 
 <body> 
 <div data-role="page" class="type-home">
 	<div data-role="content">
-		<p id="jqm-version">1.0.1 Final Release</p>
+		
 
 		
 		<div class="content-secondary">
 	
-			<div id="jqm-homeheader">
-				<h1 id="jqm-logo"><img src="http://code.jquery.com/docs/_assets/images/jquery-logo.png" alt="jQuery Mobile Framework" /></h1>
-				<p>A Touch-Optimized Web Framework for Smartphones &amp; Tablets</p>
-			</div>
-	
-	
-			<p class="intro"><strong>Welcome.</strong> Browse the jQuery Mobile components and learn how to make rich, accessible, touch-friendly websites and apps.</p>
-
+			<div id="jqm-homeheader"><!--image-->	
+				<h1><img src="image.png"/></h1>
+			</div><!--/image-->	
 			
-			<ul data-role="listview" data-inset="true" data-theme="c" data-dividertheme="f">
-				<li data-role="list-divider">Overview</li>
-				<li><a href="http://code.jquery.com/docs/about/intro.html">Intro to jQuery Mobile</a></li>
-				<li><a href="http://code.jquery.com/docs/about/getting-started.html">Quick start guide</a></li>	
-				<li><a href="http://code.jquery.com/docs/about/features.html">Features</a></li>
-				<li><a href="http://code.jquery.com/docs/about/accessibility.html">Accessibility</a></li>
-				<li><a href="http://code.jquery.com/docs/about/platforms.html">Supported platforms</a></li>
-
-			</ul>
+			<div><!--new post button-->	
+				<ul data-role="listview" data-inset="true" data-theme="c" data-dividertheme="f">
+					<li data-role="list-divider"><button value="Compose New Post" data-theme="e"></button></li>
+				</ul>
+				<br>
+			</div><!--/new post button-->	
+	
+			<div><!--read posts options-->	
+				<ul data-role="listview" data-inset="true" data-theme="c" data-dividertheme="f">
+					<li data-role="list-divider">Read Posts:</li>
+					<li>
+						<div data-role="fieldcontain">
+							<label for="name">Posts of a specific Author:</label>
+							<input type="search" name="autor" id="authorInput" value="" placeholder="Username"/>
+						</div>
+						<div data-role="fieldcontain">
+							<label for="name">Posts which published between these dates:</label>
+							<input type="text" name="autor" id="authorInput" value="" placeholder="Start Date"/>
+							<input type="search" name="autor" id="authorInput" value="" placeholder="End Date"/>
+						</div>
+						<div data-role="fieldcontain">
+							<label for="name">Posts which have these Tags:</label>
+							<input type="search" name="autor" id="authorInput" value="" placeholder="Tag, Tag, ..., Tag"/>
+						</div>
+					</li>
+				</ul>
+				<br>
+			</div><!--/read posts options-->	
+			
+			<div><!--Login-->	
+				<ul data-role="listview" data-inset="true" data-theme="c" data-dividertheme="f">
+					<li data-role="list-divider">Connect to the System:</li>
+					<li><input type="text" name="username" id="usernameInput" value="" placeholder="Username"/></li>
+					<li><button value="Login"></button></li>	
+				</ul>
+			</div><!--/Login-->	
 			
 		</div><!--/content-primary-->	
 		
 		<div class="content-primary">
 			<nav>
 				
-		
-				<ul data-role="listview" data-inset="true" data-theme="c" data-dividertheme="b">
-					<li data-role="list-divider">Components</li>
-					<li><a href="http://code.jquery.com/docs/pages/index.html">Pages &amp; dialogs</a></li>
-
-					<li><a href="http://code.jquery.com/docs/toolbars/index.html">Toolbars</a></li>
-					<li><a href="http://code.jquery.com/docs/buttons/index.html">Buttons</a></li>
-					<li><a href="http://code.jquery.com/docs/content/index.html">Content formatting</a></li>
-					<li><a href="http://code.jquery.com/docs/forms/index.html">Form elements</a></li>
-					<li><a href="http://code.jquery.com/docs/lists/index.html">List views</a></li>
-					
-					<li data-role="list-divider">API</li>
-
-					<li><a href="http://code.jquery.com/docs/api/globalconfig.html">Configuring defaults</a></li>
-					<li><a href="http://code.jquery.com/docs/api/events.html">Events</a></li>
-					<li><a href="http://code.jquery.com/docs/api/methods.html">Methods &amp; Utilities</a></li>
-					<li><a href="http://code.jquery.com/docs/api/data-attributes.html">Data attribute reference</a></li>
-					<li><a href="http://code.jquery.com/docs/api/themes.html">Theme framework</a></li>
-
-		
+				<div><!--new post composition-->	
+					<br>
+					<br>
+					<br>
+					<ul data-role="listview" data-inset="true" data-theme="c" data-dividertheme="b">
+						<li data-role="list-divider">New Post Composition</li>
+						<li>
+							<div data-role="fieldcontain">
+								<label for="textarea">Title:</label>
+								<input type="text" name="username" id="usernameInput" value="" placeholder="Username"/>
+							</div>
+						</li>
+						<li>					
+							<div data-role="fieldcontain">
+								<label for="textarea">Tags:</label>
+								<input type="text" name="username" id="usernameInput" value="" placeholder="Username"/>
+							</div>
+						</li>						
+						<li>					
+							<div data-role="fieldcontain">
+								<label for="textarea">Content:</label>
+								<textarea name="textarea" id="textarea"></textarea>
+							</div>
+						</li>
+					</ul>
+					<br>
+				</div><!--/new post composition-->	
 				
-				</ul>
+				
+				<div><!--post1-->	
+					<ul data-role="listview" data-inset="true" data-theme="c" data-dividertheme="b">
+						
+						<li data-role="list-divider">
+							<label for="textarea">Title..</label>
+						</li>
+						<li>					
+							<label for="textarea">
+								Content..<br>
+								Content..<br>
+								Content..<br>
+								Content..<br>
+								Content..<br>
+							</label>
+						</li>
+						<li data-role="list-divider">
+							<label for="textarea">Tags..</label>
+						</li>						
+					</ul>
+					<br>
+				</div><!--/post1-->	
+				
+				<div><!--post2-->	
+					<ul data-role="listview" data-inset="true" data-theme="c" data-dividertheme="b">
+						
+						<li data-role="list-divider">
+							<label for="textarea">Title..</label>
+						</li>
+						<li>					
+							<label for="textarea">
+								Content..<br>
+								Content..<br>
+								Content..<br>
+								Content..<br>
+								Content..<br>
+							</label>
+						</li>
+						<li data-role="list-divider">
+							<label for="textarea">Tags..</label>
+						</li>						
+					</ul>
+					<br>
+				</div><!--/post2-->	
+				
+				
 			</nav>
 		</div>
 
@@ -75,7 +151,7 @@
 	</div>
 	
 	<div data-role="footer" class="footer-docs" data-theme="c">
-			<p>&copy; 2011-2012 The jQuery Project</p>
+			<p>&copy; Avi, Hezi, Nir & Hinit</p>
 	</div>	
 	
 
