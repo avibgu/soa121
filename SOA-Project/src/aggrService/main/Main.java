@@ -28,7 +28,8 @@ public class Main {
 
 		// TODO change back
 		// rh.setWelcomeFiles(new String[] { "index.html" });
-		rh.setWelcomeFiles(new String[] { "tests.html" });
+		// rh.setWelcomeFiles(new String[] { "tests.html" });
+		rh.setWelcomeFiles(new String[] { "new2.html" });
 
 		final HandlerList list = new HandlerList();
 
