@@ -76,7 +76,7 @@ public class AggrServlet extends HttpServlet {
 
 		final Map<String, String[]> parameters = req.getParameterMap();
 
-		System.out.println("author: " + parameters.get("author")[0]);
+//		System.out.println("author: " + parameters.get("author")[0]);
 		
 		try {
 
