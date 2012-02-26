@@ -1,164 +1,155 @@
 <!DOCTYPE html>
 <html>	
-<head>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	
-	<title>SOA Final Project - CMS</title>
-	
-	<link rel="stylesheet"  href="http://code.jquery.com/mobile/1.0.1/jquery.mobile-1.0.1.min.css" />
-	<link rel="stylesheet" href="http://jquerymobile.com/demos/1.0.1/docs/_assets/css/jqm-docs.css" />
-	<script src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
-
-	<script src="http://code.jquery.com/experiments/themeswitcher/jquery.mobile.themeswitcher.js"></script>
-	<script src="http://jquerymobile.com/demos/1.0.1/docs/_assets/js/jqm-docs.js"></script>
-	<script src="http://code.jquery.com/mobile/1.0.1/jquery.mobile-1.0.1.min.js"></script>
-	<script src="scripts.js"></script>
-	
-</head> 
-<body> 
-<div data-role="page" class="type-home">
-	<div data-role="content">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
 		
-		<div class="content-secondary">
-	
-			<div id="jqm-homeheader"><!--image-->	
-				<h1><img src="image.png"/></h1>
-			</div><!--/image-->	
-			
-			<div><!--new post button-->	
-				<ul data-role="listview" data-inset="true" data-theme="c" data-dividertheme="f">
-					<li data-role="list-divider"><button value="Compose New Post" data-theme="e"></button></li>
-				</ul>
-				<br>
-			</div><!--/new post button-->	
-	
-			<div><!--read posts options-->	
-				<ul data-role="listview" data-inset="true" data-theme="c" data-dividertheme="f">
-					<li data-role="list-divider">Read Posts:</li>
-					<li>
-						<div data-role="fieldcontain">
-							<label for="name">Posts of a specific Author:</label>
-							<input type="search" name="autor" id="authorInput" value="" placeholder="Username"/>
-						</div>
-						<div data-role="fieldcontain">
-							<label for="name">Posts which published between these dates:</label>
-							<input type="text" name="autor" id="authorInput" value="" placeholder="Start Date"/>
-							<input type="search" name="autor" id="authorInput" value="" placeholder="End Date"/>
-						</div>
-						
-						<div data-role="fieldcontain">
-							<label for="name">Posts which have these Tags:</label>
-							<div class="inline-inputs" id="TagListDivReadPost">
-								<input type="search" name="autor" id="authorInputTagList" value="" placeholder="Tag 1, Tag 2, Tag 3 ..."/>
-							</div>
-						<!--	<button id="addTagBtnForRead" class="btn" type="button" value="+" onClick="addTagFieldReadPosts('#TagListDivReadPost')">+</button> -->
-						</div>
-
-						
-					</li>
-				</ul>
-				<br>
-			</div><!--/read posts options-->	
-			
-			<div><!--Login-->	
-				<ul data-role="listview" data-inset="true" data-theme="c" data-dividertheme="f">
-					<li data-role="list-divider">Connect to the System:</li>
-					<li><input type="text" name="username" id="usernameInput" value="" placeholder="Username"/></li>
-					<li><button value="Login"></button></li>	
-				</ul>
-			</div><!--/Login-->	
-			
-		</div><!--/content-primary-->	
+		<title>SOA Final Project - CMS</title>
 		
-		<div class="content-primary">
-			<nav>
+		<link rel="stylesheet"  href="http://code.jquery.com/mobile/1.0.1/jquery.mobile-1.0.1.min.css" />
+		<link rel="stylesheet" href="http://jquerymobile.com/demos/1.0.1/docs/_assets/css/jqm-docs.css" />
+		<script src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
+
+		<script src="http://code.jquery.com/experiments/themeswitcher/jquery.mobile.themeswitcher.js"></script>
+		<script src="http://jquerymobile.com/demos/1.0.1/docs/_assets/js/jqm-docs.js"></script>
+		<script src="http://code.jquery.com/mobile/1.0.1/jquery.mobile-1.0.1.min.js"></script>
+		
+	<script type="text/javascript" src="scripts.js"></script>
+	
+	</head> 
+	<body onload="bodyLoad()"> 
+		<div data-role="page" class="type-home">
+			<div data-role="content">
 				
-				<div><!--new post composition-->	
-					<br>
-					<br>
-					<br>
-					<ul data-role="listview" data-inset="true" data-theme="c" data-dividertheme="b">
-						<li data-role="list-divider">New Post Composition</li>
-						<li>
-							<div data-role="fieldcontain">
-								<label for="textarea">Title:</label>
-								<input type="text" name="username" id="usernameInput" value="" placeholder="Title"/>
-							</div>
-						</li>
-						<li>					
-							<div data-role="fieldcontain">
-								<label for="textarea">Tags:</label>
-								<input type="text" name="username" id="usernameInput" value="" placeholder="Tag 1, Tag 2, Tag 3 ..."/>
-							</div>
-						</li>						
-						<li>					
-							<div data-role="fieldcontain">
-								<label for="textarea">Content:</label>
-								<textarea name="textarea" id="textarea" placeholder="Content"></textarea>
-							</div>
-						</li>
-					</ul>
-					<br>
-				</div><!--/new post composition-->	
+				<div class="content-secondary">
+			
+					<div><!--image-->	
+						<h1><img src="image.png"/></h1>
+					</div><!--/image-->	
+					
+					<div id="leftDiv"></div><!-- load left pane content here -->
+					
+					<div id="loginDiv" style="visibility: collapse"><!--Login-->	
+						<ul data-role="listview" data-inset="true" data-theme="c" data-dividertheme="f">
+							<li data-role="list-divider">Connect to the System:</li>
+							<li><input type="text" name="username" id="usernameInput" value="" placeholder="Username"/></li>
+							<li><button value="Login"  onClick="login()"></button></li>	
+						</ul>
+					</div><!--/Login-->
+					
+					<div id="newPostButtonDiv" style="visibility: collapse"><!--new post button-->	
+						<ul data-role="listview" data-inset="true" data-theme="c" data-dividertheme="f">
+							<li data-role="list-divider"><button value="Compose New Post" data-theme="e"></button></li>
+						</ul>
+						<br>
+					</div><!--/new post button-->	
+			
+					<div id="readPostsOptionsDiv" style="visibility: collapse"><!--read posts options-->	
+						<ul data-role="listview" data-inset="true" data-theme="c" data-dividertheme="f">
+							<li data-role="list-divider">Read Posts:</li>
+							<li>
+								<div data-role="fieldcontain">
+									<label for="name">Posts of a specific Author:</label>
+									<input type="search" name="autor" id="authorInput" value="" placeholder="Username"/>
+								</div>
+								<div data-role="fieldcontain">
+									<label for="name">Posts which published between these dates:</label>
+									<input type="text" name="autor" id="startDateInput" value="" placeholder="Start Date"/>
+									<input type="search" name="autor" id="endDateInput" value="" placeholder="End Date"/>
+								</div>
+								
+								<div data-role="fieldcontain">
+									<label for="name">Posts which have these Tags:</label>
+									<div class="inline-inputs" id="TagListDivReadPost">
+										<input type="search" name="autor" id="tagsInputTagList" value="" placeholder="Tag 1, Tag 2, Tag 3 ..."/>
+									</div>
+								<!--	<button id="addTagBtnForRead" class="btn" type="button" value="+" onClick="addTagFieldReadPosts('#TagListDivReadPost')">+</button> -->
+								</div>
+							</li>
+						</ul>
+						<br>
+					</div><!--/read posts options-->	
+					
+					<div id="logoutDiv" style="visibility: collapse"><!--Logout-->	
+						<ul data-role="listview" data-inset="true" data-theme="c" data-dividertheme="f">
+							<li><button value="Logout"  onClick="logout()"></button></li>	
+						</ul>
+					</div><!--/Logout-->
+					
+				</div><!--/content-primary-->	
 				
-				
-				<div><!--post1-->	
-					<ul data-role="listview" data-inset="true" data-theme="c" data-dividertheme="b">
+				<div class="content-primary">
+					<nav>
+					
+						<div id="rightDiv"></div><!-- load right pane content here -->
 						
-						<li data-role="list-divider">
-							<label for="textarea">Title</label>
-						</li>
-						<li>					
-							<label for="textarea">
-								Content<br>
-								Content<br>
-								Content<br>
-								Content<br>
-								Content<br>
-							</label>
-						</li>
-						<li data-role="list-divider">
-							<label for="textarea">Tags List</label>
-						</li>						
-					</ul>
-					<br>
-				</div><!--/post1-->	
-				
-				<div><!--post2-->	
-					<ul data-role="listview" data-inset="true" data-theme="c" data-dividertheme="b">
+						<div id="composePostDiv" style="visibility: collapse"><!--new post composition-->	
+							<br>
+							<br>
+							<br>
+							<ul data-role="listview" data-inset="true" data-theme="c" data-dividertheme="b">
+								<li data-role="list-divider">New Post Composition</li>
+								<li>
+									<div data-role="fieldcontain">
+										<label for="textarea">Title:</label>
+										<input type="text" name="username" id="usernameInput" value="" placeholder="Title"/>
+									</div>
+								</li>
+								<li>					
+									<div data-role="fieldcontain">
+										<label for="textarea">Tags:</label>
+										<input type="text" name="username" id="usernameInput" value="" placeholder="Tag 1, Tag 2, Tag 3 ..."/>
+									</div>
+								</li>						
+								<li>					
+									<div data-role="fieldcontain">
+										<label for="textarea">Content:</label>
+										<textarea name="textarea" id="postContentInput" placeholder="Content"></textarea>
+									</div>
+								</li>
+							</ul>
+							<br>
+						</div><!--/new post composition-->
 						
-						<li data-role="list-divider">
-							<label for="textarea">Title</label>
-						</li>
-						<li>					
-							<label for="textarea">
-								Content<br>
-								Content<br>
-								Content<br>
-								Content<br>
-								Content<br>
-							</label>
-						</li>
-						<li data-role="list-divider">
-							<label for="textarea">Tags List</label>
-						</li>						
-					</ul>
-					<br>
-				</div><!--/post2-->	
+						<div id="sendNewPostButtonDiv" style="visibility: collapse"><!--Send New Post Button-->	
+							<ul data-role="listview" data-inset="true" data-theme="c" data-dividertheme="f">
+								<li><button value="Logout"  onClick="logout()"></button></li>	
+							</ul>
+						</div><!--/Send New Post Button-->	
+						
+						<div id="postDiv" style="visibility: collapse"><!--post-->	
+							<ul data-role="listview" data-inset="true" data-theme="c" data-dividertheme="b">
+								
+								<li data-role="list-divider">
+									<label for="textarea">Title</label>
+								</li>
+								<li>					
+									<label for="textarea">
+										Content<br>
+										Content<br>
+										Content<br>
+										Content<br>
+										Content<br>
+									</label>
+								</li>
+								<li data-role="list-divider">
+									<label for="textarea">Tags List</label>
+								</li>						
+							</ul>
+							<br>
+						</div><!--/post-->	
+
+					</nav>
+				</div>
+
 				
-				
-			</nav>
+
+			</div>
+			
+			<div data-role="footer" class="footer-docs" data-theme="c">
+					<p>&copy; Avi, Hezi, Nir & Hinit</p>
+			</div>			
+
 		</div>
-
-		
-
-	</div>
-	
-	<div data-role="footer" class="footer-docs" data-theme="c">
-			<p>&copy; Avi, Hezi, Nir & Hinit</p>
-	</div>			
-
-</div>
-</body>
+	</body>
 </html>
