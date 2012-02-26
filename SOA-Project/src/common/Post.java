@@ -169,21 +169,27 @@ public class Post {
 		final StringBuilder sb = new StringBuilder();
 
 		sb.append("{");
-		sb.append("title:" + this.mTitle + ", ");
-		sb.append("author:" + this.mAuthor + ", ");
-		sb.append("date:" + this.mDate + ", ");
-		sb.append("tags: {");
-
-		int i = 0;
-		for (final String tag : this.mTags) {
-			sb.append("tag" + i + ": " + tag + ", ");
-			i++;
+		sb.append("\"title\":\"" + this.mTitle + "\", ");
+		sb.append("\"author\":\"" + this.mAuthor + "\", ");
+		sb.append("\"date\":\"" + this.mDate + "\", ");
+		
+		if (!this.mTags.isEmpty()){
+			
+			sb.append("\"tags\":{");
+			
+			int i = 0;
+			for (final String tag : this.mTags) {
+				sb.append("\"tag\"" + i + ":\"" + tag + "\", ");
+				i++;
+			}
+			sb.deleteCharAt(sb.length() - 1);
+			sb.deleteCharAt(sb.length() - 1);
+			sb.append("}, ");
 		}
-		sb.deleteCharAt(sb.length() - 1);
-		sb.deleteCharAt(sb.length() - 1);
-		sb.append("}, ");
-		sb.append("content:" + this.mContent);
-		sb.append("}");
+
+
+		sb.append("\"content\":\"" + this.mContent);
+		sb.append("\"}");
 
 		return sb.toString();
 	}
