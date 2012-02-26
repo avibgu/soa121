@@ -72,24 +72,12 @@ public class AggrServlet extends HttpServlet {
 
 		System.out.println("getting " + req.getRequestURL());
 
-		if (req.getRequestURI().equals("/aggr/scripts.js")) {
-			// System.out.println("scripts.js request");
-			return;
-		}
-		if (req.getRequestURI().equals("/aggr/")) {
-			this.sendFileResponse(resp, new File("html/tests.html"));
-			// System.out.println("get main page");
-			return;
-		}
-		if (req.getRequestURI().equals("/aggr/jquery-1.7.1.js")) {
-			return;
-		}
-
-		System.out.println("get 2");
 		ArrayList<Post> posts = null;
 
 		final Map<String, String[]> parameters = req.getParameterMap();
 
+		System.out.println("author: " + parameters.get("author")[0]);
+		
 		try {
 
 			if (parameters.containsKey("author")) {
