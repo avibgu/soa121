@@ -32,13 +32,20 @@ function doPost(content){
 	//var content = {"title": "title1", "author": "author1", "tags":{"tag1": "tag11", "tag2": "tag21", "tag3": "tag31", "tag4": "tag41", "tag5": "tag51"}, "content": "content1" };
 	var params = {data: JSON.stringify([content])};
 
-	$.post(postServerUrl, params, callback).error("doPost Failed");
+	$.post(postServerUrl, params, callback).error(function() { alert("doPost Failed"); });
 
 }
 
 function doGet(params, callback) {
 
-	$.ajax("GET", getServerUrl + "?" + params, callback).error("doGet Failed");
+	$.ajax({
+	  type: "GET",
+	  url: getServerUrl,
+	  data: (params),
+	  cache: false,
+	  dataType: "text",
+	  success: callback
+	});
 }
 
 
@@ -155,11 +162,32 @@ function initPageContentWhenLogedout(){
 	element.style.visibility = "visible";
 }
 
-// TODO..
-
 function getPostsOfSpecificAuthor(author){
 
-	doGet("author=" + author, handleGetPostsReply);
+	doGet({author: author}, handleGetPostsReply);
+}
+
+// TODO..
+
+function getPostsBetweenDates(start, end){
+
+	doGet({startDate: start, endDate: end}, handleGetPostsReply);
+}
+
+function getPostsOfSpecificAuthor(tags){
+
+	var jTags = "{";
+	
+	for (t in tags){
+	
+		jTags += "tag:" + tags[t] + ","; 
+	}
+	
+	jTags.substring(0, jTags.length-2);
+	
+	jTags += "}"
+	
+	doGet(jTags, handleGetPostsReply);
 }
 
 function handleGetPostsReply(data){
@@ -180,12 +208,29 @@ function updatePageWithPosts(){
 
 	alert("updatePageWithPosts");
 
+	//{posts: [Post1 as JSON, POST2 as JSON]}
 	var jsonObjects = eval('(' + data + ')');
-	var rightDiv = document.getElementById("rightDiv");
 	
+	var rightDiv = document.getElementById("rightDiv");
+
 	for (k in jsonObjects) {
 	
-		jsonObjects[k];
+		var post = jsonObjects[k];
+		var postDiv = document.getElementById("postDiv").cloneNode(true);
+		
+		postDiv.getElementById("title").innerHTML =
+			post.title + " (" + post.author + " " + post.date + ")";
+			
+		postDiv.getElementById("content").innerHTML = post.content;
+		
+		var tags = post.getElementById("tag");
+		
+		for (j in tags)
+			postDiv.getElementById("tags").innerHTML += tags[j] + " ";
+		
+		postDiv.style.visibility = "visible";
+		
+		rightDiv.appendChild(postDiv)
 	}
 }
 
