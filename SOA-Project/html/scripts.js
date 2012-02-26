@@ -63,6 +63,8 @@ function bodyLoad(){
 
 	username = getCookie("username");
 	
+	initBinds();
+	
 	if (username && username != ""){
 		
 		initPageContentWhenLogedin();
@@ -162,19 +164,43 @@ function initPageContentWhenLogedout(){
 	element.style.visibility = "visible";
 }
 
+// TODO..
+
+function initBinds(){
+
+	//$(".authorInput").bind( "click.enter", searchByAuthor);
+	//$('.authorInput').keypress(function(e) {
+		//if(e.keyCode == 13) {
+			//alert('You pressed enter!');
+		//}
+	//});
+	
+	$(document).keypress(function (e) {
+		if (e.keyCode === 13){
+		
+			if (authorFocus == 1) alert('author');
+			else if (startDateFocus == 1) alert('start');
+			else if (endDateFocus == 1) alert('end');
+			else if (tagsFocus == 1) alert('tags');
+		}
+	 });
+}
+
+function searchByAuthor(){
+	getPostsOfSpecificAuthor($.(".authorInput").textInput());
+}
+
 function getPostsOfSpecificAuthor(author){
 
 	doGet({author: author}, handleGetPostsReply);
 }
-
-// TODO..
 
 function getPostsBetweenDates(start, end){
 
 	doGet({startDate: start, endDate: end}, handleGetPostsReply);
 }
 
-function getPostsOfSpecificAuthor(tags){
+function getPostsOfTheseTags(tags){
 
 	var jTags = "{";
 	
@@ -192,14 +218,14 @@ function getPostsOfSpecificAuthor(tags){
 
 function handleGetPostsReply(data){
 
-	if (putReq.readyState == 4){
+	if (data.readyState == 4){
 	
-		if(putReq.status == 200) {
+		if(data.status == 200) {
 			updatePageWithPosts(data);
 		}
 		else{
 			alert("result status != 200");
-			alert(putReq.responseText);
+			alert(data.responseText);
 		}
 	}
 }
