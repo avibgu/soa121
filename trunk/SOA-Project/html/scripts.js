@@ -121,15 +121,12 @@ function logout(){
 function initPageContentWhenLogedin(){
 
 	var leftDiv = document.getElementById("leftDiv");
-	var rightDiv = document.getElementById("rightDiv");
 	
 	// remove login button element..
 	while ( leftDiv.childNodes.length > 0 )
 		leftDiv.removeChild( leftDiv.firstChild );
 
-	// remove everything from the right pane..
-	while ( rightDiv.childNodes.length > 0 )
-		rightDiv.removeChild( rightDiv.firstChild );
+	emptyTheRightPane();
 		
 	// add compose, read and logout elements..
 	var element = document.getElementById("newPostButtonDiv").cloneNode(true);
@@ -148,15 +145,12 @@ function initPageContentWhenLogedin(){
 function initPageContentWhenLogedout(){
 
 	var leftDiv = document.getElementById("leftDiv");
-	var rightDiv = document.getElementById("rightDiv");
 	
 	// remove compose, read and logout elements..
 	while ( leftDiv.childNodes.length > 0 )
 		leftDiv.removeChild( leftDiv.firstChild );
 
-	// remove everything from the right pane..
-	while ( rightDiv.childNodes.length > 0 )
-		rightDiv.removeChild( rightDiv.firstChild );
+	emptyTheRightPane();
 		
 	// add login button element..
 	var element = document.getElementById("loginDiv").cloneNode(true);
@@ -164,7 +158,37 @@ function initPageContentWhenLogedout(){
 	element.style.visibility = "visible";
 }
 
+
+function showComposeElement(){
+
+	emptyTheRightPane();
+		
+	// add login button element..
+	var element = document.getElementById("composePostDiv").cloneNode(true);
+	rightDiv.appendChild(element);
+	element.style.visibility = "visible";
+	
+	element = document.getElementById("sendNewPostButtonDiv").cloneNode(true);
+	rightDiv.appendChild(element);
+	element.style.visibility = "visible";
+}
+
+function emptyTheRightPane(){
+
+	var rightDiv = document.getElementById("rightDiv");
+	
+	// remove everything from the right pane..
+	while ( rightDiv.childNodes.length > 0 )
+		rightDiv.removeChild( rightDiv.firstChild );
+}
+
 // TODO..
+
+function send(){
+
+	alert("send");
+	getPostsOfSpecificAuthor(username);
+}
 
 function initBinds(){
 
@@ -187,7 +211,9 @@ function initBinds(){
 }
 
 function searchByAuthor(){
-	getPostsOfSpecificAuthor($.(".authorInput").textInput());
+
+	var author = document.getElementById("authorInput").textInput();
+	getPostsOfSpecificAuthor(author);
 }
 
 function getPostsOfSpecificAuthor(author){
@@ -218,41 +244,41 @@ function getPostsOfTheseTags(tags){
 
 function handleGetPostsReply(data){
 
-	if (data.readyState == 4){
-	
-		if(data.status == 200) {
-			updatePageWithPosts(data);
-		}
-		else{
-			alert("result status != 200");
-			alert(data.responseText);
-		}
-	}
+	emptyTheRightPane();
+	updatePageWithPosts(data);
 }
 
-function updatePageWithPosts(){
+function updatePageWithPosts(data){
 
-	alert("updatePageWithPosts");
+	data = JSON.stringify([data]);
 
-	//{posts: [Post1 as JSON, POST2 as JSON]}
-	var jsonObjects = eval('(' + data + ')');
+	//[Post1 as JSON, POST2 as JSON]
+	var posts = eval('(' + data + ')');
 	
 	var rightDiv = document.getElementById("rightDiv");
-
-	for (k in jsonObjects) {
 	
-		var post = jsonObjects[k];
+	for (k in posts) {
+	
+		var post = posts[k];
+		
+		alert(posts);
+		
 		var postDiv = document.getElementById("postDiv").cloneNode(true);
 		
-		postDiv.getElementById("title").innerHTML =
+		// title
+		postDiv.getElementsByTagName("label")[0].innerHTML =
 			post.title + " (" + post.author + " " + post.date + ")";
-			
-		postDiv.getElementById("content").innerHTML = post.content;
 		
-		var tags = post.getElementById("tag");
+		// content
+		postDiv.getElementsByTagName("label")[1].innerHTML = post.content;
 		
-		for (j in tags)
-			postDiv.getElementById("tags").innerHTML += tags[j] + " ";
+		// tags
+		var tags = "";
+
+		for (t in post.tags)
+			 tags += post.tags[t] + " ";
+			 
+		postDiv.getElementsByTagName("label")[2].innerHTML = tags;
 		
 		postDiv.style.visibility = "visible";
 		

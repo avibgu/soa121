@@ -30,7 +30,7 @@ public class DBController {
 	private final int failureThreshold = 10000;
 
 	public DBController() {
-		this("", "");
+		this("root", "zubur1");
 	}
 
 	public DBController(final String pUsername, final String pPassword) {
@@ -66,7 +66,7 @@ public class DBController {
 			// final String schema = "soa121db";
 
 			// create the DB is not exist
-			this.mConn = DriverManager.getConnection(this.mDBAddrres, "niram", "a");
+			this.mConn = DriverManager.getConnection(this.mDBAddrres, mUsername, mPassword);
 			// this.mConn = DriverManager.getConnection(this.mDBAddrres, schema,
 			// schema);
 			final Statement stmt0 = this.mConn.createStatement();
@@ -74,7 +74,7 @@ public class DBController {
 			this.mConn.close();
 
 			// update connection to automatically connect to that db
-			this.mConn = DriverManager.getConnection(this.mDBAddrres + "/" + schema, "niram", "a");
+			this.mConn = DriverManager.getConnection(this.mDBAddrres + "/" + schema, mUsername, mPassword);
 			// this.mConn = DriverManager.getConnection(this.mDBAddrres + "/" +
 			// schema, schema, schema);
 

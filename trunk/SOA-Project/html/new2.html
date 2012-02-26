@@ -10,7 +10,7 @@
 		<link rel="stylesheet" href="http://jquerymobile.com/demos/1.0.1/docs/_assets/css/jqm-docs.css" />
 		<script src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
 
-		<script src="http://code.jquery.com/experiments/themeswitcher/jquery.mobile.themeswitcher.js"></script>
+		<script src="http://jquerymobile.com/demos/1.0.1/experiments/themeswitcher/jquery.mobile.themeswitcher.js"></script>
 		<script src="http://jquerymobile.com/demos/1.0.1/docs/_assets/js/jqm-docs.js"></script>
 		<script src="http://code.jquery.com/mobile/1.0.1/jquery.mobile-1.0.1.min.js"></script>
 		
@@ -33,13 +33,13 @@
 						<ul data-role="listview" data-inset="true" data-theme="c" data-dividertheme="f">
 							<li data-role="list-divider">Connect to the System:</li>
 							<li><input type="text" id="usernameInput" value="" placeholder="Username"/></li>
-							<li><button value="Login"  onClick="login()"></button></li>	
+							<li><button value="Login" onClick="login()"></button></li>	
 						</ul>
 					</div><!--/Login-->
 					
 					<div id="newPostButtonDiv" style="visibility: collapse"><!--new post button-->	
 						<ul data-role="listview" data-inset="true" data-theme="c" data-dividertheme="f">
-							<li data-role="list-divider"><button value="Compose New Post" data-theme="e"></button></li>
+							<li data-role="list-divider"><button value="Compose New Post" data-theme="e" onClick="showComposeElement()"></button></li>
 						</ul>
 						<br>
 					</div><!--/new post button-->	
@@ -113,11 +113,12 @@
 						
 						<div id="sendNewPostButtonDiv" style="visibility: collapse"><!--Send New Post Button-->	
 							<ul data-role="listview" data-inset="true" data-theme="c" data-dividertheme="f">
-								<li><button value="Logout"  onClick="logout()"></button></li>	
+								<li><button value="Send"  onClick="send()"></button></li>	
 							</ul>
 						</div><!--/Send New Post Button-->	
 						
 						<div id="postDiv" style="visibility: collapse"><!--post-->	
+							<br>
 							<ul data-role="listview" data-inset="true" data-theme="c" data-dividertheme="b">
 								
 								<li data-role="list-divider">
@@ -133,10 +134,9 @@
 									</label>
 								</li>
 								<li data-role="list-divider">
-									<label for="textarea" id="tags">Tags List</label>
+									<label for="textarea" id="tags"></label>
 								</li>						
 							</ul>
-							<br>
 						</div><!--/post-->	
 
 					</nav>

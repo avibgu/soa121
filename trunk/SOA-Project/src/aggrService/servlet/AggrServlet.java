@@ -25,9 +25,9 @@ public class AggrServlet extends HttpServlet {
 	protected DBController mDBController;
 
 	public AggrServlet() {
-		this.mDBController = null;
+//		this.mDBController = null;
 		// TODO : return this when having DB
-		// this.mDBController = new DBController();
+		this.mDBController = new DBController();
 	}
 
 	/**
@@ -123,13 +123,14 @@ public class AggrServlet extends HttpServlet {
 		final PrintWriter out = resp.getWriter();
 
 		final StringBuilder sb = new StringBuilder();
-		sb.append("{posts: [");
+		sb.append("[");
 
 		for (final Post post : posts) {
-			out.print(post.toJSON() + ", ");
+			sb.append(post.toJSON() + ", ");
 		}
 		sb.deleteCharAt(sb.length() - 1);
-		sb.append("]}");
+		sb.deleteCharAt(sb.length() - 1);
+		sb.append("]");
 
 		out.print(sb.toString());
 		out.close();
