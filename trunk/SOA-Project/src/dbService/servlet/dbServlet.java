@@ -18,9 +18,9 @@ public class dbServlet extends HttpServlet {
 	protected DBController mDBController;
 
 	public dbServlet() throws Exception {
-		this.mDBController = null;
+		// this.mDBController = null;
 		// TODO : return this when having DB
-		// this.mDBController = new DBController();
+		this.mDBController = new DBController();
 	}
 
 	@Override
