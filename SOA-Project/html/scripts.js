@@ -260,7 +260,8 @@ function initBinds(){
 
 function searchByAuthor(){
 
-	var author = document.getElementById("authorInput").textInput();
+	var author = $("#postTitleInput").val();
+	//var author = document.getElementById("authorInput").textInput();
 	getPostsOfSpecificAuthor(author);
 }
 
@@ -315,20 +316,15 @@ function handleGetPostsReply(data){
 
 function updatePageWithPosts(data){
 
-	data = JSON.stringify([data]);
-
 	//[Post1 as JSON, POST2 as JSON]
 	var posts = eval('(' + data + ')');
-	
-	alert(data);
-	alert(posts);
 	
 	var rightDiv = document.getElementById("rightDiv");
 	
 	for (k in posts) {
 	
 		var post = posts[k];
-		
+
 		var postDiv = document.getElementById("postDiv").cloneNode(true);
 		
 		// title
@@ -351,4 +347,3 @@ function updatePageWithPosts(data){
 		rightDiv.appendChild(postDiv)
 	}
 }
-
