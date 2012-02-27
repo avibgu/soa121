@@ -67,6 +67,71 @@ public class AggrServlet extends HttpServlet {
 		}
 	}
 
+	// @Override
+	// @SuppressWarnings("unchecked")
+	// protected void doGet(final HttpServletRequest req, final
+	// HttpServletResponse resp)
+	// throws ServletException, IOException {
+	//
+	// System.out.println("getting " + req.getRequestURL());
+	//
+	// ArrayList<Post> posts = null;
+	//
+	// final Map<String, String[]> parameters = req.getParameterMap();
+	//
+	// // System.out.println("author: " + parameters.get("author")[0]);
+	//
+	// try {
+	//
+	// if (parameters.containsKey("author")) {
+	// System.out.println("filtering by author");
+	//
+	// // TODO: - check it
+	// // final String unSanitizeAuthor = parameters.get("author")[0];
+	// // String author =
+	// // ESAPI.encoder().encodeForHTML(unSanitizeAuthor);
+	//
+	// String author = parameters.get("author")[0];
+	//
+	// posts = this.mDBController.getPostsOfSpecificAuthor(author);
+	// } else if (parameters.containsKey("startDate") &&
+	// parameters.containsKey("endDate")) {
+	// System.out.println("filtering by dates");
+	//
+	// // TODO: - check it
+	// // final String unSanitizeStartDate =
+	// // parameters.get("startDate")[0];
+	// // final long startDate =
+	// // Long.parseLong(ESAPI.encoder().encodeForHTML(unSanitizeStartDate));
+	// //
+	// // final String unSanitizeEndDate =
+	// // parameters.get("endDate")[0];
+	// // final long endDate =
+	// // Long.parseLong(ESAPI.encoder().encodeForHTML(unSanitizeEndDate));
+	//
+	// final long startDate = Long.parseLong(parameters.get("startDate")[0]);
+	// final long endDate = Long.parseLong(parameters.get("endDate")[0]);
+	//
+	// posts = this.mDBController.getPostsBetweenSpecificDates(new
+	// Timestamp(startDate),
+	// new Timestamp(endDate));
+	//
+	// } else if (parameters.containsKey("tag")) {
+	// System.out.println("filtering by tags");
+	// // multiple tags...
+	// final String[] tags = parameters.get("tag"); // TODO how to
+	// // send
+	//
+	// posts = this.mDBController.getPostsOfTheseTags(tags);
+	// }
+	// } catch (final Exception e) {
+	// // TODO Auto-generated catch block
+	// e.printStackTrace();
+	// }
+	//
+	// this.sendListOfPostsAsResponse(resp, posts);
+	// }
+
 	@Override
 	@SuppressWarnings("unchecked")
 	protected void doGet(final HttpServletRequest req, final HttpServletResponse resp)

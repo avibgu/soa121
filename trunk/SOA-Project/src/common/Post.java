@@ -11,8 +11,6 @@ import javax.servlet.http.HttpServletRequest;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
-import org.owasp.esapi.ESAPI;
-
 public class Post {
 
 	private String mTitle;
@@ -85,20 +83,20 @@ public class Post {
 		// get the Sanitized Data
 		try {
 			// this.mTitle = postJson.getString("title");
-			this.mTitle = ESAPI.encoder().encodeForHTML(postJson.getString("title"));
+			this.mTitle = postJson.getString("title");
 		} catch (final Exception e) {
 			this.mTitle = "";
 		}
 		try {
 			// this.mAuthor = postJson.getString("author");
-			this.mAuthor = ESAPI.encoder().encodeForHTML(postJson.getString("author"));
+			this.mAuthor = postJson.getString("author");
 
 		} catch (final Exception e) {
 			this.mAuthor = "";
 		}
 		try {
 			// this.mContent = postJson.getString("content");
-			this.mContent = ESAPI.encoder().encodeForHTML(postJson.getString("content"));
+			this.mContent = postJson.getString("content");
 
 		} catch (final Exception e) {
 			this.mContent = "";
@@ -111,14 +109,91 @@ public class Post {
 
 					// this.mTags.add(postJson.getString(tagNames.getString(j)));
 
-					this.mTags.add(postJson.getString(ESAPI.encoder().encodeForHTML(
-							postJson.getString(tagNames.getString(j)))));
+					this.mTags.add(postJson.getString(postJson.getString(tagNames.getString(j))));
 				}
 			}
 		} catch (final Exception e) {
 		}
 
 	}
+
+	// private void parseJSONToPost(final HttpServletRequest req) throws
+	// Exception {
+	//
+	// this.mTags = new ArrayList<String>();
+	// this.mDate = new
+	// java.sql.Timestamp(Calendar.getInstance().getTimeInMillis());
+	//
+	// // read the input
+	// final BufferedInputStream bis = new
+	// BufferedInputStream(req.getInputStream());
+	// final ByteArrayOutputStream buf = new ByteArrayOutputStream();
+	// int result = bis.read();
+	// while (result != -1) {
+	// final byte b = (byte) result;
+	// buf.write(b);
+	// result = bis.read();
+	// }
+	// String postJsonString = buf.toString();
+	//
+	// // decode to json
+	// postJsonString = this.decodeURIComponent2(postJsonString);
+	// // System.out.println("the decoded json = " + postJson);
+	//
+	// // before =
+	// //
+	// data=[{"title":"title1","author":"author1","tags":{"tag1":"tag11","tag2":"tag21","tag3":"tag31","tag4":"tag41","tag5":"tag51"}}]
+	// postJsonString = postJsonString.substring(postJsonString.indexOf("[") +
+	// 1,
+	// postJsonString.lastIndexOf("]"));
+	// // System.out.println("the decoded json 2 = " + postJson);
+	//
+	// // convert the string to json
+	// // after =
+	// //
+	// {"title":"title1","author":"author1","tags":{"tag1":"tag11","tag2":"tag21","tag3":"tag31","tag4":"tag41","tag5":"tag51"}}
+	// final JSONObject postJson = JSONObject.fromObject(postJsonString);
+	// // System.out.println("title = " + postJson.get("title"));
+	//
+	// // get the Sanitized Data
+	// try {
+	// // this.mTitle = postJson.getString("title");
+	// this.mTitle = ESAPI.encoder().encodeForHTML(postJson.getString("title"));
+	// } catch (final Exception e) {
+	// this.mTitle = "";
+	// }
+	// try {
+	// // this.mAuthor = postJson.getString("author");
+	// this.mAuthor =
+	// ESAPI.encoder().encodeForHTML(postJson.getString("author"));
+	//
+	// } catch (final Exception e) {
+	// this.mAuthor = "";
+	// }
+	// try {
+	// // this.mContent = postJson.getString("content");
+	// this.mContent =
+	// ESAPI.encoder().encodeForHTML(postJson.getString("content"));
+	//
+	// } catch (final Exception e) {
+	// this.mContent = "";
+	// }
+	// try {
+	// final JSONObject tags = postJson.getJSONObject("tags");
+	// final JSONArray tagNames = tags.names();
+	// if (tagNames != null) {
+	// for (int j = 0; j < tagNames.size(); j++) {
+	//
+	// // this.mTags.add(postJson.getString(tagNames.getString(j)));
+	//
+	// this.mTags.add(postJson.getString(ESAPI.encoder().encodeForHTML(
+	// postJson.getString(tagNames.getString(j)))));
+	// }
+	// }
+	// } catch (final Exception e) {
+	// }
+	//
+	// }
 
 	//
 	//
