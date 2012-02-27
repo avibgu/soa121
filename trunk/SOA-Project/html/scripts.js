@@ -91,10 +91,7 @@ function getFailure(){
 }
 
 function doGetTest(){
-		getParams = "author=a2";
-		alert("doGetTest");
-		doGet(getParams, doGetTestUpdate, getFailure);
-		//alert("doGetTest done");
+
 }
 
 
