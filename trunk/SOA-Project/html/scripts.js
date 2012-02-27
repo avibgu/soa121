@@ -25,20 +25,19 @@ function doPost(content, callback){
     });
 }
 
-function doGet(params, callback, failure) {
+function doGet(params, callback) {
 //json
-		
+		/*
 		$.ajax({
 				type: "GET",
 				url: getServerUrl,
 				data: params,
 				cache: false,
 				dataType: "json",
-				success: callback,
-				error: failure
-		});
+				success: callback
+		});*/
 		
-	//$.get(getServerUrl, params, callback);
+	$.get(getServerUrl, params, callback);
 }
 
 function doPostTestUpdate(params){
@@ -320,6 +319,9 @@ function updatePageWithPosts(data){
 
 	//[Post1 as JSON, POST2 as JSON]
 	var posts = eval('(' + data + ')');
+	
+	alert(data);
+	alert(posts);
 	
 	var rightDiv = document.getElementById("rightDiv");
 	
