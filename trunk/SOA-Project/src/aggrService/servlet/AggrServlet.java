@@ -8,14 +8,13 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import org.owasp.esapi.ESAPI;
 
 import common.DBController;
 import common.Post;
@@ -151,11 +150,11 @@ public class AggrServlet extends HttpServlet {
 				System.out.println("filtering by author");
 
 				// TODO: - check it
-				final String unSanitizeAuthor = parameters.get("author")[0];
-				String author = ESAPI.encoder().encodeForHTML(unSanitizeAuthor);
-
+				// final String unSanitizeAuthor = parameters.get("author")[0];
 				// String author =
-				// ESAPI.encoder().encodeForHTML(parameters.get("author")[0]);
+				// ESAPI.encoder().encodeForHTML(unSanitizeAuthor);
+
+				String author = parameters.get("author")[0];
 
 				posts = this.mDBController.getPostsOfSpecificAuthor(author);
 			} else if (parameters.containsKey("startDate") && parameters.containsKey("endDate")) {
@@ -163,10 +162,10 @@ public class AggrServlet extends HttpServlet {
 
 				// TODO: - check it
 				final String unSanitizeStartDate = parameters.get("startDate")[0];
-				final long startDate = Long.parseLong(ESAPI.encoder().encodeForHTML(unSanitizeStartDate));
+				final long startDate = Long.parseLong(unSanitizeStartDate);
 
 				final String unSanitizeEndDate = parameters.get("endDate")[0];
-				final long endDate = Long.parseLong(ESAPI.encoder().encodeForHTML(unSanitizeEndDate));
+				final long endDate = Long.parseLong(unSanitizeEndDate);
 
 				// final long startDate =
 				// Long.parseLong(parameters.get("startDate")[0]);
@@ -179,14 +178,14 @@ public class AggrServlet extends HttpServlet {
 			} else if (parameters.containsKey("tag")) {
 				System.out.println("filtering by tags");
 				// multiple tags...
-				// final String[] tags = parameters.get("tag"); // TODO how to
+				final String[] tags = parameters.get("tag"); // TODO how to
 				// send
 
-				final String[] unSanitizeTags = parameters.get("tag");
-				String[] tags = new String[unSanitizeTags.length];
-				for (int i = 0; i < unSanitizeTags.length; i++) {
-					tags[i] = ESAPI.encoder().encodeForHTML(unSanitizeTags[i]);
-				}
+				// final String[] unSanitizeTags = parameters.get("tag");
+				// String[] tags = new String[unSanitizeTags.length];
+				// for (int i = 0; i < unSanitizeTags.length; i++) {
+				// tags[i] = ESAPI.encoder().encodeForHTML(unSanitizeTags[i]);
+				// }
 
 				posts = this.mDBController.getPostsOfTheseTags(tags);
 			}
@@ -220,14 +219,16 @@ public class AggrServlet extends HttpServlet {
 		for (final Post post : posts) {
 			sb.append(post.toJSON() + ", ");
 		}
-		
-		if (!posts.isEmpty()){
-		
+
+		if (!posts.isEmpty()) {
+
 			sb.deleteCharAt(sb.length() - 1);
 			sb.deleteCharAt(sb.length() - 1);
 		}
 		sb.append("]");
 
+		System.out.println("result is:");
+		System.out.println(Arrays.toString(posts.toArray()));
 		out.print(sb.toString());
 		out.close();
 	}
