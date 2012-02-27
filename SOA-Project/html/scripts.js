@@ -21,9 +21,73 @@ function doPost(content, callback){
 }
 
 function doGet(params, callback) {
-
-	$.get(getServerUrl, params, callback);
+//json
+		///*
+		$.ajax({
+				type: "GET",
+				url: getServerUrl,
+				data: params,
+				cache: false,
+				dataType: "json",
+				success: callback
+		});
+		//*/
+	//$.get(getServerUrl, params, callback);
 }
+
+function doPostTestUpdate(params){
+		
+}
+
+
+
+function postsTest(){		
+		content = {"title": "t2", "author": "a2", "content": "c2" };
+		doPost(content, doPostTestUpdate);
+}
+
+function doGetTestUpdate(params){
+		alert("received answer");
+		alert(params);
+		alert(params.getElementsByTagName('title'));
+		//alert(params.resopnseText);
+		//$('#myDiv').html("-" + xml + "-");
+		//data = JSON.stringify([params]);
+
+		//alert("before");
+		//xmlDocu = jQuery.parseXML(xml);
+		//alert("after");
+		
+    //$xml = $( xmlDocu );
+    //$title = $xml.find( "title" );
+
+		/* append "RSS Title" to #someElement */
+		//$( "#myDiv" ).append( $title.text() );
+
+
+
+		//[Post1 as JSON, POST2 as JSON]
+		posts = eval('(' + params.resopnseText + ')');
+	
+		alert("the posts after eval");
+		alert(posts);
+		
+	for (k in posts) {
+	
+		post = posts[k];
+		alert (k);
+		alert(post);
+	}
+}
+
+function doGetTest(){
+		getParams = "author=a2";
+		alert("doGetTest");
+		doGet(getParams, doGetTestUpdate);
+		//alert("doGetTest done");
+}
+
+
 
 function bodyLoad(){
 
