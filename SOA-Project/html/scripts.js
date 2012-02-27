@@ -1,55 +1,5 @@
 
-// NIR
-
-MAX_TAGS = 5;
-
-// add another field tag to add Posts
-function addTagFieldReadPosts( whereToAddId )
-{	
-	if ( typeof tagFieldNum == 'undefined' ) {
-		tagFieldNum = 1;
-    }
-		
-	if(tagFieldNum > MAX_TAGS - 1)
-		return;
-
-	tagFieldNum++;
-			
-	finalString = "";
-	for(i =1; i<= tagFieldNum; i++){
-		finalString = finalString + '<input type="search" name="autor" id="authorInputTagList" value="" placeholder="Tag"/>';
-	}
-
-	$(whereToAddId).html(finalString);
-		
-	if(tagFieldNum > MAX_TAGS - 1){
-		jQuery("#addTagBtnForRead").attr('disabled', 'disabled');
-	}
-}
-
-function doPost(content){
-
-	//var content = {"title": "title1", "author": "author1", "tags":{"tag1": "tag11", "tag2": "tag21", "tag3": "tag31", "tag4": "tag41", "tag5": "tag51"}, "content": "content1" };
-	var params = {data: JSON.stringify([content])};
-
-	$.post(postServerUrl, params, callback).error(function() { alert("doPost Failed"); });
-
-}
-
-function doGet(params, callback) {
-
-	$.ajax({
-	  type: "GET",
-	  url: getServerUrl,
-	  data: (params),
-	  cache: false,
-	  dataType: "text",
-	  success: callback
-	});
-}
-
-
-// AVI
+$(document).ready(bodyLoad);
 
 //var postServerUrl = "http://soa2.cs.bgu.ac.il:17172/";	TODO
 //var getServerUrl = "http://soa3.cs.bgu.ac.il:17171/";		TODO
@@ -58,6 +8,22 @@ var postServerUrl = "http://127.0.0.1:17171/";
 var getServerUrl = "http://127.0.0.1:17172/aggr";
 
 var username;
+
+function doPost(content, callback){
+
+	alert(content);
+
+	//var content = {"title": "title1", "author": "author1", "tags":{"tag1": "tag11", "tag2": "tag21", "tag3": "tag31", "tag4": "tag41", "tag5": "tag51"}, "content": "content1" };
+	var params = {data: JSON.stringify([content])};
+	
+	$.post(postServerUrl, params, callback).error(function() { alert("doPost Failed"); });
+
+}
+
+function doGet(params, callback) {
+
+	$.get(getServerUrl, params, callback);
+}
 
 function bodyLoad(){
 
@@ -186,9 +152,9 @@ function send(){
 	
 	var rightDiv = document.getElementById("rightDiv");
 	
-	var title = rightDiv.getElementsByTagName("label")[0].innerHTML;
-	var tags = rightDiv.getElementsByTagName("label")[1].innerHTML;
-	var content = rightDiv.getElementsByTagName("label")[2].innerHTML;
+	var title = $("#postTitleInput").val();
+	var tags = $("#postTagsInput").val();
+	var content = $("#postContentInput").val();
 	
 	var mySplitResult = tags.split(", ");
 	
@@ -197,18 +163,16 @@ function send(){
 	for(i = 0; i < mySplitResult.length; i++)
 		jTags += "tag:" + mySplitResult[i] + ","; 
 
-	jTags.substring(0, jTags.length-2);
+	jTags = jTags.substring(0, jTags.length-1);
 	
 	jTags += "}";
 
-	var post = {"title": "\"" + title + "\"",
-				"author": "\"" + username + "\"",
-				"tags":jTags,
-				"content": "\"" + content + "\"" };
+	var post = "{\"title\":\"" + title + "\"," +
+				"\"author\":\"" + username + "\"," + 
+				"\"tags:\"" + jTags + "\"," + 
+				"\"content\":\"" + content + "\"}";
 	
-	doPost(post);
-	
-	getPostsOfSpecificAuthor(username);
+	doPost(post, handleGetPostsReply);
 }
 
 function initBinds(){
@@ -262,8 +226,7 @@ function getPostsOfTheseTags(tags){
 	var jTags = "{";
 	
 	for(i = 0; i < tags.length; i++){
-	
-		alert(tags[i]);
+
 		jTags += "tag:" + tags[i] + ","; 
 	}
 	
@@ -292,8 +255,6 @@ function updatePageWithPosts(data){
 	for (k in posts) {
 	
 		var post = posts[k];
-		
-		alert(posts);
 		
 		var postDiv = document.getElementById("postDiv").cloneNode(true);
 		
