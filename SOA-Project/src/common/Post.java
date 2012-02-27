@@ -70,8 +70,8 @@ public class Post {
 
 		// before =
 		// data=[{"title":"title1","author":"author1","tags":{"tag1":"tag11","tag2":"tag21","tag3":"tag31","tag4":"tag41","tag5":"tag51"}}]
-		postJsonString = postJsonString.substring(postJsonString.indexOf("[") + 1,
-				postJsonString.lastIndexOf("]"));
+//		postJsonString = postJsonString.substring(postJsonString.indexOf("[") + 1,
+//				postJsonString.lastIndexOf("]"));
 		// System.out.println("the decoded json 2 = " + postJson);
 
 		// convert the string to json
