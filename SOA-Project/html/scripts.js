@@ -158,12 +158,12 @@ function initPageContentWhenLogedout(){
 	element.style.visibility = "visible";
 }
 
-
 function showComposeElement(){
 
 	emptyTheRightPane();
-		
-	// add login button element..
+	
+	var rightDiv = document.getElementById("rightDiv");
+
 	var element = document.getElementById("composePostDiv").cloneNode(true);
 	rightDiv.appendChild(element);
 	element.style.visibility = "visible";
@@ -182,30 +182,44 @@ function emptyTheRightPane(){
 		rightDiv.removeChild( rightDiv.firstChild );
 }
 
-// TODO..
-
 function send(){
+	
+	var rightDiv = document.getElementById("rightDiv");
+	
+	var title = rightDiv.getElementsByTagName("label")[0].innerHTML;
+	var tags = rightDiv.getElementsByTagName("label")[1].innerHTML;
+	var content = rightDiv.getElementsByTagName("label")[2].innerHTML;
+	
+	var mySplitResult = tags.split(", ");
+	
+	var jTags = "{";
+	
+	for(i = 0; i < mySplitResult.length; i++)
+		jTags += "tag:" + mySplitResult[i] + ","; 
 
-	alert("send");
+	jTags.substring(0, jTags.length-2);
+	
+	jTags += "}";
+
+	var post = {"title": "\"" + title + "\"",
+				"author": "\"" + username + "\"",
+				"tags":jTags,
+				"content": "\"" + content + "\"" };
+	
+	doPost(post);
+	
 	getPostsOfSpecificAuthor(username);
 }
 
 function initBinds(){
-
-	//$(".authorInput").bind( "click.enter", searchByAuthor);
-	//$('.authorInput').keypress(function(e) {
-		//if(e.keyCode == 13) {
-			//alert('You pressed enter!');
-		//}
-	//});
 	
 	$(document).keypress(function (e) {
 		if (e.keyCode === 13){
 		
-			if (authorFocus == 1) alert('author');
-			else if (startDateFocus == 1) alert('start');
-			else if (endDateFocus == 1) alert('end');
-			else if (tagsFocus == 1) alert('tags');
+			if (authorFocus == 1) searchByAuthor();
+			else if (startDateFocus == 1) document.getElementById('endDateInput').focus();
+			else if (endDateFocus == 1) searchByDates;
+			else if (tagsFocus == 1) s;
 		}
 	 });
 }
@@ -221,18 +235,36 @@ function getPostsOfSpecificAuthor(author){
 	doGet({author: author}, handleGetPostsReply);
 }
 
+function searchByDates(){
+
+	var start = document.getElementById("startDateInput").textInput();
+	var start = document.getElementById("endDateInput").textInput();
+	
+	getPostsBetweenDates(start, end);
+}
+
 function getPostsBetweenDates(start, end){
 
 	doGet({startDate: start, endDate: end}, handleGetPostsReply);
+}
+
+function searchByTags(){
+
+	var tags = document.getElementById("tagsInputTagList").textInput();
+	
+	var mySplitResult = tags.split(", ");
+	
+	getPostsOfTheseTags(mySplitResult);
 }
 
 function getPostsOfTheseTags(tags){
 
 	var jTags = "{";
 	
-	for (t in tags){
+	for(i = 0; i < tags.length; i++){
 	
-		jTags += "tag:" + tags[t] + ","; 
+		alert(tags[i]);
+		jTags += "tag:" + tags[i] + ","; 
 	}
 	
 	jTags.substring(0, jTags.length-2);
