@@ -5,6 +5,8 @@ import java.io.ByteArrayOutputStream;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
+import java.util.Vector;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -103,15 +105,7 @@ public class Post {
 		}
 		try {
 			final JSONObject tags = postJson.getJSONObject("tags");
-			final JSONArray tagNames = tags.names();
-			if (tagNames != null) {
-				for (int j = 0; j < tagNames.size(); j++) {
-
-					// this.mTags.add(postJson.getString(tagNames.getString(j)));
-
-					this.mTags.add(postJson.getString(postJson.getString(tagNames.getString(j))));
-				}
-			}
+			this.mTags.addAll(tags.values());
 		} catch (final Exception e) {
 		}
 
