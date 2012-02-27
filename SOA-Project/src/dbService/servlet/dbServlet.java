@@ -32,7 +32,8 @@ public class dbServlet extends HttpServlet {
 
 		System.out.println("The post:");
 		System.out.println(post);
-		// this.mDBController.createNewPost(post);
+		this.mDBController.createNewPost(post);
+		resp.setHeader("Access-Control-Allow-Origin", "*");
 		this.sendTextResponse(resp, "POSTED");
 	}
 
