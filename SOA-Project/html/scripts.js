@@ -4,20 +4,25 @@ $(document).ready(bodyLoad);
 //var postServerUrl = "http://soa2.cs.bgu.ac.il:17172/";	TODO
 //var getServerUrl = "http://soa3.cs.bgu.ac.il:17171/";		TODO
 
-var postServerUrl = "http://127.0.0.1:17171/";
+var postServerUrl = "http://127.0.0.1:17171";
 var getServerUrl = "http://127.0.0.1:17172/aggr";
 
 var username;
 
 function doPost(content, callback){
 
-	alert(content);
-
 	//var content = {"title": "title1", "author": "author1", "tags":{"tag1": "tag11", "tag2": "tag21", "tag3": "tag31", "tag4": "tag41", "tag5": "tag51"}, "content": "content1" };
-	var params = {data: JSON.stringify([content])};
+	//var params = {data: JSON.stringify([content])};
 	
-	$.post(postServerUrl, params, callback).error(function() { alert("doPost Failed"); });
+	//$.post(postServerUrl, content, callback, 'json');//.error(function() { alert("doPost Failed"); });
 
+	$.ajax({
+        type: 'POST',
+        url: postServerUrl,
+        data: content,
+        success: callback,
+		error: function(){alert("error");}
+    });
 }
 
 function doGet(params, callback) {
@@ -225,7 +230,7 @@ function send(){
 	var jTags = "{";
 	
 	for(i = 0; i < mySplitResult.length; i++)
-		jTags += "tag:" + mySplitResult[i] + ","; 
+		jTags += "\"tag\":\"" + mySplitResult[i] + "\","; 
 
 	jTags = jTags.substring(0, jTags.length-1);
 	
@@ -233,10 +238,10 @@ function send(){
 
 	var post = "{\"title\":\"" + title + "\"," +
 				"\"author\":\"" + username + "\"," + 
-				"\"tags:\"" + jTags + "\"," + 
+				"\"tags\":" + jTags + "," + 
 				"\"content\":\"" + content + "\"}";
 	
-	doPost(post, handleGetPostsReply);
+	doPost(post, getPostsOfSpecificAuthor(username));
 }
 
 function initBinds(){
