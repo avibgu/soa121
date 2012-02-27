@@ -30,12 +30,12 @@ public class DBController {
 	private final int failureThreshold = 10000;
 
 	public DBController() {
-		this("root", "zubur1");
+		this("proj2", "xueshengdier");
 	}
 
 	public DBController(final String pUsername, final String pPassword) {
-		this(pUsername, pPassword, "jdbc:mysql://127.0.0.1:3306");
-		// this(pUsername, pPassword, "jdbc:mysql://db4free.net:3306");
+		this(pUsername, pPassword, "jdbc:mysql://soa1.cs.bgu.ac.il:3306");
+		// this(pUsername, pPassword, "jdbc:mysql://127.0.0.1:3306");
 	}
 
 	public DBController(final String pUsername, final String pPassword, final String pDBAddrres) {
@@ -54,7 +54,6 @@ public class DBController {
 			// TODO: commet this line in the end of tests
 			// new TestDBController(this).testPost();
 		} catch (final SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -62,7 +61,8 @@ public class DBController {
 	protected void createConnection() throws SQLException {
 
 		try {
-			final String schema = "testdb";
+			// final String schema = "testdb";
+			final String schema = "proj2db";
 			// final String schema = "soa121db";
 
 			// create the DB is not exist
