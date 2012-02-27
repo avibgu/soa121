@@ -220,8 +220,12 @@ public class AggrServlet extends HttpServlet {
 		for (final Post post : posts) {
 			sb.append(post.toJSON() + ", ");
 		}
-		sb.deleteCharAt(sb.length() - 1);
-		sb.deleteCharAt(sb.length() - 1);
+		
+		if (!posts.isEmpty()){
+		
+			sb.deleteCharAt(sb.length() - 1);
+			sb.deleteCharAt(sb.length() - 1);
+		}
 		sb.append("]");
 
 		out.print(sb.toString());
