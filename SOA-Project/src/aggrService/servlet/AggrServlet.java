@@ -113,8 +113,15 @@ public class AggrServlet extends HttpServlet {
 
 			} else if (parameters.containsKey("tag")) {
 				System.out.println("filtering by tags");
-				final String[] tags = parameters.get("tag"); // TODO how to send
 				// multiple tags...
+				// final String[] tags = parameters.get("tag"); // TODO how to
+				// send
+
+				final String[] unSanitizeTags = parameters.get("tag");
+				String[] tags = new String[unSanitizeTags.length];
+				for (int i = 0; i < unSanitizeTags.length; i++) {
+					tags[i] = ESAPI.encoder().encodeForHTML(unSanitizeTags[i]);
+				}
 
 				posts = this.mDBController.getPostsOfTheseTags(tags);
 			}

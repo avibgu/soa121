@@ -11,6 +11,8 @@ import javax.servlet.http.HttpServletRequest;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
+import org.owasp.esapi.ESAPI;
+
 public class Post {
 
 	private String mTitle;
@@ -80,19 +82,24 @@ public class Post {
 		final JSONObject postJson = JSONObject.fromObject(postJsonString);
 		// System.out.println("title = " + postJson.get("title"));
 
-		// get the titles
+		// get the Sanitized Data
 		try {
-			this.mTitle = postJson.getString("title");
+			// this.mTitle = postJson.getString("title");
+			this.mTitle = ESAPI.encoder().encodeForHTML(postJson.getString("title"));
 		} catch (final Exception e) {
 			this.mTitle = "";
 		}
 		try {
-			this.mAuthor = postJson.getString("author");
+			// this.mAuthor = postJson.getString("author");
+			this.mAuthor = ESAPI.encoder().encodeForHTML(postJson.getString("author"));
+
 		} catch (final Exception e) {
 			this.mAuthor = "";
 		}
 		try {
-			this.mContent = postJson.getString("content");
+			// this.mContent = postJson.getString("content");
+			this.mContent = ESAPI.encoder().encodeForHTML(postJson.getString("content"));
+
 		} catch (final Exception e) {
 			this.mContent = "";
 		}
@@ -101,7 +108,11 @@ public class Post {
 			final JSONArray tagNames = tags.names();
 			if (tagNames != null) {
 				for (int j = 0; j < tagNames.size(); j++) {
-					this.mTags.add(postJson.getString(tagNames.getString(j)));
+
+					// this.mTags.add(postJson.getString(tagNames.getString(j)));
+
+					this.mTags.add(postJson.getString(ESAPI.encoder().encodeForHTML(
+							postJson.getString(tagNames.getString(j)))));
 				}
 			}
 		} catch (final Exception e) {
@@ -172,11 +183,11 @@ public class Post {
 		sb.append("\"title\":\"" + this.mTitle + "\", ");
 		sb.append("\"author\":\"" + this.mAuthor + "\", ");
 		sb.append("\"date\":\"" + this.mDate + "\", ");
-		
-		if (!this.mTags.isEmpty()){
-			
+
+		if (!this.mTags.isEmpty()) {
+
 			sb.append("\"tags\":{");
-			
+
 			int i = 0;
 			for (final String tag : this.mTags) {
 				sb.append("\"tag\"" + i + ":\"" + tag + "\", ");
@@ -186,7 +197,6 @@ public class Post {
 			sb.deleteCharAt(sb.length() - 1);
 			sb.append("}, ");
 		}
-
 
 		sb.append("\"content\":\"" + this.mContent);
 		sb.append("\"}");
