@@ -15,6 +15,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.owasp.esapi.ESAPI;
+
 import common.DBController;
 import common.Post;
 
@@ -27,7 +29,7 @@ public class AggrServlet extends HttpServlet {
 	public AggrServlet() {
 		this.mDBController = null;
 		// TODO : return this when having DB
-//		this.mDBController = new DBController();
+		// this.mDBController = new DBController();
 	}
 
 	/**
@@ -76,21 +78,39 @@ public class AggrServlet extends HttpServlet {
 
 		final Map<String, String[]> parameters = req.getParameterMap();
 
-//		System.out.println("author: " + parameters.get("author")[0]);
-		
+		// System.out.println("author: " + parameters.get("author")[0]);
+
 		try {
 
 			if (parameters.containsKey("author")) {
 				System.out.println("filtering by author");
-				final String author = parameters.get("author")[0];
+
+				// TODO: - check it
+				final String unSanitizeAuthor = parameters.get("author")[0];
+				String author = ESAPI.encoder().encodeForHTML(unSanitizeAuthor);
+
+				// String author =
+				// ESAPI.encoder().encodeForHTML(parameters.get("author")[0]);
+
 				posts = this.mDBController.getPostsOfSpecificAuthor(author);
 			} else if (parameters.containsKey("startDate") && parameters.containsKey("endDate")) {
 				System.out.println("filtering by dates");
-				final long startDate = Long.parseLong(parameters.get("startDate")[0]);
-				final long endDate = Long.parseLong(parameters.get("endDate")[0]);
+
+				// TODO: - check it
+				final String unSanitizeStartDate = parameters.get("startDate")[0];
+				final long startDate = Long.parseLong(ESAPI.encoder().encodeForHTML(unSanitizeStartDate));
+
+				final String unSanitizeEndDate = parameters.get("endDate")[0];
+				final long endDate = Long.parseLong(ESAPI.encoder().encodeForHTML(unSanitizeEndDate));
+
+				// final long startDate =
+				// Long.parseLong(parameters.get("startDate")[0]);
+				// final long endDate =
+				// Long.parseLong(parameters.get("endDate")[0]);
 
 				posts = this.mDBController.getPostsBetweenSpecificDates(new Timestamp(startDate),
 						new Timestamp(endDate));
+
 			} else if (parameters.containsKey("tag")) {
 				System.out.println("filtering by tags");
 				final String[] tags = parameters.get("tag"); // TODO how to send
