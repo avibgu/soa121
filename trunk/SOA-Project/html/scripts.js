@@ -230,12 +230,12 @@ function send(){
 	var tags = $("#postTagsInput").val();
 	var content = $("#postContentInput").val();
 	
-	var mySplitResult = tags.split(", ");
+	var mySplitResult = tags.split(",");
 	
 	var jTags = "{";
 	
 	for(i = 0; i < mySplitResult.length; i++)
-		jTags += "\"tag\":\"" + mySplitResult[i] + "\","; 
+		jTags += "\"tag"+i+"\":\"" + mySplitResult[i].trim() + "\","; 
 
 	jTags = jTags.substring(0, jTags.length-1);
 	
