@@ -25,18 +25,19 @@ function doPost(content, callback){
     });
 }
 
-function doGet(params, callback) {
+function doGet(params, callback, failure) {
 //json
-		///*
+		
 		$.ajax({
 				type: "GET",
 				url: getServerUrl,
 				data: params,
 				cache: false,
 				dataType: "json",
-				success: callback
+				success: callback,
+				error: failure
 		});
-		//*/
+		
 	//$.get(getServerUrl, params, callback);
 }
 
@@ -85,10 +86,14 @@ function doGetTestUpdate(params){
 	}
 }
 
+function getFailure(){
+	alert("fail");
+}
+
 function doGetTest(){
 		getParams = "author=a2";
 		alert("doGetTest");
-		doGet(getParams, doGetTestUpdate);
+		doGet(getParams, doGetTestUpdate, getFailure);
 		//alert("doGetTest done");
 }
 
