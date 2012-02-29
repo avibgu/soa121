@@ -6,12 +6,12 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
-import java.util.Vector;
 
 import javax.servlet.http.HttpServletRequest;
 
-import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
+
+import org.owasp.esapi.ESAPI;
 
 public class Post {
 
@@ -68,168 +68,82 @@ public class Post {
 
 		// decode to json
 		postJsonString = this.decodeURIComponent2(postJsonString);
-		// System.out.println("the decoded json = " + postJson);
 
 		// before =
 		// data=[{"title":"title1","author":"author1","tags":{"tag1":"tag11","tag2":"tag21","tag3":"tag31","tag4":"tag41","tag5":"tag51"}}]
-//		postJsonString = postJsonString.substring(postJsonString.indexOf("[") + 1,
-//				postJsonString.lastIndexOf("]"));
-		// System.out.println("the decoded json 2 = " + postJson);
-
-		// convert the string to json
 		// after =
 		// {"title":"title1","author":"author1","tags":{"tag1":"tag11","tag2":"tag21","tag3":"tag31","tag4":"tag41","tag5":"tag51"}}
+
+		// escape all string
+		// System.out.println("before escape: ");
+		// System.out.println(postJsonString);
+
+		// postJsonString = StringEscapeUtils.escapeJavaScript(postJsonString);
+
+		postJsonString = this.replaceSpecialChars(postJsonString);
+
+		// postJsonString = ESAPI.encoder().encodeForHTML(postJsonString);
+
+		System.out.println("after escape:");
+		System.out.println(postJsonString);
 		final JSONObject postJson = JSONObject.fromObject(postJsonString);
-		// System.out.println("title = " + postJson.get("title"));
 
 		// get the Sanitized Data
 		try {
 			// this.mTitle = postJson.getString("title");
-			this.mTitle = postJson.getString("title");
+			System.out.println("title before: " + postJson.getString("title"));
+			System.out.println("title after: " + ESAPI.encoder().encodeForHTML(postJson.getString("title")));
+
+			this.mTitle = ESAPI.encoder().encodeForHTML(postJson.getString("title"));
 		} catch (final Exception e) {
 			this.mTitle = "";
 		}
 		try {
-			// this.mAuthor = postJson.getString("author");
-			this.mAuthor = postJson.getString("author");
+			System.out.println("author before: " + postJson.getString("author"));
+			System.out
+					.println("author after: " + ESAPI.encoder().encodeForHTML(postJson.getString("author")));
+
+			this.mAuthor = ESAPI.encoder().encodeForHTML(postJson.getString("author"));
 
 		} catch (final Exception e) {
 			this.mAuthor = "";
 		}
 		try {
-			// this.mContent = postJson.getString("content");
-			this.mContent = postJson.getString("content");
+			System.out.println("Content before: " + postJson.getString("content"));
+			System.out.println("Content after: "
+					+ ESAPI.encoder().encodeForHTML(postJson.getString("content")));
+
+			this.mContent = ESAPI.encoder().encodeForHTML(postJson.getString("content"));
 
 		} catch (final Exception e) {
 			this.mContent = "";
 		}
 		try {
 			final JSONObject tags = postJson.getJSONObject("tags");
-			this.mTags.addAll(tags.values());
+			Collection<String> tagsValues = tags.values();
+			ArrayList<String> sanitizeTagsValues = new ArrayList<String>();
+
+			for (String tag : tagsValues) {
+				System.out.println("Tag before = " + tag);
+				sanitizeTagsValues.add(ESAPI.encoder().encodeForHTML(tag));
+				System.out.println("Tag after = " + ESAPI.encoder().encodeForHTML(tag));
+
+			}
+
+			this.mTags.addAll(sanitizeTagsValues);
 		} catch (final Exception e) {
 		}
 
 	}
 
-	// private void parseJSONToPost(final HttpServletRequest req) throws
-	// Exception {
-	//
-	// this.mTags = new ArrayList<String>();
-	// this.mDate = new
-	// java.sql.Timestamp(Calendar.getInstance().getTimeInMillis());
-	//
-	// // read the input
-	// final BufferedInputStream bis = new
-	// BufferedInputStream(req.getInputStream());
-	// final ByteArrayOutputStream buf = new ByteArrayOutputStream();
-	// int result = bis.read();
-	// while (result != -1) {
-	// final byte b = (byte) result;
-	// buf.write(b);
-	// result = bis.read();
-	// }
-	// String postJsonString = buf.toString();
-	//
-	// // decode to json
-	// postJsonString = this.decodeURIComponent2(postJsonString);
-	// // System.out.println("the decoded json = " + postJson);
-	//
-	// // before =
-	// //
-	// data=[{"title":"title1","author":"author1","tags":{"tag1":"tag11","tag2":"tag21","tag3":"tag31","tag4":"tag41","tag5":"tag51"}}]
-	// postJsonString = postJsonString.substring(postJsonString.indexOf("[") +
-	// 1,
-	// postJsonString.lastIndexOf("]"));
-	// // System.out.println("the decoded json 2 = " + postJson);
-	//
-	// // convert the string to json
-	// // after =
-	// //
-	// {"title":"title1","author":"author1","tags":{"tag1":"tag11","tag2":"tag21","tag3":"tag31","tag4":"tag41","tag5":"tag51"}}
-	// final JSONObject postJson = JSONObject.fromObject(postJsonString);
-	// // System.out.println("title = " + postJson.get("title"));
-	//
-	// // get the Sanitized Data
-	// try {
-	// // this.mTitle = postJson.getString("title");
-	// this.mTitle = ESAPI.encoder().encodeForHTML(postJson.getString("title"));
-	// } catch (final Exception e) {
-	// this.mTitle = "";
-	// }
-	// try {
-	// // this.mAuthor = postJson.getString("author");
-	// this.mAuthor =
-	// ESAPI.encoder().encodeForHTML(postJson.getString("author"));
-	//
-	// } catch (final Exception e) {
-	// this.mAuthor = "";
-	// }
-	// try {
-	// // this.mContent = postJson.getString("content");
-	// this.mContent =
-	// ESAPI.encoder().encodeForHTML(postJson.getString("content"));
-	//
-	// } catch (final Exception e) {
-	// this.mContent = "";
-	// }
-	// try {
-	// final JSONObject tags = postJson.getJSONObject("tags");
-	// final JSONArray tagNames = tags.names();
-	// if (tagNames != null) {
-	// for (int j = 0; j < tagNames.size(); j++) {
-	//
-	// // this.mTags.add(postJson.getString(tagNames.getString(j)));
-	//
-	// this.mTags.add(postJson.getString(ESAPI.encoder().encodeForHTML(
-	// postJson.getString(tagNames.getString(j)))));
-	// }
-	// }
-	// } catch (final Exception e) {
-	// }
-	//
-	// }
-
-	//
-	//
-	// private void parseJSONToPost(final HttpServletRequest req) throws
-	// Exception {
-	//
-	// this.mTags = new ArrayList<String>();
-	// this.mDate = new
-	// java.sql.Timestamp(Calendar.getInstance().getTimeInMillis());
-	//
-	// final TransformerFactory f = TransformerFactory.newInstance();
-	// final Transformer t = f.newTransformer();
-	//
-	// final Source s = new StreamSource(req.getInputStream());
-	// final Result r = new DOMResult();
-	//
-	// t.transform(s, r);
-	//
-	// final Node n = ((DOMResult) r).getNode();
-	//
-	// final NodeList childs = n.getChildNodes();
-	//
-	// for (int i = 0; i < childs.getLength(); i++) {
-	//
-	// final Node child = childs.item(i);
-	//
-	// if (child.getNodeName().equals("title")) {
-	// this.mTitle = child.getNodeValue();
-	// } else if (child.getNodeName().equals("author")) {
-	// this.mAuthor = child.getNodeValue();
-	// } else if (child.getNodeName().equals("content")) {
-	// this.mContent = child.getNodeValue();
-	// } else if (child.getNodeName().equals("tags")) {
-	//
-	// final NodeList tags = child.getChildNodes();
-	//
-	// for (int j = 0; j < tags.getLength(); j++) {
-	// this.mTags.add(tags.item(j).getNodeValue());
-	// }
-	// }
-	// }
-	// }
+	private String replaceSpecialChars(String postJsonString) {
+		postJsonString = postJsonString.replaceAll("\n", "\\\\n");
+		postJsonString = postJsonString.replaceAll("\t", "\\\\t");
+		postJsonString = postJsonString.replaceAll("\b", "\\\\b");
+		postJsonString = postJsonString.replaceAll("\f", "\\\\f");
+		postJsonString = postJsonString.replaceAll("\r", "\\\\r");
+		return postJsonString;
+	}
 
 	// <title></title>
 	// <author></author>
@@ -244,10 +158,7 @@ public class Post {
 	// <content></content>
 	public String toJSON() {
 
-		// DateFormat df = DateFormat.getDateInstance(DateFormat.FULL);
-
 		final StringBuilder sb = new StringBuilder();
-
 		sb.append("{");
 		sb.append("title:\"" + this.mTitle + "\", ");
 		sb.append("author:\"" + this.mAuthor + "\", ");
