@@ -334,8 +334,6 @@ function updatePageWithPosts(data){
 	returnedPosts = eval('(' + data + ')');
 	
 	maxPages =  Math.floor(returnedPosts.length / 10 + 1);
-	
-	alert(maxPages);
 
 	showPosts(rightDiv);
 }
@@ -379,6 +377,9 @@ function showPosts(){
 		prevNextButtonsDiv = document.getElementById("prevNextButtonsDiv").cloneNode(true);
 		prevNextButtonsDiv.style.visibility = "visible";
 		rightDiv.appendChild(prevNextButtonsDiv);
+		
+		if (1 == page) prevNextButtonsDiv.getElementsByTagName("button")[0].disabled = true;	//disable prev
+		if (maxPages == page) prevNextButtonsDiv.getElementsByTagName("button")[1].disabled = true;	//disable next
 	}
 }
 
