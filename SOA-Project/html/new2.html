@@ -118,7 +118,6 @@
 						</div><!--/Send New Post Button-->	
 						
 						<div id="postDiv" style="visibility: collapse"><!--post-->	
-							<br>
 							<ul data-role="listview" data-inset="true" data-theme="c" data-dividertheme="b">
 								
 								<li data-role="list-divider">
@@ -137,7 +136,13 @@
 									<label for="textarea" id="tags"></label>
 								</li>						
 							</ul>
-						</div><!--/post-->	
+						</div><!--/post-->
+						
+						<div id="prevNextButtonsDiv" style="visibility: collapse"><!--Prev & Next Buttons-->	
+							<ul data-role="listview" data-inset="true" data-theme="c" data-dividertheme="f">
+								<li><button value="Prev" onClick="prev()"></button><button value="Next" onClick="next()"></button></li>	
+							</ul>
+						</div><!--/Send New Post Button-->
 
 					</nav>
 				</div>

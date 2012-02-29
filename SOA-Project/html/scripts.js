@@ -14,6 +14,10 @@ var startDateFocus;
 var endDateFocus;
 var tagsFocus;
 
+var page;
+var maxPages;
+var returnedPosts;
+
 function doPost(content, callback){
 
 	//var content = {"title": "title1", "author": "author1", "tags":{"tag1": "tag11", "tag2": "tag21", "tag3": "tag31", "tag4": "tag41", "tag5": "tag51"}, "content": "content1" };
@@ -103,6 +107,7 @@ function doGetTest(){
 function bodyLoad(){
 
 	username = getCookie("username");
+	page = 1;
 	
 	initBinds();
 	
@@ -326,13 +331,23 @@ function handleGetPostsReply(data){
 function updatePageWithPosts(data){
 
 	//[Post1 as JSON, POST2 as JSON]
-	var posts = eval('(' + data + ')');
+	returnedPosts = eval('(' + data + ')');
 	
+	maxPages =  Math.floor(returnedPosts.length / 10 + 1);
+	
+	alert(maxPages);
+
+	showPosts(rightDiv);
+}
+
+
+function showPosts(){
+
 	var rightDiv = document.getElementById("rightDiv");
+
+	for(var i = (page-1)*10; i < returnedPosts.length && i < page*10; i++){
 	
-	for (k in posts) {
-	
-		var post = posts[k];
+		var post = returnedPosts[i];
 
 		var postDiv = document.getElementById("postDiv").cloneNode(true);
 		
@@ -356,6 +371,36 @@ function updatePageWithPosts(data){
 		
 		postDiv.style.visibility = "visible";
 		
-		rightDiv.appendChild(postDiv)
+		rightDiv.appendChild(postDiv);
+    }
+	
+	if (returnedPosts.length > 0){
+		
+		prevNextButtonsDiv = document.getElementById("prevNextButtonsDiv").cloneNode(true);
+		prevNextButtonsDiv.style.visibility = "visible";
+		rightDiv.appendChild(prevNextButtonsDiv);
+	}
+}
+
+
+function prev(){
+
+	if (page > 1){
+	
+		page--;
+		
+		emptyTheRightPane();
+		showPosts();
+	}
+}
+
+function next(){
+
+	if (page < maxPages){
+	
+		page++;
+		
+		emptyTheRightPane();
+		showPosts();
 	}
 }
