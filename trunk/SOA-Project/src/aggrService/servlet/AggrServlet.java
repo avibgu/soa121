@@ -227,9 +227,25 @@ public class AggrServlet extends HttpServlet {
 		}
 		sb.append("]");
 
+		String resultString = sb.toString();
+
+		resultString = this.replaceSpecialChars(resultString);
+
+		System.out.println("result string = ");
+		System.out.println(resultString);
 		System.out.println("result is:");
 		System.out.println(Arrays.toString(posts.toArray()));
-		out.print(sb.toString());
+		out.print(resultString);
 		out.close();
 	}
+
+	private String replaceSpecialChars(String pString) {
+		pString = pString.replaceAll("\n", "\\\\n");
+		pString = pString.replaceAll("\t", "\\\\t");
+		pString = pString.replaceAll("\b", "\\\\b");
+		pString = pString.replaceAll("\f", "\\\\f");
+		pString = pString.replaceAll("\r", "\\\\r");
+		return pString;
+	}
+
 }
