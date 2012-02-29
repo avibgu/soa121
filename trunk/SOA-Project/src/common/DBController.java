@@ -30,12 +30,13 @@ public class DBController {
 	private final int failureThreshold = 10000;
 
 	public DBController() {
-		this("proj2", "xueshengdier");
+//		this("proj2", "xueshengdier");
+		this("root", "zubur1");
 	}
 
 	public DBController(final String pUsername, final String pPassword) {
-		this(pUsername, pPassword, "jdbc:mysql://soa1.cs.bgu.ac.il:3306");
-		// this(pUsername, pPassword, "jdbc:mysql://127.0.0.1:3306");
+//		this(pUsername, pPassword, "jdbc:mysql://soa1.cs.bgu.ac.il:3306");
+		this(pUsername, pPassword, "jdbc:mysql://127.0.0.1:3306");
 	}
 
 	public DBController(final String pUsername, final String pPassword, final String pDBAddrres) {

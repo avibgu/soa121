@@ -173,7 +173,7 @@ public class AggrServlet extends HttpServlet {
 				// Long.parseLong(parameters.get("endDate")[0]);
 
 				posts = this.mDBController.getPostsBetweenSpecificDates(new Timestamp(startDate),
-						new Timestamp(endDate));
+						new Timestamp(endDate + 86399999));
 
 			} else if (parameters.containsKey("tag")) {
 				System.out.println("filtering by tags");

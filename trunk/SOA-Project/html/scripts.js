@@ -278,11 +278,6 @@ function getPostsOfSpecificAuthor(author){
 
 function searchByDates(){
 
-	//var start = $("#startDateInput").val();
-	//var end = $("#endDateInput").val();
-	
-	// parse a date in yyyy-mm-dd format
-	
 	var parts = $("#startDateInput").val().match(/(\d+)/g);
 
 	var start = new Date(parts[0], parts[1]-1, parts[2]).getTime();
@@ -290,10 +285,7 @@ function searchByDates(){
 	parts = $("#endDateInput").val().match(/(\d+)/g);
 	
 	var end = new Date(parts[0], parts[1]-1, parts[2]).getTime();
-	
-	alert(start);
-	alert(end);
-	
+
 	getPostsBetweenDates(start, end);
 }
 
@@ -321,10 +313,6 @@ function getPostsOfTheseTags(tags){
 	}
 	
 	jTags = jTags.substring(0, jTags.length-1);
-	
-	//jTags += "}"
-	
-	alert (jTags);
 	
 	doGet(jTags, handleGetPostsReply);
 }
