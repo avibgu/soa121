@@ -247,7 +247,7 @@ function send(){
 				"\"tags\":" + jTags + "," + 
 				"\"content\":\"" + content + "\"}";
 	
-	doPost(post, getPostsOfSpecificAuthor(username));
+	doPost(post, function(){getPostsOfSpecificAuthor(username);});
 }
 
 function initBinds(){
