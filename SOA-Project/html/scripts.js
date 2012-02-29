@@ -9,6 +9,11 @@ var getServerUrl = "http://127.0.0.1:17172/aggr";
 
 var username;
 
+var authorFocus;
+var startDateFocus;
+var endDateFocus;
+var tagsFocus;
+
 function doPost(content, callback){
 
 	//var content = {"title": "title1", "author": "author1", "tags":{"tag1": "tag11", "tag2": "tag21", "tag3": "tag31", "tag4": "tag41", "tag5": "tag51"}, "content": "content1" };
@@ -252,17 +257,18 @@ function initBinds(){
 		
 			if (authorFocus == 1) searchByAuthor();
 			else if (startDateFocus == 1) document.getElementById('endDateInput').focus();
-			else if (endDateFocus == 1) searchByDates;
-			else if (tagsFocus == 1) s;
+			else if (endDateFocus == 1) searchByDates();
+			else if (tagsFocus == 1) searchByTags();
 		}
 	 });
 }
 
 function searchByAuthor(){
 
-	var author = $("#postTitleInput").val();
-	//var author = document.getElementById("authorInput").textInput();
-	getPostsOfSpecificAuthor(author);
+	var author = $("#authorInput").val();
+
+	if (author && "" != author)	
+		getPostsOfSpecificAuthor(author);
 }
 
 function getPostsOfSpecificAuthor(author){
@@ -272,8 +278,21 @@ function getPostsOfSpecificAuthor(author){
 
 function searchByDates(){
 
-	var start = document.getElementById("startDateInput").textInput();
-	var start = document.getElementById("endDateInput").textInput();
+	//var start = $("#startDateInput").val();
+	//var end = $("#endDateInput").val();
+	
+	// parse a date in yyyy-mm-dd format
+	
+	var parts = $("#startDateInput").val().match(/(\d+)/g);
+
+	var start = new Date(parts[0], parts[1]-1, parts[2]).getTime();
+	
+	parts = $("#endDateInput").val().match(/(\d+)/g);
+	
+	var end = new Date(parts[0], parts[1]-1, parts[2]).getTime();
+	
+	alert(start);
+	alert(end);
 	
 	getPostsBetweenDates(start, end);
 }
@@ -285,25 +304,27 @@ function getPostsBetweenDates(start, end){
 
 function searchByTags(){
 
-	var tags = document.getElementById("tagsInputTagList").textInput();
+	var tags = $("#tagsInputTagList").val();
 	
-	var mySplitResult = tags.split(", ");
+	var mySplitResult = tags.split(",");
 	
 	getPostsOfTheseTags(mySplitResult);
 }
 
 function getPostsOfTheseTags(tags){
 
-	var jTags = "{";
+	var jTags = "";
 	
 	for(i = 0; i < tags.length; i++){
 
-		jTags += "tag:" + tags[i] + ","; 
+		jTags += "tag=" + tags[i] + "&"; 
 	}
 	
-	jTags.substring(0, jTags.length-2);
+	jTags = jTags.substring(0, jTags.length-1);
 	
-	jTags += "}"
+	//jTags += "}"
+	
+	alert (jTags);
 	
 	doGet(jTags, handleGetPostsReply);
 }
