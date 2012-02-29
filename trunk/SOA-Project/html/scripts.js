@@ -347,7 +347,10 @@ function updatePageWithPosts(data){
 		var tags = "";
 
 		for (t in post.tags)
-			 tags += post.tags[t] + " ";
+			 tags += post.tags[t] + ", ";
+			 
+		if ("" != tags)
+			tags = tags.substring(0, tags.length-2);
 			 
 		postDiv.getElementsByTagName("label")[2].innerHTML = tags;
 		
