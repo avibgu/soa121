@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>	
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		
+		<title>SOA Final Project - CMS</title>
+		
+		<link rel="stylesheet"  href="http://code.jquery.com/mobile/1.0.1/jquery.mobile-1.0.1.min.css" />
+		<link rel="stylesheet" href="http://jquerymobile.com/demos/1.0.1/docs/_assets/css/jqm-docs.css" />
+		<script src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
+
+		<script src="http://jquerymobile.com/demos/1.0.1/experiments/themeswitcher/jquery.mobile.themeswitcher.js"></script>
+		<script src="http://jquerymobile.com/demos/1.0.1/docs/_assets/js/jqm-docs.js"></script>
+		<script src="http://code.jquery.com/mobile/1.0.1/jquery.mobile-1.0.1.min.js"></script>
+		
+		<script type="text/javascript" src="scripts.js"></script>
+	
+	</head> 
+	<body onLoad='bodyLoad()'> 
+		<div data-role="page" class="type-home">
+			<div data-role="content">
+				
+				<div class="content-secondary">
+			
+					<div><!--image-->	
+						<h1><img src="image.png"/></h1>
+					</div><!--/image-->	
+					
+					<div id="leftDiv"></div><!-- load left pane content here -->
+					
+				</div><!--/content-primary-->	
+				
+				<div class="content-primary">
+					
+						<div id="rightDiv"></div><!-- load right pane content here -->
+						
+				</div>
+
+				<div id="tempDiv"></div>
+				
+			</div>
+			
+			<div data-role="footer" class="footer-docs" data-theme="c">
+					<p>&copy; Avi, Hezi, Nir & Hinit</p>
+			</div>			
+
+		</div>
+	</body>
+</html>
