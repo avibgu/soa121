@@ -1,11 +1,11 @@
 
 $(document).ready(bodyLoad);
 
-//var postServerUrl = "http://soa2.cs.bgu.ac.il:17172/";	TODO
-//var getServerUrl = "http://soa3.cs.bgu.ac.il:17171/";		TODO
+var postServerUrl = "http://soa2.cs.bgu.ac.il:17172/";
+var getServerUrl = "http://soa3.cs.bgu.ac.il:17171/";
 
-var postServerUrl = "http://127.0.0.1:17171";
-var getServerUrl = "http://127.0.0.1:17172/aggr";
+//var postServerUrl = "http://127.0.0.1:17171";
+//var getServerUrl = "http://127.0.0.1:17172/aggr";
 
 var username;
 
