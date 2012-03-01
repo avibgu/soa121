@@ -84,24 +84,34 @@ public class Post {
 
 		// postJsonString = ESAPI.encoder().encodeForHTML(postJsonString);
 
-		System.out.println("after escape:");
-		System.out.println(postJsonString);
+		// TODO
+		// System.out.println("after escape:");
+		// TODO
+		// System.out.println(postJsonString);
 		final JSONObject postJson = JSONObject.fromObject(postJsonString);
 
 		// get the Sanitized Data
 		try {
 			// this.mTitle = postJson.getString("title");
-			System.out.println("title before: " + postJson.getString("title"));
-			System.out.println("title after: " + ESAPI.encoder().encodeForHTML(postJson.getString("title")));
+			// TODO
+			// System.out.println("title before: " +
+			// postJson.getString("title"));
+			// TODO
+			// System.out.println("title after: " +
+			// ESAPI.encoder().encodeForHTML(postJson.getString("title")));
 
 			this.mTitle = ESAPI.encoder().encodeForHTML(postJson.getString("title"));
 		} catch (final Exception e) {
 			this.mTitle = "";
 		}
 		try {
-			System.out.println("author before: " + postJson.getString("author"));
-			System.out
-					.println("author after: " + ESAPI.encoder().encodeForHTML(postJson.getString("author")));
+			// TODO
+			// System.out.println("author before: " +
+			// postJson.getString("author"));
+			// TODO
+			// System.out
+			// .println("author after: " +
+			// ESAPI.encoder().encodeForHTML(postJson.getString("author")));
 
 			this.mAuthor = ESAPI.encoder().encodeForHTML(postJson.getString("author"));
 
@@ -109,9 +119,12 @@ public class Post {
 			this.mAuthor = "";
 		}
 		try {
-			System.out.println("Content before: " + postJson.getString("content"));
-			System.out.println("Content after: "
-					+ ESAPI.encoder().encodeForHTML(postJson.getString("content")));
+			// TODO
+			// System.out.println("Content before: " +
+			// postJson.getString("content"));
+			// TODO
+			// System.out.println("Content after: "
+			// + ESAPI.encoder().encodeForHTML(postJson.getString("content")));
 
 			this.mContent = ESAPI.encoder().encodeForHTML(postJson.getString("content"));
 
@@ -124,9 +137,12 @@ public class Post {
 			ArrayList<String> sanitizeTagsValues = new ArrayList<String>();
 
 			for (String tag : tagsValues) {
-				System.out.println("Tag before = " + tag);
+				// TODO
+				// System.out.println("Tag before = " + tag);
 				sanitizeTagsValues.add(ESAPI.encoder().encodeForHTML(tag));
-				System.out.println("Tag after = " + ESAPI.encoder().encodeForHTML(tag));
+				// TODO
+				// System.out.println("Tag after = " +
+				// ESAPI.encoder().encodeForHTML(tag));
 
 			}
 

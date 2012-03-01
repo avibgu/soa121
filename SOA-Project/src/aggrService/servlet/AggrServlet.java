@@ -8,7 +8,6 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Map;
 
 import javax.servlet.ServletException;
@@ -136,7 +135,8 @@ public class AggrServlet extends HttpServlet {
 	protected void doGet(final HttpServletRequest req, final HttpServletResponse resp)
 			throws ServletException, IOException {
 
-		System.out.println("getting " + req.getRequestURL());
+		// TODO
+		// System.out.println("getting " + req.getRequestURL());
 
 		ArrayList<Post> posts = null;
 
@@ -147,7 +147,8 @@ public class AggrServlet extends HttpServlet {
 		try {
 
 			if (parameters.containsKey("author")) {
-				System.out.println("filtering by author");
+				// TODO
+				// System.out.println("filtering by author");
 
 				// TODO: - check it
 				// final String unSanitizeAuthor = parameters.get("author")[0];
@@ -158,7 +159,8 @@ public class AggrServlet extends HttpServlet {
 
 				posts = this.mDBController.getPostsOfSpecificAuthor(author);
 			} else if (parameters.containsKey("startDate") && parameters.containsKey("endDate")) {
-				System.out.println("filtering by dates");
+				// TODO
+				// System.out.println("filtering by dates");
 
 				// TODO: - check it
 				final String unSanitizeStartDate = parameters.get("startDate")[0];
@@ -176,7 +178,8 @@ public class AggrServlet extends HttpServlet {
 						new Timestamp(endDate + 86399999));
 
 			} else if (parameters.containsKey("tag")) {
-				System.out.println("filtering by tags");
+				// TODO
+				// System.out.println("filtering by tags");
 				// multiple tags...
 				final String[] tags = parameters.get("tag"); // TODO how to
 				// send
@@ -231,10 +234,15 @@ public class AggrServlet extends HttpServlet {
 
 		resultString = this.replaceSpecialChars(resultString);
 
-		System.out.println("result string = ");
-		System.out.println(resultString);
-		System.out.println("result is:");
-		System.out.println(Arrays.toString(posts.toArray()));
+		// TODO
+		// System.out.println("result string = ");
+		// TODO
+		// System.out.println(resultString);
+		// TODO
+		// System.out.println("result is:");
+		// TODO
+		// System.out.println(Arrays.toString(posts.toArray()));
+
 		out.print(resultString);
 		out.close();
 	}

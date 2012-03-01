@@ -30,13 +30,15 @@ public class DBController {
 	private final int failureThreshold = 10000;
 
 	public DBController() {
-//		this("proj2", "xueshengdier");
-		this("root", "zubur1");
+		this("proj2", "xueshengdier");
+		// this("niram", "a");
+
 	}
 
 	public DBController(final String pUsername, final String pPassword) {
-//		this(pUsername, pPassword, "jdbc:mysql://soa1.cs.bgu.ac.il:3306");
-		this(pUsername, pPassword, "jdbc:mysql://127.0.0.1:3306");
+		this(pUsername, pPassword, "jdbc:mysql://soa1.cs.bgu.ac.il:3306");
+		// this(pUsername, pPassword, "jdbc:mysql://127.0.0.1:3306");
+
 	}
 
 	public DBController(final String pUsername, final String pPassword, final String pDBAddrres) {
@@ -67,7 +69,7 @@ public class DBController {
 			// final String schema = "soa121db";
 
 			// create the DB is not exist
-			this.mConn = DriverManager.getConnection(this.mDBAddrres, mUsername, mPassword);
+			this.mConn = DriverManager.getConnection(this.mDBAddrres, this.mUsername, this.mPassword);
 			// this.mConn = DriverManager.getConnection(this.mDBAddrres, schema,
 			// schema);
 			final Statement stmt0 = this.mConn.createStatement();
@@ -75,7 +77,8 @@ public class DBController {
 			this.mConn.close();
 
 			// update connection to automatically connect to that db
-			this.mConn = DriverManager.getConnection(this.mDBAddrres + "/" + schema, mUsername, mPassword);
+			this.mConn = DriverManager.getConnection(this.mDBAddrres + "/" + schema, this.mUsername,
+					this.mPassword);
 			// this.mConn = DriverManager.getConnection(this.mDBAddrres + "/" +
 			// schema, schema, schema);
 
@@ -100,15 +103,19 @@ public class DBController {
 				this.mLastPostID = res.getInt(1);
 			}
 			this.mLastPostID++;
-			System.out.println(this.mLastPostID + " after max");
+			// TODO
+			// System.out.println(this.mLastPostID + " after max");
 			// System.out.println("Number of column: " + this.mLastPostID);
 
 		} catch (final SQLException ex) {
 
 			// handle any errors
-			System.out.println("SQLException: " + ex.getMessage());
-			System.out.println("SQLState: " + ex.getSQLState());
-			System.out.println("VendorError: " + ex.getErrorCode());
+			// TODO
+			// System.out.println("SQLException: " + ex.getMessage());
+			// TODO
+			// System.out.println("SQLState: " + ex.getSQLState());
+			// TODO
+			// System.out.println("VendorError: " + ex.getErrorCode());
 			throw ex;
 		}
 	}
@@ -131,7 +138,9 @@ public class DBController {
 
 			int numOfLinesChanged = pst.executeUpdate();
 
-			System.out.println("inserted to posts: " + numOfLinesChanged + " lines");
+			// TODO
+			// System.out.println("inserted to posts: " + numOfLinesChanged +
+			// " lines");
 
 			pst.close();
 
@@ -143,13 +152,16 @@ public class DBController {
 				pst.setString(2, tag);
 
 				numOfLinesChanged = pst.executeUpdate();
-				System.out.println("inserted to tags: " + numOfLinesChanged + " lines");
+				// TODO
+				// System.out.println("inserted to tags: " + numOfLinesChanged +
+				// " lines");
 
 				pst.close();
 			}
 
 		} catch (final SQLException e) {
-			System.out.println("Exception in createNewPost, trying with new id (maybe because of delete)");
+			// TODO
+			// System.out.println("Exception in createNewPost, trying with new id (maybe because of delete)");
 			e.printStackTrace();
 			if (this.numOfTriesTillFailures < this.failureThreshold) {
 				this.numOfTriesTillFailures++;
@@ -174,7 +186,8 @@ public class DBController {
 		final ResultSet rs = pst.executeQuery();
 
 		final ArrayList<Post> result = this.postsFromResultSet(rs);
-		System.out.println("result = " + result.size());
+		// TODO
+		// System.out.println("result = " + result.size());
 		pst.close();
 
 		return result;
