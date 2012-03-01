@@ -217,6 +217,8 @@ function showComposeElement(){
 	element = document.getElementById("sendNewPostButtonDiv").cloneNode(true);
 	rightDiv.appendChild(element);
 	element.style.visibility = "visible";
+	
+	$('#postTitleInput').focus();
 }
 
 function emptyTheRightPane(){
@@ -258,6 +260,7 @@ function send(){
 function initBinds(){
 	
 	$(document).keypress(function (e) {
+		
 		if (e.keyCode === 13){
 		
 			if (authorFocus == 1) searchByAuthor();
@@ -380,7 +383,11 @@ function showPosts(){
 		
 		if (1 == page) prevNextButtonsDiv.getElementsByTagName("button")[0].disabled = true;	//disable prev
 		if (maxPages == page) prevNextButtonsDiv.getElementsByTagName("button")[1].disabled = true;	//disable next
+		
+		$('#postDiv').focus();
+		
 	}
+	
 }
 
 

@@ -27,11 +27,14 @@ public class dbServlet extends HttpServlet {
 	protected void doPost(final HttpServletRequest req, final HttpServletResponse resp)
 			throws ServletException, IOException {
 
-		System.out.println("posting " + req.getRequestURL());
+		// TODO
+		// System.out.println("posting " + req.getRequestURL());
 		final Post post = new Post(req);
 
-		System.out.println("The post:");
-		System.out.println(post);
+		// TODO
+		// System.out.println("The post:");
+		// TODO
+		// System.out.println(post);
 		this.mDBController.createNewPost(post);
 		resp.setHeader("Access-Control-Allow-Origin", "*");
 		this.sendTextResponse(resp, "POSTED");
